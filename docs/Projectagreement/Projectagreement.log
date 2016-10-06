@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/W32TeX) (preloaded format=pdflatex 2016.9.29)  6 OCT 2016 13:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/W32TeX) (preloaded format=pdflatex 2016.9.29)  6 OCT 2016 13:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -531,18 +531,18 @@ Chapter 5.
 ] (./Projectagreement.aux (./Stakeholder.aux) (./Introduction.aux)
 (./Productenvironment.aux) (./Timetable.aux) (./Agreement.aux)) ) 
 Here is how much of TeX's memory you used:
- 1328 strings out of 493013
- 14245 string characters out of 6136993
+ 1337 strings out of 493013
+ 14404 string characters out of 6136993
  58586 words of memory out of 5000000
- 4848 multiletter control sequences out of 15000+600000
- 29084 words of font info for 69 fonts, out of 8000000 for 9000
+ 4857 multiletter control sequences out of 15000+600000
+ 31815 words of font info for 78 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  23i,6n,22p,159b,201s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/texlive/20
 16/texmf-dist/fonts/enc/dvips/base/8r.enc}<c:/texlive/2016/texmf-dist/fonts/typ
 e1/urw/times/utmb8a.pfb><c:/texlive/2016/texmf-dist/fonts/type1/urw/times/utmr8
 a.pfb>
-Output written on Projectagreement.pdf (7 pages, 27703 bytes).
+Output written on Projectagreement.pdf (7 pages, 28194 bytes).
 PDF statistics:
  37 PDF objects out of 1000 (max. 8388607)
  25 compressed objects within 1 object stream
