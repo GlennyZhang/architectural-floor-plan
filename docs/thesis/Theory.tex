@@ -1,1 +1,13 @@
 \section{Theory}
+\subsection{Preprocessing}
+\subsubsection{Erosion and Dilation}
+\subsubsection{Distance transformation}
+\subsection{Object detection}
+\subsubsection{Orientated FAST and Rotated BRIEF}
+\subsubsection{Cascade training}
+\subsection{Room detection}
+\subsubsection{Hough transformation}
+\subsubsection{Watershed}
+The watershed-algorithm in our project is used for segmentation of the different rooms. It can find rooms indifferent of its shape.
+
+The algorithm is processed on a grayscale image on which the color intensity is analogous to the height in a heightmap. The watershed in use does flooding. The idea is to place a water source in each regional minimum and flood the entire relief. It will stop if it meets a different watersource or an impassable barrier.

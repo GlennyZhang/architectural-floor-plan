@@ -1,1 +1,17 @@
 \section{Introduction}
+\subsection{Starting position}
+The company PlanFabrik GmbH creates floor plans for house technology. In a first
+step the plans are analysed and enhanced through an employee. He adds more
+information to the plan, like room polygons or he marks areas where house technology
+can be installed and where not. Those areas are defined by different features. For example, usually the area close to windows has a higher density of pipes emitting heat to the room. This is to equal out the heat loss that usually occurs on windows.
+
+The process of drawing those areas is currently tool supported but still takes a lot of time, equal to the rising amount of rooms the employee has to analyse. The idea is to create a more automated system which does require only a small amount of user input.
+
+\subsection{Problem description}
+To manually create all the room-areas, it takes the user alot of time. This is due to the fact that he has to click every corner of each room to make the room-enclosing polygon. The fact that the current tool is not too precise, which means that errors in selecting the exact corner exist regularly. The user then has to rearrange the created corner to fit the exact corner in the image. This process of selecting all the corners by hand is highly ineffective, especially for floor plans that have several hundred or even thousands of corners in it.
+
+An automated solution would provide a faster and more comfortable solution for the client. Additionally, the software may provide additional info that is needed. It can calculate the size of each room directly, which would otherwise have to be calculated by hand.
+
+\subsection{Goals}
+The idea of theory of this bachelor thesis is to compare different algorithms which can autmatically analyse floor plans and draw the polygons for the rooms. The goal in the end is to show and explain a way to solve the problem and decide which algorithms are used best. All of this will help us create a software that can do the automated analysis for basic floor plans. More complicated floor plans may hold problems that our algorithms can not find, those are supposed to be solved manually with an editor.
+In the end, the program is supposed to create an output-file with the information of the areas found which is exportable to the existing software that currently handles the following processes. 
