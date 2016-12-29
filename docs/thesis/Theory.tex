@@ -1,6 +1,22 @@
 \section{Theory}
 \subsection{Preprocessing}
 \subsubsection{Erosion and Dilation}
+In our project we need erosion to strengthen small features that we want to be highlighted as well as to get rid of small details in the picture itself. We use it in early preprocessing. It helps together with the dilation to clean up pictures to further process them without too many interfering objects in the image. The main usage is to extract an image that features all the walls and has as few as possible other lines on it.
+
+For our project we use the binary grayscale erosion.
+The erosion uses the following principle to work.
+
+
+\[A \ominus B = \{ z\in E | B \subseteq A \}\]  
+\[where: B_{z} = \{b+z | b \in B\} with \forall z \in E \]
+
+A is a binary image in the Euclidean space or an integer grid. The erosion is done with the structuring element B on the image A. The structuring element has to be a subset or equal to A, otherwise there will be no erosion. The mask B will be applied to all pixels possible, if the mask fits on the center pixel of A, the value will be retained. Otherwise it will get deleted. This means that only when B is completly contained in A, values of pixels are retained.
+
+Binary dilation uses the exact same process. The only difference compared to the erosion is that the deletion of the pixel will not be setting pixel values to black (0) but to white (1). Both of those processes are inherantly the same and can be summed up under the term morphological operation. These are altering the image with a mask, as we did here for erosion and dilation.
+
+
+
+
 \subsubsection{Distance transformation}
 \subsection{Object detection}
 \subsubsection{Orientated FAST and Rotated BRIEF}
