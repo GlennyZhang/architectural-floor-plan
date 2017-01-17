@@ -1,5 +1,5 @@
 \section{Theory}
-\subsection{Preprocessing}
+\subsection{Information Segmentation}
 \subsubsection{Erosion and Dilation}
 In our project we need erosion to strengthen small features that we want to be highlighted as well as to get rid of small details in the picture itself. We use it in early preprocessing. It helps together with the dilation to clean up pictures to further process them without too many interfering objects in the image. The main usage is to extract an image that features all the walls and has as few as possible other lines on it.
 \\
@@ -18,11 +18,11 @@ Binary dilation uses the exact same process. The only difference compared to the
 
 
 \subsubsection{Distance transformation}
-\subsection{Object detection}
+\subsection{Structural Analysis}
 \subsubsection{Orientated FAST and Rotated BRIEF}
 \todo{Write why SURF not used: License}
 \subsubsection{Cascade training}
-\subsection{Room detection}
+\subsection{Semantic Analysis}
 \subsubsection{Hough transformation}
 \subsubsection{Watershed}
 The watershed-algorithm in our project is used for segmentation of the different rooms. It can find rooms indifferent of its shape.
