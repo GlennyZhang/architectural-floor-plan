@@ -1,5 +1,9 @@
 \documentclass[11pt, a4paper]{report}
 
+\usepackage{glossaries}
+\loadglsentries{Glossary}
+\makeglossaries
+
 \usepackage{etoolbox}
 \patchcmd{\chapter}{\thispagestyle{plain}}{\thispagestyle{fancy}}{}{}
 \renewcommand{\thesection}{\arabic{section}}
@@ -36,10 +40,12 @@
 			\end{tabular}
 	}
 	
-	\maketitle
-	\tableofcontents
-	
+\maketitle
+
 \include{Abstract}
+
+\tableofcontents
+	
 \include{Introduction}
 \include{Theory}
 \include{Implementation}
@@ -50,5 +56,8 @@
 	
 \bibliography{quotations}
 \bibliographystyle{ieeetr}
+
+\clearpage
+\printglossary
 
 \end{document}
