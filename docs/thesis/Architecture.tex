@@ -41,6 +41,7 @@ To reuse algorithms in different workflows, the software architecture splits the
   \label{fig:IAlgorithm_CD}
 \end{figure}
 
+\subsubsection{Parameter}
 Because a lot of the algorithms need parameters to be set manually, there is the possibility to flag these parameters with an attribute in the code and the software is then able to automatically show a slider in the user interface. With this slider the user is able to set the parameter or use the default values (See Figure \ref{fig:parameter_window}).
 
 
@@ -51,6 +52,8 @@ Because a lot of the algorithms need parameters to be set manually, there is the
   \label{fig:parameter_window}
 \end{figure}
 
+\subsubsection{History}
+As seen in Figure \ref{fig:IAlgorithm_CD} and Figure \ref{fig:parameter_window}, an algorithm is not just able to return one AFImage, instead it can return an unlimited count of AFImages, which then are displayed in the parameter window. These images are used to show a history of the steps the algorithm performed. This makes it easier to set the right parameter for the given algorithm and helps to debug all steps of an algorithm.
 
 \subsection{Workflow}
 
