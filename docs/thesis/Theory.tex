@@ -40,6 +40,15 @@ Source: http://stackoverflow.com/questions/7426136/fastest-available-algorithm-f
 \subsubsection{Find contours}
 The find-contours algorithm will not receive a detailed description, since it does little more than a simple threshhold in our program. What it is used for is to create the bassins for the watershed algorithm based on the distance transformation. The distance transformation gives us a way to find bassins that are certainly in a room. With the contours-algorithm we create a sharp border for those bassins. Therefore the resulting has a bassin in the center of every room. We can guarantee that this bassin is part of a room and in no way possible part of a wall. In the watershed we will make use of that fact, we will try to connect all bassins to find separate rooms for those that don't connect to others. A more detailed explanation you will find in the watershed section.
 
+\subsubsection{Harris corner detection}
+
+\subsubsection{Door gap closing algorithm}
+
+The cascade door training algorithm has found the rectangles that represent the doors. What is needed in the end though is not the door itself but the space inbetween the two walls that the door connects. This is so that we can seperate the different rooms that have doors inbetween.
+This algorithm combines the edges that have been found with the Harris-Corner detection and the doors from the cascade door algorithm. It uses a heuristic that works as following. The door algorithm provides four points that mark the edge of the recognized door and build a rectangle.
+Added to the rectangle is  a threshold in all directions in which the algorithm searches for edges. The idea is that due to the structure of walls there will be a rectangle made out of four edge points inside the door area that represents the space inbetween the walls. It is expected to only find one rectangle, due to the fact that it makes no sense to have a wall go through a door. As well as the fact that there should be no further lines because it it a cleaned up image and any other line except the walls should not be in that image.
+To find the rectangle it connects two edges and calculates the angle compared to the x-Axis for all pairs of edges available. Now all the angles get compared to each other. If two edges AB and CD have a similar angle there will be another comparison for the angles between AC and BD or AD and BC. If one of those two is also of a similar angle we have found our door-rectangle.
+\todo{Add image of how those edges are found}
 
 \subsection{Structural Analysis}
 \subsubsection{Orientated FAST and Rotated BRIEF}
