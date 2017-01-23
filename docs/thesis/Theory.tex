@@ -18,6 +18,26 @@ Binary dilation uses the exact same process. The only difference compared to the
 
 
 \subsubsection{Distance transformation}
+The distance transformation is as well as the erosion and dilation a morphological operation. In our project it serves the purpose to find bassins for the watershed algorithm. This is used to define the foreground picture. We will explain this further in the wathershed discussion.
+It is used after preprocessing to find the center of what is supposed to be rooms. This algorithm is only used in combination with the watershed.
+
+The algorithm that openCV uses is called cvDistTransform and uses an euclidean distance to calculate the output image. The input for this transformation is a binary image \[I(u,v) = I(x)\] which will be separated into a foreground and background image.
+\[FG(I) = {x | I(x) = 1}\]
+\[BG(I) = {x | I(x) = 0}\]
+The formula for the distance transformation of I, D(x) itself is defined as:
+\[D(x) :=\min_{x' \in FG(I)} dist(x,x') \]
+It applies to any pixel x = (u,v) of the input image. If the pixel is part of the foreground image FG(I) then the result of the transformation D(x) is zero. As said above, the distance formula dist(x,x') is the euclidean distance (also called L\textsubscript{2}-Norm) between two pixels.
+\[dist(x,x') = ||x - x'|| = \sqrt{(u - u')^2 + (v - v')^2}\]
+
+Since the exact calculation with the euclidean distance takes a lot of computational power openCV uses the Chamfer-Algorithm instead. This algorithm runs a two masks over the image. The first mask M\textsubscript{L} is run over in a diagonal manner over the image starting in the top left corner of the image. The second mask M\textsubscript{R} does the same in reverse starting at the bottom right corner. Those masks are a matrix that represent the euclidean distance between the center and the pixels around it. Each mask only changes the pixels in the direction they are run through the image \cite{burger_burge_2016}. As a result, the masks look similar to the following ones:
+\[M_{L} = \begin{bmatrix} . & . & .\\ . & x & m_1 \\ m_2 & m_1 & m_2 \end{bmatrix}\]
+\[M_{R} = \begin{bmatrix} m2 & m1 & m2 \\ m1 & x & . \\ . & . & . \end{bmatrix}\]
+
+This all leads to the resulting effect shown in the image below.
+\todo{Make image of distance transformation before and after}
+
+
+Source: http://stackoverflow.com/questions/7426136/fastest-available-algorithm-for-distance-transform
 \subsection{Structural Analysis}
 \subsubsection{Orientated FAST and Rotated BRIEF}
 \todo{Write why SURF not used: License}
