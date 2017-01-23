@@ -5,12 +5,15 @@ The software architecture has to fulfil multiple requirements for this project. 
 
 \begin{figure}[h]
   \centering
-      \includegraphics[width=0.8\textwidth]{AFPARS_Architecture}
+      \includegraphics[width=1\textwidth]{AFPARS_Architecture}
   \caption{AFPARS software architecture.}
   \label{fig:AFPARS_Architecture}
 \end{figure}
 
+
 To fulfil these requirements, the architecture of the software is split into four parts as shown in Figure \ref{fig:AFPARS_Architecture}. The complete application is based on the \acrfull{acro:JVM} where \gls{gloss:Kotlin} is running on. For image processing and recognition the application uses the library \gls{gloss:OpenCV}.
+
+\todo{What else should I write?}
 
 \pagebreak
 
@@ -20,7 +23,7 @@ floor plan images called AFImage. Different drivers add the support for multiple
 
 \begin{figure}[h]
   \centering
-      \includegraphics[width=0.5\textwidth]{AFImage_CD}
+      \includegraphics[width=0.6\textwidth]{AFImage_CD}
   \caption{AFImage class diagram.}
   \label{fig:AFImage_CD}
 \end{figure}
@@ -28,11 +31,11 @@ floor plan images called AFImage. Different drivers add the support for multiple
 The meta container AFImage contains multiple attributes (see Figure \ref{fig:AFImage_CD}) which can be used by algorithms to get information created by other algorithms or store information into an existing image.
 
 \subsection{Algorithm}
-blas
+To reuse algorithms in different workflows, the software architecture splits the algorithms into small parts which then can be connected together to pipelines. The algorithm itself does not know in which context it is running. As input parameter it gets just an AFImage from the last algorithm output and is able to return an AFImage again. 
 
 \begin{figure}[h]
   \centering
-      \includegraphics[width=1\textwidth]{IAlgorithm_CD}
+      \includegraphics[width=0.6\textwidth]{IAlgorithm_CD}
   \caption{Algorithm interface class diagram.}
   \label{fig:IAlgorithm_CD}
 \end{figure}
@@ -40,6 +43,13 @@ blas
 bla
 
 \subsection{Workflow}
+
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=1\textwidth]{workflow}
+  \caption{Workflow example with two algorithms.}
+  \label{fig:Workflow}
+\end{figure}
 
 \subsection{User Interface}
 \missingfigure{User Interface Image.}
