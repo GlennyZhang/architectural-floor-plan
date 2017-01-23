@@ -31,7 +31,8 @@ floor plan images called AFImage. Different drivers add the support for multiple
 The meta container AFImage contains multiple attributes (see Figure \ref{fig:AFImage_CD}) which can be used by algorithms to get information created by other algorithms or store information into an existing image.
 
 \subsection{Algorithm}
-To reuse algorithms in different workflows, the software architecture splits the algorithms into small parts which then can be connected together to pipelines. The algorithm itself does not know in which context it is running. As input parameter it gets just an AFImage from the last algorithm output and is able to return an AFImage again. 
+\todo{rewrite, this is nonsense}
+To reuse algorithms in different workflows, the software architecture splits the algorithms into small parts which then can be connected together to pipelines. The algorithm itself does not know in which context it is running. As input parameter it gets just an AFImage from the last algorithm output and is able to return an AFImage again (see Figure \ref{fig:IAlgorithm_CD}). 
 
 \begin{figure}[h]
   \centering
@@ -40,7 +41,16 @@ To reuse algorithms in different workflows, the software architecture splits the
   \label{fig:IAlgorithm_CD}
 \end{figure}
 
-bla
+Because a lot of the algorithms need parameters to be set manually, there is the possibility to flag these parameters with an attribute in the code and the software is then able to automatically show a slider in the user interface. With this slider the user is able to set the parameter or use the default values (See Figure \ref{fig:parameter_window}).
+
+
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.6\textwidth]{parameter_window}
+  \caption{Flag based parameter window.}
+  \label{fig:parameter_window}
+\end{figure}
+
 
 \subsection{Workflow}
 
