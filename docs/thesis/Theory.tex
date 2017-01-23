@@ -35,9 +35,12 @@ Since the exact calculation with the euclidean distance takes a lot of computati
 
 This all leads to the resulting effect shown in the image below.
 \todo{Make image of distance transformation before and after}
-
-
 Source: http://stackoverflow.com/questions/7426136/fastest-available-algorithm-for-distance-transform
+
+\subsubsection{Find contours}
+The find-contours algorithm will not receive a detailed description, since it does little more than a simple threshhold in our program. What it is used for is to create the bassins for the watershed algorithm based on the distance transformation. The distance transformation gives us a way to find bassins that are certainly in a room. With the contours-algorithm we create a sharp border for those bassins. Therefore the resulting has a bassin in the center of every room. We can guarantee that this bassin is part of a room and in no way possible part of a wall. In the watershed we will make use of that fact, we will try to connect all bassins to find separate rooms for those that don't connect to others. A more detailed explanation you will find in the watershed section.
+
+
 \subsection{Structural Analysis}
 \subsubsection{Orientated FAST and Rotated BRIEF}
 \todo{Write why SURF not used: License}
