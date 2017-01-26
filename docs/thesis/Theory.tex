@@ -40,7 +40,26 @@ Source: http://stackoverflow.com/questions/7426136/fastest-available-algorithm-f
 \subsubsection{Find contours}
 The find-contours algorithm will not receive a detailed description, since it does little more than a simple threshhold in our program. What it is used for is to create the bassins for the watershed algorithm based on the distance transformation. The distance transformation gives us a way to find bassins that are certainly in a room. With the contours-algorithm we create a sharp border for those bassins. Therefore the resulting has a bassin in the center of every room. We can guarantee that this bassin is part of a room and in no way possible part of a wall. In the watershed we will make use of that fact, we will try to connect all bassins to find separate rooms for those that don't connect to others. A more detailed explanation you will find in the watershed section.
 
-\subsubsection{Harris corner detection}
+\subsubsection{Corner detection}
+The corner detection algorithm is used to find corners in an image that contains mostly walls. Its purpose is to find the edges of all walls and therefore provide important information for the door gap closing algorithm. Why this information is needed will be explained in the section about this door gap closing algorithm.
+This project uses the harris corner algorithm due to its reliability, simplicity in implementation and the good results we got after the first uses. The algorithm itself is implemented by OpenCv.
+The idea of the algorithm is that there are edges wherever the gradient of the image function is high for more than one direction.
+First it calculates the basic partial derivatives of the image function I\textsubscript{x}(u,v) in horizontal and vertical direction. This is done for every position in the image (u,v).
+\[A(u,v) = I_{x}^2(u,v)\]
+\[B(u,v) = I_{y}^2(u,v)\]
+\[C(u,v) = I_{x}^2(u,v) * I_{y}^2(u,v)\]
+
+All of those elements will be part of a local structure matrix M.
+\[M = \begin{pmatrix} A & C \\ C & B \end{pmatrix}\]
+Afterwards all three scalar fields will be smoothed with a linear gaussian filter and be represented as a Matrix \begin{math}\bar{M}\end{math}.
+The two eigenvalues of the Matrix \begin{math}\bar{M}\end{math}
+\[\lambda_{1,2} = \dfrac{trace(\bar{M})}{2} \pm \sqrt{(\dfrac{trace(\bar{M})}{2})^2 - det(\bar{M})} \]
+are positive and contain important information about the local structure. In a area with no corners \begin{math}\bar{M} = 0\end{math}  as well as the two eigenvalues \begin{math}\lambda_1 = \lambda_2 = 0\end{math}. To find a corner there needs to be a strong edge in the main direction (bigger eigenvalue) as well as in the direction of its normal (smaller eigenvalue). 
+To find the corner strength itself the harris corner detection uses the function 
+\[Q(u,v) := det(\bar{M}(u,v)) - \alpha * (trace(\bar{M}(u,v)))^2\]
+whereas the parameter \begin{math}\alpha\end{math} defines the sensitivity of the detector. A candidate for a corner is found when
+\[Q(u,v) > t_H\]
+with the threshold t\textsubscript{H} being around 10 000 to 1 000 000. To find the exact corner it finds groups of candidates that are close to each other are all eliminated but the best candidate.
 
 \subsubsection{Door gap closing algorithm}
 
