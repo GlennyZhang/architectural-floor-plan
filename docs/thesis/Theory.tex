@@ -79,3 +79,9 @@ To find the rectangle it connects two edges and calculates the angle compared to
 The watershed-algorithm in our project is used for segmentation of the different rooms. It can find rooms indifferent of its shape.
 \\
 The algorithm is processed on a grayscale image on which the color intensity is analogous to the height in a height map. The watershed in use does flooding. The idea is to place a water source in each regional minimum and flood the entire relief. It will stop if it meets a different watersource or an impassable barrier.
+
+The basic algorithm uses three different markings for all regions. The values I for each region can be:
+\[I(u,v) = \begin{cases} 0 & background \\  255 & foreground \\ 1..254 & regions \end{cases} \]
+
+It is a really simple algorithm where it starts with looking for an unmarked foreground pixel. All pixels of the region that are connected to this starting pixel will be visited and marked. There are three different ways to do this process. It can be a recursive, an iterative depth-first or breadth-first flood filling. It is not clear what implementation OpenCv uses. In the end all of the methods lead to a similar result and thus will not be discussed further. 
+
