@@ -4,6 +4,7 @@
 \todo{Description of Testset}
 
 \subsection{Parameter Finding}
+\label{subsec:Parameter Finding}
 \todo{Parameter finding and description}
 
 \subsection{Information Segmentation}
@@ -20,7 +21,32 @@ This project always uses a combination of erosion and dilation to retain the ori
 \end{description}
 
 Both of those combinations are used in the morphological transformation class. First used is the "dilation first" transform to combine the walls out of several lines into one. This results in all the walls being one thick line instead of a multitude of small lines. This guarantees that all walls are thick lines and won't get erased with the "erosion first" transform. This is now followed with the "erosion first" transform to erase all the other lines besides the walls. 
-\todo{Noise Removal (Morphological)}
+
+\begin{figure}[h]
+	\centering
+	\subfloat[Original image.]{\includegraphics[width=0.4\textwidth]{A_N1.png}\label{fig:A_N1}}
+	\hfill
+	\subfloat[Image after noise removal.]{\includegraphics[width=0.4\textwidth]{morphtransuncleaned.jpg}\label{fig:A_N1_Morph}}
+	\caption{Before and after of an uncleaned floor plan with noise removal. }
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\subfloat[Original image.]{\includegraphics[width=0.4\textwidth]{A_N1_cleaned.png}\label{fig:A_N1_cleaned}}
+	\hfill
+	\subfloat[Image after noise removal.]{\includegraphics[width=0.4\textwidth]{morphtranscleaned.jpg}\label{fig:A_N1_cleaned_Morph}}
+	\caption{Before and after of a cleaned floor plan with noise removal.}
+\end{figure}
+
+The figure~\ref{fig:A_N1} is one of the uncleaned testing images before any noise removal. It was cleaned up with an erosion/dilation size of 8. Figure~\ref{fig:A_N1_Morph} is the result of the noise removal. It is easily visible that most of what's left are walls. Due to the thin lines of the windows they get removed in the process. Those will be added later though as they are an important part of the wall to surround the rooms.
+
+The same was done to the cleaned up image. As a result of different image sizes the noise removal was actually worse with the same parameters. This shows that each different image has very specific parameters for an optimal noise removal. This is further discussed in the section \ref{subsec:Parameter Finding}.
+
+As this is not perfect due to the variety of possible objects on a plan, there is the option to delete those beforehand or afterwards with our built in editor. This is so we can manually improve the quality of the outcome of noise removal.
+
+As a result of the noise removal we get an image with very basic information about where the walls are. This will be very important for our next step and other steps to come.
+
+\todo{Discuss specific parameters for each image in parameter finding}
 \todo{Distance Transform, Why not Contour Detection}
 
 \subsection{Structural Analysis}
