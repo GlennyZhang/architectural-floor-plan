@@ -75,8 +75,34 @@ To find the rectangle it connects two edges and calculates the angle compared to
 \subsubsection{Orientated FAST and Rotated BRIEF}
 \todo{Write why SURF not used: License}
 \subsubsection{Cascade training}
+The algorithm used for object detection in this project was first described by Paul Viola in his paper \todo{ACCEPTED CONFERENCE  ON COMPUTER VISION AND PATTERN RECOGNITION 2001 Rapid Object Detection using a Boosted Cascade of Simple Features}. It is based on three key components. One is the "Integral Image" which is an image representation that allows to detect features very quickly. A second component is the learning algorithm "AdaBoost" which select a small number of critical features from a big set. The last component is an algorithm that combines increasingly complex features in a cascade. All of these components provide the basis for a really fast feature detection compared to previously known algorithms.
+
+The object detection for this method is based on features and not pixels. Features can provide additional domain knowledge that would not be know with just pixels. Additionally the detection based on features is processed much faster than a pixel based system. The algorithm uses three different simple features based on the "Haar" basis functions. The value of a two-rectangle feature is the difference of the sum of two regions that are vertically or horizontally adjacent and have the same measurements (see Figure\todo{link figure}). The three-rectangle feature has the same conditions but the value is based on the sum of two outside rectangles and subtracted the sum of a center rectangle. Last is the four-rectangle features which the value is the difference of sums of diagonal pairs of rectangles.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\textwidth]{rectangleFeatures.jpg}
+	\caption{Rectangle features in a detection window. There are two-rectangle (A and B), three-rectangle (C) and four-rectangle features in use.}
+	\label{fig:rectFeat}
+\end{figure}
+
+All features combined are more than 180'000 while the detector has a base resolution of 24x24. This means the rectangle features are overcomplete.
+These rectangle features are computed using the representation "integral image". In an integral every pixel is a sum of pixels of the original image that are above and to the left:
+\[ii(x,y) = \sum_{x'\leq x, y'\leq y} i(x',y')\]
+where ii(x,y) is the integral image and i(x,y) the original. Using two conditions with s(x,y) as the row sum:
+\[s(x,y) = s(x,y-1)+i(x,y)\]
+\[ii(x,y) = ii(x-1,y)+s(x,y)\]
+the whole image can be computed in one pass.
+This method helps so we can now compute two-rectangular features from just 6 values instead of having to do all the calculations for the sums each time over whole regions. In addition three-rectangular features only take 8 and four-rectangular only 9 values to calculate its value. This algorithm can only recognize features in vertical, horizontal or diagonal direction due to the nature of our rectangle features.
+To train and select a small size of features this algorithm uses the "AdaBoost" method. The basic idea is that there is a feature size over 180'000 features to determine the if an object is recognized or not. The job of this "AdaBoost" is to reduce the amount of features down to a basic set of features that still has a high recognition rate. For each feature the algorithm determines the optimal threshold classification function so that the least amount of examples are misclassified.
+To achieve improved detection rate and drastically reduce the computation time this algorithm implements a cascade function. This means that the detection process is that of a degenerate decision tree. A positive result from a classifier triggers the evaluation of the next classifier. If at any point the result is negative the algorithm immediately declares the result as negative and won't be computed any further. The idea is that the first layer rules out a large amount of possibilities with very little computation time. Further stages of the process will reduce further negatives but need additional computation power. The idea behind this process is that in an image most sub-windows will be negative and such should be rejected as early as possible in the cascade process to require fewer computational effort.
+The classifier is trained with a training set of positives and negatives. Each stage is trained by adding features until the target detection and false positive rates are met. Stages are added until the overall target for false positive rate and detection rate is met. In the end there is always a balance to between finding high detection rates with low false positive rates and lower time for computation.
+
+ 
 \subsection{Semantic Analysis}
 \subsubsection{Hough transformation}
+The hough transformation was used as an alternative to the current process to find walls and therefore the rooms. In the implementation it will be explained why this was not implemented in the final project.
+
+What the hough transformation does is to find 
 \subsubsection{Watershed}
 The watershed-algorithm in our project is used for segmentation of the different rooms. It can find rooms indifferent of its shape.
 \\
