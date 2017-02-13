@@ -62,21 +62,41 @@ To find the centers there had to be an additional method that provides us with a
 \todo{Discuss specific parameters for each image in parameter finding}
 \todo{Distance Transform, Why not Contour Detection}
   
-
-
+\subsubsection{Hough transformation}
+Hough line transformation was the first algorithm we tried using to find the walls in the floor plan. It finds straight lines  
 
 \subsection{Structural Analysis}
 test
 \todo{Object Detection: TM, Hough Lines, ORB}
 \subsubsection{Cascade classifier}
-The cascade classifier is used for object recognition of doors, windows and other objects that are important for the room detection and zone identification. This algorithm is a machine learning algorithm that has to be trained with positive and negative images. The resulting learned parameters are saved in an XML file. Since this is a crucial part of this project, it is described more detailed than most other algorithms. In the following lines the implementation process is described as well as all the experiences we made during this project.
+The cascade classifier is used for object recognition of doors, windows and other objects that are important for the room detection and zone identification. This algorithm is a machine learning algorithm that has to be trained with positive and negative images. The resulting learned parameters are safed in an XML file. Since this is a crucial part of this project, it is described more detailed than most other algorithms. In the following lines the implementation process is described as well as all the experiences we made during this project.
 
-The basic problem was to find an algorithm that can find objects that vary in some details and regardless of their rotation and size. This is important due to the fact that there is no standard for objects in architectural floor plans that are used by a wide audience of architects. The decision to go with a machine learning approach and not an algorithm that works with heuristics is because we wanted to be able to process a broad variety of floor plans. Regardless whether they show a small house with just basic features or a big plan with a lot of details and special objects.
+The basic problem was to find an algorithm that can find objects that vary in their details and regardless of their rotation and size. This is important due to the fact that there is no standard for objects in architectural floor plans that are used by a wide audience of architects. The decision to go with a machine learning approach and not an algorithm that works with heuristics is because we wanted to be able to process a broad variety of floor plans. Regardless wheter they show a small house with just basic features or a big plan with a lot of details and special objects.
+
+
+
+
 \todo{Cascading Classifier: To few samples, Cat images prove, more positive, thickening, polydp, positive negative ratio, more specific negative samples}
 \todo{Object Single Cases}
 \todo{Gaps Closing: Clustering, Rotation / MinBox}
 
+\subsubsection{Image size}
+As a result of a lot of the testing we found out that images that have too big of a size use a lot of ram to process. Images below 100 kBytes did not affect the heap too much. There was an increased use of RAM due to the program of around 1-2 GB. When images of size 300 kBytes and bigger, the computer used for testing used more than 5 GB of additional RAM to process during one instance. This can lead to huge problems. The program will crash if there is no more RAM available. Therefore it is necessary to reduce the size of the image to a size below 150 kBytes. Otherwise there is no guarantee that the given RAM is enough to process. Especially when there are different programs running. For example an additional architecture program. Those usually use a lot of Heap-Space themselves. 
+
 \subsection{Semantic Analysis}
-test
+\subsubsection{Watershed}
+The watershed is the core of our room search algorithm. Its purpose is to fill  the unknown areas that are provided in a foreground/background image from previous images. It needs extremely good preprocessing. If it has any previous errors, the resulting rooms will not make sense.
+
+We use the watershed to its ability to find connected rooms with a simple method. It is a simple algorithm that has low computational cost. This and the fact that it was already implemented in openCV makes us use this algorithm.
+
+The algorithm uses a simple image of all the walls as an image to compare to the foreground/background image. This image has been modified with the door recognition algorithm to close all doors within that picture. This is important so rooms are separated when running the watershed algorithm. Additionally we tried to do a window recognition to close the outside walls. As explained in section \todo{Explain why window rec didnt work}, this did not work out as planned. What we instead used was \todo{create alternative to window recognition}. With this method we are able to separate all rooms within a building that has no windows on the inside. Any building that has a courtyard will fail with this method. Our goal was to find a solution that can also deal with this. But due to limited time and no reasonable alternative we chose to go with that.
+
+The background/foreground image is split up in three different zones. The zone with pixel color values of 0 represent the part of the image that are unknown. All pixels with color value \todo{findValue} represent the walls. As for the rooms we chose to mark all center with value \todo{findValue}. The image used for comparison has the same areas with walls as the BG-image. This means that the area for the wall will not expand with the watershed. The only exception is the area where doors or windows were closed. This is based on the assumption that the wall has the same pixel color and the inside of the room has a vastly brighter color.
+The bright centers of the room inside the BG-image will expand into the unknown areas close to the walls and fill up the rooms. This will result in an image with several enclosed rooms all having the same pixel color. This will be processed with a modified connected components algorithm to find all the edges or the room.
+
+We ran into several problems during the implementation of this algorithm. The most common problem is that not all doors were found. Additionally not all rooms have doors to separate them. There are also rooms that are separated with just an open space. There are also objects like cabinets that were drawn with thick lines and were identified as a part of the room. This is easily recognizable as a human but can not be differentiated with the algorithms used.
+
+As a solution to the fact that not all the doors are found, there is the option to close doors by hand with the editor. This is the simplest solution that always guarantees success. We also tried to improve door detection with better samples and bigger sample size. This can be found in the section \todo{link section with door detection}.
+To erase object from the image we initially planned to do an object detection. There was time to do some additional object detection other than just door and window. Those can be found in the code. But there are too many different object only within those few plans we got to catch them all. To implement all of the and erase those objects is a next step for this project. For now the user has to erase all object that do not get caught by noise removal by hand.
 \todo{Watershed}
 \todo{Polygon Smoothing}
