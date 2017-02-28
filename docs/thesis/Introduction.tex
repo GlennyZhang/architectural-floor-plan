@@ -19,7 +19,12 @@ In the end, the program is supposed to create an output-file with the informatio
 
 
 \subsection{State of the art}
-\todo{Description of Testset}
+This section will explain what the current process for room recognition is in the Planfabrik GmbH. It will show the actual process that is to be replaced by the software described in this paper. In an additional section, there will be a description of papers similar to this one. The idea is to show what solution other works have done to solve the problem. It also describes the work that was the foundation for our work.
+
+\subsubsection{Manual process}
+ The process for room and zone detection is done by hand. To start, they have an unprocessed architectural floor plan in a ,dwg or .dxf format. It is processed by a CAD. When defining the room size, the person processing the plan has to select an edge selection tool to create the room polygon. As a room has at least four edges, this process will take at least 4 mouse clicks for every room. This selection tool has its difficulties as it is not always very exact and a corner selection has to be corrected from time to. From what we have experienced, every 4-8 corners there is going to be such an inaccuracy. The same process is done for any zone they define which will more than double the amount of user interactions necessary. This is due to the fact that every room can have several different zones.
+ All those polygons will be saved in a separate layer in the floor plan. One layer will contain for example all rooms.
+ \todo{write down the process more in depth and create an image of the process.} 
 
 \subsection{Experiment}
 \todo{Description of Testset}
