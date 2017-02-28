@@ -1,7 +1,9 @@
 \section{Software Architecture}
-This chapter describes the architecture of the software developed. First there will be a description of the big picture separating the software into several parts. Each of those parts will then be explained in greater detail in a seperate chapter.
-\\\\
-The software architecture has to fulfil multiple requirements for this project. It should be easily extendable with new algorithms and \acrshort{acro:UI} extensions. The input and output format of the application should be independent from the algorithms to support different file types like bitmap images or \gls{gloss:DXF}/\gls{gloss:DWG} formats. The algorithms of the application should be linked together as workflows which then can be executed by an engine simultaniously.
+This chapter describes the architecture of the software developed. First there will be a description of the big picture separating the software into several parts. Each of those parts will then be explained in greater detail in a separate chapter.
+
+The software architecture has to fulfil multiple requirements for this project. It should be easily extendable with new algorithms and \acrshort{acro:UI} extensions. The input and output format of the application should be independent from the algorithms to support different file types like bitmap images or \gls{gloss:DXF}/\gls{gloss:DWG} formats. The algorithms of the application should be linked together as workflows which then can be executed by an engine simultaneously.
+
+The idea behind this separation concept is that it should be possible to create new combinations of algorithm pipelines with already implemented algorithms. Every algorithm is just a blackbox which can be connected together with other algorithms to create a processing pipeline, called workflow. This makes it possible to replace existing algorithms and test out new ideas without modifying other parts of the pipeline. 
 
 \begin{figure}[h]
   \centering
@@ -13,7 +15,43 @@ The software architecture has to fulfil multiple requirements for this project. 
 
 To fulfil these requirements, the architecture of the software is split into four parts as shown in Figure \ref{fig:AFPARS_Architecture}. The complete application is based on the \acrfull{acro:JVM} where \gls{gloss:Kotlin} is running on. For image processing and recognition the application uses the library \gls{gloss:OpenCV}.
 
-\todo{What else should I write? Explain why it is important that the algorithm is easily interchangeable and why we did seperate those parts specifically. Why did we choose that sort of architecture over a different one. There is no mention of what holds all of this together ie. the workflow.}
+Every part of the architecture has its own area of responsibility and is connected with the other parts through interfaces which have been designed to be as generic as possible to support the most flexibility.
+
+\subsection{Programming Language}
+
+The software is built with the modern language \gls{gloss:Kotlin}, which is a statically typed programming language for the \acrfull{acro:JVM}. It supports special language features like extension methods, optional parameters and functional programming concepts, which all were used in this project and help to make the code more readable and maintainable. \cite{kotlin}
+
+The next sections show some examples where and how the new language are used in the software.
+
+\subsubsection{Extension Methods}
+The language feature \flqq Extension Methods\frqq can be used to make the code more readable. It extends an existing object with a new method without the concept of inheritance.
+
+\begin{lstlisting}[caption={Erode image without extension methods},label={lst:imageOperations},language=Java]
+// threshold image
+Imgproc.threshold(image, image, 128.0, 255.0, Imgproc.THRESH_BINARY)
+
+// erode image
+val structureSize = 3
+val element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, 
+        Size(structureSize.toDouble(), structureSize.toDouble()))
+Imgproc.erode(image, image, element)
+\end{lstlisting}
+
+It is used in this software to make calls to \gls{gloss:OpenCV} more natural for object oriented developers. For example instead of using the static Imgproc class (see Listing \ref{lst:imageOperations}), it is possible to call a lot of methods on the Mat object itself (see Listing \ref{lst:imageOperationsWithExtensions}).
+
+\begin{lstlisting}[caption={Erode image with extension methods},label={lst:imageOperationsWithExtensions},language=Java]
+// threshold image
+image.threshold(128.0, 255.0, Imgproc.THRESH_BINARY)
+
+// erode image
+image.erode(3)
+\end{lstlisting}
+
+\subsubsection{Optional Parameters}
+
+\subsubsection{Functional Concepts}
+
+
 
 \pagebreak
 
