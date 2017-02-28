@@ -62,10 +62,15 @@ opening for exterior wall
 
 \subsection{Parameter Finding}
 \label{subsec:Parameter Finding}
+\subsubsection{Scale Test}
 \todo{Parameter finding and description}
 
 \subsection{Information Segmentation}
-All of the following topics in this section are used to remove or add specific information from our image. The idea is to standardize all incoming floor plans regardless of what "noise" is around in the basic floor plan. Noise is anything that is of no importance to all the following algorithms. This contains elements such as "personal-property" (cars, pianos, etc.) as well as text or any lines to show dimensions on the plan. The idea would be that most of this noise is erased by the user in advance. But it is practically impossible to remove all the noise beforehand due to it being so time intensive that it would ruin all the benefits of the algorithm using less time than doing everything by hand. 
+
+
+All of the following topics in this section are used to remove or add specific information from our image. The idea is to standardize all incoming floor plans regardless of what "noise" is around in the basic floor plan. Noise is anything that is of no importance to all the following algorithms. This contains elements such as "personal-property" (cars, pianos, etc.) as well as text or any lines to show dimensions on the plan. The idea would be that most of this noise is erased by the user in advance. But it is practically impossible to remove all the noise beforehand due to it being so time intensive that it would ruin all the benefits of the algorithm using less time than doing everything by hand.
+
+
 \subsubsection{Noise removal (erosion and dilation)}
 The basic principle to remove noise is erosion and dilation. How the algorithm is processed is explained in section~\ref{subsubsec:Erosion and Dilation}.
 The purpose of both of those algorithms in this project is to remove any information on the starting picture to get a picture containing only the walls. This works due to the fact that usually the walls are the thickest lines on the floor plan. It is a simple heuristic to extract the walls and is according to the method other papers use. \todo{Link papers}
@@ -102,7 +107,7 @@ The same was done to the cleaned up image. As a result of different image sizes 
 As this is not perfect due to the variety of possible objects on a plan, there is the option to delete those beforehand or afterwards with our built in editor. This is so we can manually improve the quality of the outcome of noise removal.
 
 As a result of the noise removal we get an image with very basic information about where the walls are. This will be very important for our next step and other steps to come.
-
+\subsubsection{Normalize Image}
 \subsubsection{Distance transformation \& Geodesic dilation}
 The distance transformation is used to find the centers of the rooms as explained in section~\ref{subsubsec:Distance transformation}. As its base it needs a cleaned up image of all the walls. It is a result of the noise removal we discussed in the previous section. To find the actual area of the of the room there is further processing with a geodesic dilation needed.
 
@@ -118,13 +123,24 @@ The distance transformation gives us an image that represents the distance from 
 To find the centers there had to be an additional method that provides us with a specific information where these center areas are.
 \todo{Discuss specific parameters for each image in parameter finding}
 \todo{Distance Transform, Why not Contour Detection}
-  
+\subsubsection{Find Center of Distance Transform}  
 \subsubsection{Hough transformation}
+\subsubsection{JavaCv}
 Hough line transformation was the first algorithm we tried using to find the walls in the floor plan. It finds straight lines  
-
+\subsubsection{Harris corner detection}
+\subsubsection{Corner sharpening}
+\subsubsection{Sparse Point Cloud}
 \subsection{Structural Analysis}
 test
 \todo{Object Detection: TM, Hough Lines, ORB}
+\subsubsection{Canny Line Detection} 
+\subsubsection{Find Contours}
+\subsubsection{Geodesic Dilation}
+\subsubsection{Marker Distance Transform}
+\subsubsection{HoughP Line Detection}
+\subsubsection{Template Matching}
+\subsubsection{Gap Closing Alg}
+\subsubsection{Simple gap closing}
 \subsubsection{Cascade classifier}
 The cascade classifier is used for object recognition of doors, windows and other objects that are important for the room detection and zone identification. This algorithm is a machine learning algorithm that has to be trained with positive and negative images. The resulting learned parameters are safed in an XML file. Since this is a crucial part of this project, it is described more detailed than most other algorithms. In the following lines the implementation process is described as well as all the experiences we made during this project.
 
@@ -136,11 +152,21 @@ The basic problem was to find an algorithm that can find objects that vary in th
 \todo{Cascading Classifier: To few samples, Cat images prove, more positive, thickening, polydp, positive negative ratio, more specific negative samples}
 \todo{Object Single Cases}
 \todo{Gaps Closing: Clustering, Rotation / MinBox}
-
+\subsubsection{Bad results}
+\subsubsection{Shape Distance Matching}
+\subsubsection{Erosion for better Results}
+\subsubsection{Detection with more Pos/Neg}
+\subsubsection{Component analysis}
+\subsubsection{Border removal}
+\subsubsection{Minimum room}
+\subsubsection{Exterior wall closing algorithm}
+\subsubsection{Polygon approx}
+\subsubsection{opening for exterior wall}
 \subsubsection{Image size}
 As a result of a lot of the testing we found out that images that have too big of a size use a lot of ram to process. Images below 100 kBytes did not affect the heap too much. There was an increased use of RAM due to the program of around 1-2 GB. When images of size 300 kBytes and bigger, the computer used for testing used more than 5 GB of additional RAM to process during one instance. This can lead to huge problems. The program will crash if there is no more RAM available. Therefore it is necessary to reduce the size of the image to a size below 150 kBytes. Otherwise there is no guarantee that the given RAM is enough to process. Especially when there are different programs running. For example an additional architecture program. Those usually use a lot of Heap-Space themselves. 
 
 \subsection{Semantic Analysis}
+\subsubsection{NikieRoomDetection}
 \subsubsection{Watershed}
 The watershed is the core of our room search algorithm. Its purpose is to fill  the unknown areas that are provided in a foreground/background image from previous images. It needs extremely good preprocessing. If it has any previous errors, the resulting rooms will not make sense.
 
@@ -156,4 +182,6 @@ We ran into several problems during the implementation of this algorithm. The mo
 As a solution to the fact that not all the doors are found, there is the option to close doors by hand with the editor. This is the simplest solution that always guarantees success. We also tried to improve door detection with better samples and bigger sample size. This can be found in the section \todo{link section with door detection}.
 To erase object from the image we initially planned to do an object detection. There was time to do some additional object detection other than just door and window. Those can be found in the code. But there are too many different object only within those few plans we got to catch them all. To implement all of the and erase those objects is a next step for this project. For now the user has to erase all object that do not get caught by noise removal by hand.
 \todo{Watershed}
+
+\subsubsection{Watershed inverse binarization}
 \todo{Polygon Smoothing}
