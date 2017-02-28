@@ -21,9 +21,9 @@ Every part of the architecture has its own area of responsibility and is connect
 
 The software is built with the modern language \gls{gloss:Kotlin}, which is a statically typed programming language for the \acrfull{acro:JVM}. It supports special language features like extension methods, optional parameters and functional programming concepts, which all were used in this project and help to make the code more readable and maintainable. \cite{kotlin}
 
-The next sections show some examples where and how the new language are used in the software.
-
 \subsubsection{Extension Methods}
+This section show an example how the new language are used in the software.
+
 The language feature \flqq Extension Methods\frqq can be used to make the code more readable. It extends an existing object with a new method without the concept of inheritance.
 
 \begin{lstlisting}[caption={Erode image without extension methods},label={lst:imageOperations},language=Java]
@@ -47,17 +47,11 @@ image.threshold(128.0, 255.0, Imgproc.THRESH_BINARY)
 image.erode(3)
 \end{lstlisting}
 
-\subsubsection{Optional Parameters}
-
-\subsubsection{Functional Concepts}
-
-
-
 \pagebreak
 
-\subsection{Input / Output}
+\subsection{Meta Format}
 To support the different input and output formats the architecture uses a meta format for the
-floor plan images called AFImage. Different \gls{gloss:Drivers} \todo{Define drivers in the glossary} add the support for multiple file formats. With this architecture it is possible to extend the software with new file formats and work internally with the meta container.
+floor plan images called AFImage. Different \gls{gloss:Drivers} \todo{Define drivers in the glossary} add the support for multiple file formats. With this architecture it is possible to extend the software with new file formats and work internally with the meta container format.
 
 \begin{figure}[h]
   \centering
@@ -68,7 +62,33 @@ floor plan images called AFImage. Different \gls{gloss:Drivers} \todo{Define dri
 
 The meta container AFImage contains a map of attributes (see Figure \ref{fig:AFImage_CD}) which can be used by algorithms to get information created by other algorithms or to store information into an existing image.
 
-\todo{DWG / DXF Discussion}
+To interact with the user interface there is also a map of layers which contains shapes that are printed onto the image. The software uses this for example for recognised doors or rooms which are shown as overlay.
+
+\subsection{Input \& Output}
+
+\subsubsection{DWG / DXF}
+
+\begin{table}[h]
+\centering
+\caption{DWG / DXF Evaluation Result}
+\label{tbl:DWGEvaluationResult}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Name         & Vendor         & Reason                                               \\ \midrule
+YCAD Library & Ed Karlo       & No documentation and very unintuitive.                \\
+Teigha       & ODA            & Too expensive and only for conversion.               \\
+Kabeja       & -              & Could not read the example document.                 \\
+Tika         & Apache         & Only a meta text reader.                             \\
+jnetcad      & Johannes Raida & Only a converter.                                    \\
+CaffViewer   & DeCaff         & Too expensive but able to read the example document. \\ \bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\subsubsection{Scalable Vector Graphics}
+
+\subsubsection{Raster Image}
 
 \subsection{Algorithm}
 \todo{rewrite, this is nonsense}
