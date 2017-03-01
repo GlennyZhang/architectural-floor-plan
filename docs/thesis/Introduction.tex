@@ -26,5 +26,40 @@ This section will explain what the current process for room recognition is in th
  All those polygons will be saved in a separate layer in the floor plan. One layer will contain for example all rooms.
  \todo{write down the process more in depth and create an image of the process.} 
 
-\subsection{Experiment}
+\subsection{Metriken}
+To have some measurement to compare our product to what is already in place at the Planfabrik GmbH we went there and tested two values. Those values are the time which is needed to do the room segmentation and how many mouse-clicks it would take. We did that on five different floor plans that were preselected by us. They were selected because of how difficult they would be to analyze as well as their difference in the number of rooms to be found.
+
+The plans chosen are the following:
+
+AN\_1
+50er
+Grundriss\_OG
+H\_OG
+A1\_OG
+
+The time was taken with a countdown clock on an iPhone and was stopped manually by hand. This led to the time being usually 1-2 seconds longer than the actual time. The way this was done for all tests will be the same so that this will not matter and the tests are comparable to each other. The clicks made were counted by hand.
+An estimate for how many clicks are made on a floor plan is made along the following rules. For every room there is it usually takes the amount of edges the room has plus two additional clicks to create and confirm the room. There are also some additional clicks at the beginning to start the selection as well as the end to confirm and save it.
+What was not taken into consideration in these tests are miss-clicks. These do happen quite often. There are two different types of errors that can come from those. Either the last selected edge was way off and has to be corrected which will take 3 additional clicks. The second error is that it deletes all the work done by now and all rooms have to be reselected. During our testing this second error happened twice during six test-runs. That the edge selection is not correct happens around every third or fourth room. All together it can generate an additional 10 percent of clicks over an several floor plans.
+
+
+\begin{table}[]
+	\centering
+	\caption{My caption}
+	\label{my-label}
+	\begin{tabular}{@{}lll@{}}
+		\toprule
+		Plan          & Clicks & Time (S) \\ \midrule
+		AN\_1         & 77     & 182 \\
+		50er          & 85     & 170  \\
+		Grundriss\_OG & 47     & 96 \\
+		H\_OG         & 80     & 179 \\
+		A1\_OG        & 222    & 452 \\ \bottomrule
+	\end{tabular}
+\end{table}
+
+This table shows the test results for all the different floor plans. With this data we will make comparisons in the "Implementation" to test how effective our product is compared to the one in use.
+
+Based on information from the Planfabrik GmbH each hour of work costs them 80 CHF. Therefore any time saved on those room selections saves them a considerable amount of money. This is why the time measurement takes an important part in our metrics. Additionally any time the algorithm is running and the worker can focus on other things will not count towards the time taken for room recognition. This may also be and advantage of this project, due to the fact that its an automated algorithm and there doesn't have to be a worker to select all the edges. 
+
+
 \todo{Description of Testset}
