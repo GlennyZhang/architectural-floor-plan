@@ -1,5 +1,5 @@
 \section{Software Architecture}
-This chapter describes the architecture of the software developed. First there will be a description of the big picture separating the software into several parts. Each of those parts will then be explained in greater detail in a separate chapter.
+This chapter describes the architecture of the software developed. First there will be a description of the big picture of the software, which shows the separation the into different parts. Each of these parts will then be explained in greater detail in a separate chapter.
 
 The software architecture has to fulfil multiple requirements for this project. It should be easily extendable with new algorithms and \acrshort{acro:UI} extensions. The input and output format of the application should be independent from the algorithms to support different file types like bitmap images or \gls{gloss:DXF}/\gls{gloss:DWG} formats. The algorithms of the application should be linked together as workflows which then can be executed by an engine simultaneously.
 
@@ -22,13 +22,14 @@ Every part of the architecture has its own area of responsibility and is connect
 The software is built with the modern language \gls{gloss:Kotlin}, which is a statically typed programming language for the \acrfull{acro:JVM}. It supports special language features like extension methods, optional parameters and functional programming concepts, which all were used in this project and help to make the code more readable and maintainable. \cite{kotlin}
 
 \subsubsection{Extension Methods}
-This section show an example how the new language are used in the software.
+This section shows an example how the new language is used in the software.
 
-The language feature \flqq Extension Methods\frqq can be used to make the code more readable. It extends an existing object with a new method without the concept of inheritance.
+The language feature \flqq Extension Methods\frqq  can be used to make the code more readable. It extends an existing object with a new method without the concept of inheritance. The code of the method will be outsourced into a separate file.
 
 \begin{lstlisting}[caption={Erode image without extension methods},label={lst:imageOperations},language=Java]
 // threshold image
-Imgproc.threshold(image, image, 128.0, 255.0, Imgproc.THRESH_BINARY)
+Imgproc.threshold(image, image, 128.0, 255.0, 
+		Imgproc.THRESH_BINARY)
 
 // erode image
 val structureSize = 3
@@ -65,8 +66,12 @@ The meta container AFImage contains a map of attributes (see Figure \ref{fig:AFI
 To interact with the user interface there is also a map of layers which contains shapes that are printed onto the image. The software uses this for example for recognised doors or rooms which are shown as overlay.
 
 \subsection{Input \& Output}
+The following sections gives a brief overview about the different input and output formats used by the software.
 
 \subsubsection{DWG / DXF}
+As requested by the client, the software should support the import and export of DWG and DXF formats. These file formats are standard in the architectural environment and can be imported and exported by the software AutoCAD of the company Autodesk.
+
+There are several libraries for Java which support reading and writing of DWG and DXF files, but a lot of them are not maintained anymore or cost something. The table \ref{tbl:DWGEvaluationResult} shows the evaluated libraries together with the reason, why they are not suitable for this software (Please consult table \ref{tbl:DWGEvaluationMatrix} in the appendix for an extended comparison).
 
 \begin{table}[h]
 \centering
@@ -84,11 +89,20 @@ CaffViewer   & DeCaff         & Too expensive but able to read the example docum
 \end{tabular}
 \end{table}
 
+The only library which could read the test document provided by the client is the CaffViewer. But it is licensed under a closed source license and costs about 1350 Euro.
+
+\subsubsection{Raster Graphics}
+
 
 
 \subsubsection{Scalable Vector Graphics}
+Because DWG and DXF support could not be implemented, rooms and other shapes which the software recognises can be exported to \gls{acro:SVG}.
 
-\subsubsection{Raster Image}
+In contrast to the raster image format, the \gls{acro:SVG} file contains commands to draw the image later. This is useful to resize an image without loss of quality and it is possible to select every single element of image.
+
+With \gls{acro:SVG} it is possible to create an overlay for an existing plan.
+
+\subsubsection{Comma-separated Values}
 
 \subsection{Algorithm}
 \todo{rewrite, this is nonsense}
