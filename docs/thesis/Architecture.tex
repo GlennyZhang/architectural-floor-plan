@@ -52,7 +52,7 @@ image.erode(3)
 
 \subsection{Meta Format}
 To support the different input and output formats the architecture uses a meta format for the
-floor plan images called AFImage. Different \gls{gloss:Drivers} \todo{Define drivers in the glossary} add the support for multiple file formats. With this architecture it is possible to extend the software with new file formats and work internally with the meta container format.
+floor plan images called AFImage. Different \gls{gloss:Drivers} add the support for multiple file formats. With this architecture it is possible to extend the software with new file formats and work internally with the meta container format.
 
 \begin{figure}[h]
   \centering
@@ -170,16 +170,53 @@ It is also possible to show the parameter window which is described in the follo
 \pagebreak
 \subsection{User Interface}
 
+The user interface of the software is designed to be user friendly and very intuitive. It guides the user through the process and offers the tools to fix algorithm errors. The interface itself is very simple and contains only the controls which are absolutely necessarily (see Figure \ref{fig:afpars_window}).
+
+\begin{figure}[h!]
+  \centering
+      \includegraphics[width=1\textwidth]{afpars_window}
+  \caption{Main window of the software.}
+  \label{fig:afpars_window}
+\end{figure}
+
+\subsubsection{Layout}
+
+The layout of the interface is inspired by popular design softwares like Adobe Illustrator or Autodesk AutoCAD. The different parts of the layout are shown in Figure \ref{fig:afpars_window_zones}.
+
+At the top there is the navigation section which guides the user through the process of the application. The navigation buttons are ordered in a sequential manner to reflect the application workflow. First of all the user has to load the image from a file or the clipboard. After that he is able to start the workflow and run through the different steps.
+
+After finishing the workflow, the user has the possibility to export the different layers or a \gls{acro:CSV} file with all the detected rooms and room sizes.
+
+In the center of the window is the canvas section which is the drawing pane of the application. It always shows the current image of the process and let the user correct and inspect the algorithm output.
+
+To edit the current image, there are tools on the left side of the window. The controls there change the current tool used to manipulate the image.
+
+
+\begin{figure}[h!]
+  \centering
+      \includegraphics[width=1\textwidth]{afpars_window_zones}
+  \caption{Main window with zones.}
+  \label{fig:afpars_window_zones}
+\end{figure}
+
+On the right side of the application window, there is the layer section. The layer section shows the different layers which are printed onto the canvas. Every layer contains shapes which can be toggled as visible or not. There is always a draw layer which contains all the drawings done by the tools on the right side. It is also possible mark these drawings and to delete them if needed.
+
+Only drawn shapes and detect rooms can be deleted through the user interface. Every other layer is locked and can only be disabled.
+
+At the bottom there is the status bar which shows the status of the different task the user interface is performing.
+
 
 \subsubsection{Parameter Window} \label{sub:parameter_window}
-Because a lot of the algorithms need parameters to be set manually, there is the possibility to flag these parameters with an attribute in the code and the software is then able to automatically detect them and show an input field in the user interface. With this input field the user is able to set the parameter or use the default values (See Figure \ref{fig:parameter_window}).
+Because a lot of the algorithms need parameters to set manually, there is the possibility to flag these parameters with an attribute in the code and the software is then able to automatically detect them and show an input field in the user interface. With this input field the user is able to set the parameter or use the default values (See Figure \ref{fig:parameter_window}).
 
 
-\begin{figure}[h]
+\begin{figure}[h!]
   \centering
-      \includegraphics[width=0.6\textwidth]{parameter_window}
-  \caption{Flag based parameter window.}
+      \includegraphics[width=1\textwidth]{parameter_window}
+  \caption{Algorithm parameter window.}
   \label{fig:parameter_window}
 \end{figure}
+
+This parameter window is shown by the application when an algorithm is started. It runs the algorithm once and then shows the output of it in the preview window. Every change of the parameters let the algorithm run again. With this behaviour the user always gets an instant visual feedback of the changes he made.
 
 \todo{Why it looks like that. (Andere Software)}
