@@ -65,6 +65,8 @@ The meta container AFImage contains a map of attributes (see Figure \ref{fig:AFI
 
 To interact with the user interface there is also a map of layers which contains shapes that are printed onto the image. The software uses this for example for recognised doors or rooms which are shown as overlay.
 
+By default there is an attribute called "originalimage" which is a copy of the original image read by the AFImageReader. This is used in some algorithms to have access to the original, unprocessed picture.
+
 \pagebreak
 
 \subsection{Input \& Output}
@@ -123,10 +125,9 @@ With \gls{acro:SVG} it is possible to create an overlay for an existing plan.
 \subsubsection{Comma-separated Values}
 For exporting the different rooms and their room size, the software contains \gls{acro:CSV} format support. This file format is used to store table data like Microsoft Excel data-sheets.
 
+\pagebreak
 \subsection{Algorithm}
-\todo{rewrite, this is nonsense}
-\todo{Explain why it is of importance that algorithms can be used in a pipeline and in different orders, why it is essential that we can swap them out, reuse them etx.}
-To reuse algorithms in different workflows, the software architecture splits the algorithms into small parts which then can be connected together to pipelines. The algorithm itself does not know in which context it is running. As input parameter it gets just an AFImage from the last algorithm output and is able to return an AFImage again (see Figure \ref{fig:IAlgorithm_CD}). 
+The architecture of the algorithms follows the single responsibility principle \cite[p.~484]{mclaughlin_pollice_west_2010}. To simply reuse and replace algorithms in a pipeline, every algorithm is responsible for solving just one problem. For example the morphological transform algorithm just creates a clean image of a given input image and has no other task to do.
 
 \begin{figure}[h]
   \centering
@@ -135,8 +136,43 @@ To reuse algorithms in different workflows, the software architecture splits the
   \label{fig:IAlgorithm_CD}
 \end{figure}
 
-\subsubsection{Parameter}
-Because a lot of the algorithms need parameters to be set manually, there is the possibility to flag these parameters with an attribute in the code and the software is then able to automatically show a slider in the user interface. With this slider the user is able to set the parameter or use the default values (See Figure \ref{fig:parameter_window}).
+An algorithm is context unaware and stateless. It gets an input image and returns an output image which maybe is enhanced by more information or pixel based processed (see Figure \ref{fig:IAlgorithm_CD}).
+
+\subsubsection{History}
+As seen in Figure \ref{fig:IAlgorithm_CD} and Figure \ref{fig:parameter_window}, an algorithm is not just able to return one AFImage, instead it can return an unlimited count of AFImages, which then are displayed in the parameter window. These images are used to show a history of the steps the algorithm performed. This makes it easier to set the right parameter for the given algorithm and helps to debug all steps of an algorithm.
+
+\pagebreak
+\subsection{Workflow \& Workflow Engine}
+To create a pipeline which connects multiple algorithms together, there is the concept of workflows. A workflow is a list of algorithms which have a defined order in which they are executed.
+
+The reason why there is the possibility to define multiple workflows, is to run different combinations of algorithms in parallel or to test out multiple versions of pipelines. With workflows it is also simple to implement a flexible system, where the user is able to create new combinations of algorithms on his own.
+
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=1\textwidth]{workflow}
+  \caption{Workflow example with two algorithms.}
+  \label{fig:Workflow}
+\end{figure}
+
+The execution of a workflow is managed by the workflow engine which takes a workflow and an input image and passed the image through the different algorithms defined in the workflow (see Figure \ref{fig:Workflow}).
+
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=1\textwidth]{WorkflowEngine_CD}
+  \caption{Workflow engine class diagram.}
+  \label{fig:WorkflowEngine_CD}
+\end{figure}
+
+The workflow engine runs the workflows in a new thread and communicates with the application over events. It is possible to stop the workflow after each algorithm and make changes to the current AFImage of the process. This feature is used to let the user fix recognition errors.
+
+It is also possible to show the parameter window which is described in the following chapter (see \ref{sub:parameter_window}).
+
+\pagebreak
+\subsection{User Interface}
+
+
+\subsubsection{Parameter Window} \label{sub:parameter_window}
+Because a lot of the algorithms need parameters to be set manually, there is the possibility to flag these parameters with an attribute in the code and the software is then able to automatically detect them and show an input field in the user interface. With this input field the user is able to set the parameter or use the default values (See Figure \ref{fig:parameter_window}).
 
 
 \begin{figure}[h]
@@ -146,19 +182,4 @@ Because a lot of the algorithms need parameters to be set manually, there is the
   \label{fig:parameter_window}
 \end{figure}
 
-\subsubsection{History}
-As seen in Figure \ref{fig:IAlgorithm_CD} and Figure \ref{fig:parameter_window}, an algorithm is not just able to return one AFImage, instead it can return an unlimited count of AFImages, which then are displayed in the parameter window. These images are used to show a history of the steps the algorithm performed. This makes it easier to set the right parameter for the given algorithm and helps to debug all steps of an algorithm.
-
-\subsection{Workflow}
-
-
-\begin{figure}[h]
-  \centering
-      \includegraphics[width=1\textwidth]{workflow}
-  \caption{Workflow example with two algorithms.}
-  \label{fig:Workflow}
-\end{figure}
-
-\subsection{User Interface}
-\missingfigure{User Interface Image.}
 \todo{Why it looks like that. (Andere Software)}
