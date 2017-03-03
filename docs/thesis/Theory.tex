@@ -18,11 +18,11 @@ Binary dilation uses the exact same process. The only difference compared to the
 \subsubsection{Geodesic Dilation}
 \label{subsubsec:GeodesicDilation}
 
-Geodesic dilation is an iterative morphological transformation for reconstruction of marked foreground objects. Instead of the normal dilation (Section~\ref{subsubsec:Erosion and Dilation}) it uses a marker image F which defines the starting points of the dilation, a mask image G which defines the constraints of the dilation and a structuring element B which describes the dilation itself.
+Geodesic dilation is an iterative morphological transformation for reconstruction of marked foreground objects. Instead of the normal dilation (Section~\ref{subsubsec:Erosion and Dilation}) it uses a marker image $F$ which defines the starting points of the dilation, a mask image $G$ which defines the constraints of the dilation and a structuring element $B$ which describes the dilation itself.
 
 For example the algorithm is used to reconstruct the area of the brightest points of a distance transformed image (Section~\ref{subsubsec:Distance transformation}). We used this for extracting and enhancing the room center points which then are used as marker points of the watershed marker image (Section~\ref{subsub:watershed}).
 
-The geodesic dilation is defined as $D_{G}^{(n)}(F)$ where n is the iteration size and F the marker with respect to the mask G. As a precondition F is a subset of (or is included in) G: $F \subseteq G$.
+The geodesic dilation is defined as $D_{G}^{(n)}(F)$ where n is the iteration size and $F$ the marker with respect to the mask $G$. As a precondition $F$ is a subset of (or is included in) $G$: $F \subseteq G$.
 
 There is no implementation in \gls{gloss:OpenCV} of this algorithm. We implemented it ourself and give here short implementation overview.
 	
@@ -44,7 +44,7 @@ Where:
     \item $n$: is the iteration index
 \end{itemize}
 
-As seen in equation~\ref{eq:geodesic_dilation_iteration}, a geodesic dilation with zero iterations is equal to the original marker image. In the first iteration the marker image F is dilated with the structural element B and the result of that dilation is intersect with the mask image. This intersection limits the dilation to the marker constraints. After one iteration the next iteration uses the result of the last iteration as new marker image F.
+As seen in equation~\ref{eq:geodesic_dilation_iteration}, a geodesic dilation with zero iterations is equal to the initial marker image. In the first iteration the marker image $F$ is dilated with the structural element $B$ and the result of that dilation is intersect with the mask image. This intersection limits the dilation to the marker constraints. After one iteration the next iteration uses the result of the last iteration as new marker image $F$.
 
 The iteration stops as soon as the the difference (absolute array norm) between $F^{n}$ and $F^{n-1}$ becomes less then $\epsilon$ which in our case is 0.0001.
 
@@ -134,9 +134,25 @@ The hough transformation was used as an alternative to the current process to fi
 
 What the hough transformation does is to find 
 
-\subsubsection{Connected Component Analysis}
+\pagebreak
 
-\citep[Section 3.3.4]{szeliski_2011}
+\subsubsection{Connected Component Analysis}
+Finding connected components is a common way to detect objects in a thresholded image. In this work it is used to detect connected room pixels and calculate the size of each room out of it.
+
+This is accomplished by finding pixels which are adjacent to each other. A pixel is adjacent to another pixel if it is immediate $\mathcal{N}_4$ or $\mathcal{N}_8$ and has the same scalar value. Further the neighbour pixels are labeled with the same label and in the end combined to a region $\mathcal{R}$ \citep[Section 3.3.4]{szeliski_2011}.
+
+\begin{figure}[h]
+	\centering
+	\subfloat[4-neighbourhood, $\mathcal{N}_4$]{\includegraphics[width=0.3\textwidth]{n4_pixel}\label{fig:n4_pixel}}
+	\hfill
+	\subfloat[8-neighbourhood, $\mathcal{N}_8$]{\includegraphics[width=0.3\textwidth]{n8_pixel}\label{fig:n8_pixel}}
+	\caption{Pixel neighbourhoods.}
+	\label{fig:pixel_neighbourhood}
+\end{figure}
+
+The distance $\mathcal{N}_4$ and $\mathcal{N}_8$ refers to the distance between two pixels (Figure~\ref{fig:pixel_neighbourhood}). In $\mathcal{N}_4$ only the four pixels (top, left, bottom, right) are used to determine if two pixels are connected. In $\mathcal{N}_8$ all pixels around the pixel are included into the process \citep{burger_burge_2016}.
+
+For each region $\mathcal{R}$ it is possible to compute statistics like the area (number of pixels) or the perimeter (number of boundary pixels) \citep[Section 3.3.4]{szeliski_2011}. These statistics are used for example to determine the actual room size.
 
 \subsubsection{Watershed}
 \label{subsub:watershed}
