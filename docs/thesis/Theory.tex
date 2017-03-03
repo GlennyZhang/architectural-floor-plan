@@ -46,7 +46,7 @@ Where:
 
 As seen in equation~\ref{eq:geodesic_dilation_iteration}, a geodesic dilation with zero iterations is equal to the original marker image. In the first iteration the marker image F is dilated with the structural element B and the result of that dilation is intersect with the mask image. This intersection limits the dilation to the marker constraints. After one iteration the next iteration uses the result of the last iteration as new marker image F.
 
-The iteration stops after the difference (absolute array norm) between $F^{n}$ and $F^{n-1}$ is less then $\epsilon$ which in our case is 0.0001.
+The iteration stops as soon as the the difference (absolute array norm) between $F^{n}$ and $F^{n-1}$ becomes less then $\epsilon$ which in our case is 0.0001.
 
 \subsubsection{Distance transformation}
 \label{subsubsec:Distance transformation}
