@@ -3,7 +3,7 @@
 \subsubsection{Erosion and Dilation}
 \label{subsubsec:Erosion and Dilation}
 In our project we need dilation to strengthen small features that we want to be highlighted as well as to get rid of small details in the picture itself. We use it in early preprocessing. It helps together with the erosion to clean up pictures to further process them without too many interfering objects in the image. The main usage is to extract an image that features all the walls and has as few as possible other lines on it. \cite{burger_burge_2016}
-\\
+
 For our project we use the binary grayscale erosion.
 The erosion uses the following principle to work.
 
@@ -12,11 +12,41 @@ The erosion uses the following principle to work.
 \[where: B_{z} = \{b+z | b \in B\} with \forall z \in E \]
 
 A is a binary image in the Euclidean space or an integer grid. The erosion is done with the structuring element B on the image A. The structuring element has to be a subset or equal to A, otherwise there will be no erosion. The mask B will be applied to all pixels possible, if the mask fits on the center pixel of A, the value will be retained. Otherwise it will get deleted. This means that only when B is completely contained in A, values of pixels are retained.
-\\
+
 Binary dilation uses the exact same process. The only difference compared to the erosion is that the deletion of the pixel will not be setting pixel values to white (1) but to black (0). Both of those processes are inherently the same and can be summed up under the term morphological operation. These are altering the image with a mask, as we did here for erosion and dilation.
 
+\subsubsection{Geodesic Dilation}
+\label{subsubsec:GeodesicDilation}
 
+Geodesic dilation is an iterative morphological transformation for reconstruction of marked foreground objects. Instead of the normal dilation (section~\ref{subsubsec:Erosion and Dilation}) it uses a marker image F which defines the starting points of the dilation, a mask image G which defines the constraints of the dilation and a structuring element B which describes the dilation itself.
 
+For example the algorithm is used to reconstruct the area of the brightest points of a distance transformed image (section~\ref{subsubsec:Distance transformation}). We used this for extracting and enhancing the room center points which then are used as marker points of the watershed marker image (section~\ref{subsub:watershed}).
+
+The geodesic dilation is defined as $D_{G}^{(n)}(F)$ where n is the iteration size and F the marker with respect to the mask G. As a precondition F is a subset of (or is included in) G: $F \subseteq G$.
+
+There is no implementation in \gls{gloss:OpenCV} of this algorithm. We implemented it ourself and give here short implementation overview.
+	
+\begin{equation} \label{eq:geodesic_dilation_iteration}
+\begin{gathered}
+D_{G}^{(0)}(F) = F
+\\
+D_{G}^{(1)}(F) = (F \oplus B) \cap G)
+\\
+D_{G}^{(n)}(F) = D_{G}^{(1)}(D_{G}^{(n-1)}(F))
+\end{gathered}
+\end{equation}
+
+Where:
+\begin{itemize}[label=]
+    \item $F$: is the marker image
+    \item $G$: is the mask image
+    \item $B$: is the structuring element
+    \item $n$: is the iteration index
+\end{itemize}
+
+As seen in equation~\ref{eq:geodesic_dilation_iteration}, a geodesic dilation with zero iterations is equal to the original marker image. In the first iteration the marker image F is dilated with the structural element B and the result of that dilation is intersect with the mask image. This intersection limits the dilation to the marker constraints. After one iteration the next iteration uses the result of the last iteration as new marker image F.
+
+The iteration stops after the difference (absolute array norm) between $F^{n}$ and $F^{n-1}$ is less then $\epsilon$ which in our case is 0.0001.
 
 \subsubsection{Distance transformation}
 \label{subsubsec:Distance transformation}
@@ -104,6 +134,7 @@ The hough transformation was used as an alternative to the current process to fi
 
 What the hough transformation does is to find 
 \subsubsection{Watershed}
+\label{subsub:watershed}
 The watershed-algorithm in our project is used for segmentation of the different rooms. It can find rooms indifferent of its shape.
 \\
 The algorithm is processed on a grayscale image on which the color intensity is analogous to the height in a height map. The watershed in use does flooding. The idea is to place a water source in each regional minimum and flood the entire relief. It will stop if it meets a different watersource or an impassable barrier.
