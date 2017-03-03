@@ -2,7 +2,7 @@
 \subsection{Information Segmentation}
 \subsubsection{Erosion and Dilation}
 \label{subsubsec:Erosion and Dilation}
-In our project we need dilation to strengthen small features that we want to be highlighted as well as to get rid of small details in the picture itself. We use it in early preprocessing. It helps together with the erosion to clean up pictures to further process them without too many interfering objects in the image. The main usage is to extract an image that features all the walls and has as few as possible other lines on it. \cite{burger_burge_2016}
+In our project we need dilation to strengthen small features that we want to be highlighted as well as to get rid of small details in the picture itself. We use it in early preprocessing. It helps together with the erosion to clean up pictures to further process them without too many interfering objects in the image. The main usage is to extract an image that features all the walls and has as few as possible other lines on it \citep{burger_burge_2016}.
 
 For our project we use the binary grayscale erosion.
 The erosion uses the following principle to work.
@@ -18,9 +18,9 @@ Binary dilation uses the exact same process. The only difference compared to the
 \subsubsection{Geodesic Dilation}
 \label{subsubsec:GeodesicDilation}
 
-Geodesic dilation is an iterative morphological transformation for reconstruction of marked foreground objects. Instead of the normal dilation (section~\ref{subsubsec:Erosion and Dilation}) it uses a marker image F which defines the starting points of the dilation, a mask image G which defines the constraints of the dilation and a structuring element B which describes the dilation itself.
+Geodesic dilation is an iterative morphological transformation for reconstruction of marked foreground objects. Instead of the normal dilation (Section~\ref{subsubsec:Erosion and Dilation}) it uses a marker image F which defines the starting points of the dilation, a mask image G which defines the constraints of the dilation and a structuring element B which describes the dilation itself.
 
-For example the algorithm is used to reconstruct the area of the brightest points of a distance transformed image (section~\ref{subsubsec:Distance transformation}). We used this for extracting and enhancing the room center points which then are used as marker points of the watershed marker image (section~\ref{subsub:watershed}).
+For example the algorithm is used to reconstruct the area of the brightest points of a distance transformed image (Section~\ref{subsubsec:Distance transformation}). We used this for extracting and enhancing the room center points which then are used as marker points of the watershed marker image (Section~\ref{subsub:watershed}).
 
 The geodesic dilation is defined as $D_{G}^{(n)}(F)$ where n is the iteration size and F the marker with respect to the mask G. As a precondition F is a subset of (or is included in) G: $F \subseteq G$.
 
@@ -61,11 +61,11 @@ The formula for the distance transformation of I, D(x) itself is defined as:
 It applies to any pixel x = (u,v) of the input image. If the pixel is part of the foreground image FG(I) then the result of the transformation D(x) is zero. As said above, the distance formula dist(x,x') is the euclidean distance (also called L\textsubscript{2}-Norm) between two pixels.
 \[dist(x,x') = ||x - x'|| = \sqrt{(u - u')^2 + (v - v')^2}\]
 
-Since the exact calculation with the euclidean distance takes a lot of computational power openCV uses the Chamfer-Algorithm instead. This algorithm runs a two masks over the image. The first mask M\textsubscript{L} is run over in a diagonal manner over the image starting in the top left corner of the image. The second mask M\textsubscript{R} does the same in reverse starting at the bottom right corner. Those masks are a matrix that represent the euclidean distance between the center and the pixels around it. Each mask only changes the pixels in the direction they are run through the image \cite{burger_burge_2016}. As a result, the masks look similar to the following ones:
+Since the exact calculation with the euclidean distance takes a lot of computational power openCV uses the Chamfer-Algorithm instead. This algorithm runs a two masks over the image. The first mask M\textsubscript{L} is run over in a diagonal manner over the image starting in the top left corner of the image. The second mask M\textsubscript{R} does the same in reverse starting at the bottom right corner. Those masks are a matrix that represent the euclidean distance between the center and the pixels around it. Each mask only changes the pixels in the direction they are run through the image \citep{burger_burge_2016}. As a result, the masks look similar to the following ones:
 \[M_{L} = \begin{bmatrix} . & . & .\\ . & x & m_1 \\ m_2 & m_1 & m_2 \end{bmatrix}\]
 \[M_{R} = \begin{bmatrix} m2 & m1 & m2 \\ m1 & x & . \\ . & . & . \end{bmatrix}\]
 
-This all leads to the resulting effect shown in the image below.
+This all leads to the resulting effect shown in the image below \citep[Section 3.3.3]{szeliski_2011}.
 \todo{Make image of distance transformation before and after}
 Source: http://stackoverflow.com/questions/7426136/fastest-available-algorithm-for-distance-transform
 
@@ -133,6 +133,11 @@ The classifier is trained with a training set of positives and negatives. Each s
 The hough transformation was used as an alternative to the current process to find walls and therefore the rooms. In the implementation it will be explained why this was not implemented in the final project.
 
 What the hough transformation does is to find 
+
+\subsubsection{Connected Component Analysis}
+
+\citep[Section 3.3.4]{szeliski_2011}
+
 \subsubsection{Watershed}
 \label{subsub:watershed}
 The watershed-algorithm in our project is used for segmentation of the different rooms. It can find rooms indifferent of its shape.
