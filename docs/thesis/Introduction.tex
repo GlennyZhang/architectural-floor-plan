@@ -59,6 +59,9 @@ For the semantic analysis they use SURF as a algorithm to detect doors. This hel
 	\label{fig:paper2_floorplan}
 \end{figure}
 
+Both of those papers have a room detection rate between 80-90\%. The important part though is the room recognition rate which is only around 50\% for the work by Mace, Valveny,Loctea and Tabbone. This is really low for a use in an actual program. The work by Ahmed,Liwicki,Weber and Dengel improved this rate up to about 80\% which is a big improvement. This is most likely due to the fact that they use SURF as a door recognition algorithm which helps separate the rooms more accurately. Both works struggle with the difference in how symbols and walls are depicted in architectural floor plans. They can only detect those rooms if the walls are the thickest lines on a plan and there is no interference from symbols.
+
+\todo{write on nikie}
  
 
 \subsection{Metriken}
@@ -96,5 +99,3 @@ This table shows the test results for all the different floor plans. With this d
 
 Based on information from the Planfabrik GmbH each hour of work costs them 80 CHF. Therefore any time saved on those room selections saves them a considerable amount of money. This is why the time measurement takes an important part in our metrics. Additionally any time the algorithm is running and the worker can focus on other things will not count towards the time taken for room recognition. This may also be and advantage of this project, due to the fact that its an automated algorithm and there doesn't have to be a worker to select all the edges. 
 
-
-\todo{Description of Testset}
