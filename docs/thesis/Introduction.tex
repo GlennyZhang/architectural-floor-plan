@@ -22,9 +22,44 @@ In the end, the program is supposed to create an output-file with the informatio
 This section will explain what the current process for room recognition is in the Planfabrik GmbH. It will show the actual process that is to be replaced by the software described in this paper. In an additional section, there will be a description of papers similar to this one. The idea is to show what solution other works have done to solve the problem. It also describes the work that was the foundation for our work.
 
 \subsubsection{Manual process}
- The process for room and zone detection is done by hand. To start, they have an unprocessed architectural floor plan in a ,dwg or .dxf format. It is processed by a CAD. When defining the room size, the person processing the plan has to select an edge selection tool to create the room polygon. As a room has at least four edges, this process will take at least 4 mouse clicks for every room. This selection tool has its difficulties as it is not always very exact and a corner selection has to be corrected from time to. From what we have experienced, every 4-8 corners there is going to be such an inaccuracy. The same process is done for any zone they define which will more than double the amount of user interactions necessary. This is due to the fact that every room can have several different zones.
- All those polygons will be saved in a separate layer in the floor plan. One layer will contain for example all rooms.
- \todo{write down the process more in depth and create an image of the process.} 
+ The process for room and zone detection is done by hand. To start, they have an unprocessed architectural floor plan in a ,dwg or .dxf format. It is processed by a \gls{gloss:CAD}. When defining the room size, the person processing the plan has to select an edge selection tool to create the room polygon. As a room has at least four edges, this process will take at least 4 mouse clicks for every room. This selection tool has its difficulties as the person operating might not select the exact corner or miss-click which leads to the loss of the whole selected polygon. From what we have experienced, every 8-16 corners there is going to be such an inaccuracy. 
+ 
+ To define the zones for different density of heating pipes the same process of selecting a polygon is done. Depending on the elements of the plan, this can double the amount of user interactions. Some rooms might not contain those zones but others might have several.
+ 
+ As a result the \gls{gloss:CAD} can calculate all the different sizes for the room.
+ 
+\subsubsection{Similar works}
+This section introduces two papers A System to Detect Rooms in Architectural Floor Plan Images \citep[10]{mace_valveny_loctea_tabbone_2010} and Automatic Room Detection and Room Labeling from Architectural Floor Plans \citep[1]{ahmed_liwicki_weber_dengel_2012} which are two very recent paper on the exact problem of room segmentation. Additionally we shortly present the \citep[1]{nikieroomdet} which was the starting point for a first version of the program. It was one of the few places that showed actual code. 
+
+The second paper wrote by Ahmed,Liwicki,Weber and Dengel proposes a general structure for detectiong floor plans. This structure will help us separate and compare the steps of the algorithms proposed in both the discussed papers. It will also be used for the further structure of this document. They propose to separate the algorithm in the three parts of "Information segmentation", "Structural analysis" and "Semantic analysis". The information segmentation part contains all algorithms separating information (text, line thickness, symbols, etc.). The structural analysis contains algorithms that combine the important information from previous algorithms and and create a basic wall image. Finally the semantic analysis finds symbols and rooms based on information from the structural analysis.
+
+The paper written by Mace, Valveny,Loctea and Tabbone uses several algorithms for information segmentation. They do a graphic/text separation because not all floor plan contain text, therefore text like room names can not be used and have to be removed.  Additionally they use a thick/thin line separation algorithm to separate the walls from the other lines of the floor plan. The walls are expected to be the thickest lines on the plan.
+
+For structural analysis they use the hough transformation which is described in Section \ref{subsubsec:Hough transformation} in combination with image vectorization. This is used for a simple wall detection algorithm. The wall detection works on an image with the contour of the walls. They take two lines that are close and have the same orientation and see if the pixels in between those lines are black. If so this is an actual wall due to the fact that before taking the contour of the walls they were connected. 
+
+The room detection in the semantic analysis is done with a polygon partitioning technique that uses the wall as a convex hull and tries to split it up in smaller polygons (rooms) that all have to be convex. This in combination of the fact that rooms are mostly rectangular shape which is adjusted with some post-processing will find the rooms.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.4\textwidth]{paper1_floorplan}
+	\caption{Room segmentation with the algorithm used in "A System to Detect Rooms in Architectural Floor Plan Images" by Mace, Valveny,Loctea and Tabbone. }
+	\label{fig:paper1_floorplan}
+\end{figure}
+
+The second paper mentioned above by Ahmed,Liwicki,Weber and Dengel take a similar approach. For information segmentation they also separate text/lines as well as separate thick/thin lines. The difference is that they use the text to name the rooms. Additionally they separate the image in thick, medium and thin lines instead of just thick and thin. Thick lines represent external, medium internal walls and thin lines represent symbols.
+
+For structural analysis they also use a similar approach for wall detection but additionally close additional gaps with a convex/concave hypothesis further described in the paper. Those algorithms lead to a very refined image of the walls with better results than proposed in the previous paper.
+
+For the semantic analysis they use SURF as a algorithm to detect doors. This helps separating rooms as the the definition of separate is that there has to be a door connection them. To find the rooms a connected component analysis is used on the wall image. Gaps where doors exist where closed with SURF and therefore rooms are where a connected component of white pixels is. Each of these rooms will then be labeled with a name from the text layer that has text in the area of the detected room.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{paper2_floorplan}
+	\caption{Room segmentation with the algorithm used in "Automatic Room Detection and Room Labeling from Architectural Floor Plans" by Ahmed,Liwicki,Weber and Dengel. }
+	\label{fig:paper2_floorplan}
+\end{figure}
+
+ 
 
 \subsection{Metriken}
 To have some measurement to compare our product to what is already in place at the Planfabrik GmbH we went there and tested two values. Those values are the time which is needed to do the room segmentation and how many mouse-clicks it would take. We did that on five different floor plans that were preselected by us. They were selected because of how difficult they would be to analyze as well as their difference in the number of rooms to be found.
