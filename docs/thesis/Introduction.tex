@@ -50,7 +50,7 @@ The second paper mentioned above by Ahmed,Liwicki,Weber and Dengel take a simila
 
 For structural analysis they also use a similar approach for wall detection but additionally close additional gaps with a convex/concave hypothesis further described in the paper. Those algorithms lead to a very refined image of the walls with better results than proposed in the previous paper.
 
-For the semantic analysis they use SURF as a algorithm to detect doors. This helps separating rooms as the the definition of separate is that there has to be a door connection them. To find the rooms a connected component analysis is used on the wall image. Gaps where doors exist where closed with SURF and therefore rooms are where a connected component of white pixels is. Each of these rooms will then be labeled with a name from the text layer that has text in the area of the detected room.
+For the semantic analysis they use \ref{gloss:SURF} as a algorithm to detect doors. This helps separating rooms as the the definition of separate is that there has to be a door connection them. To find the rooms a connected component analysis is used on the wall image. Gaps where doors exist where closed with \ref{gloss:SURF} and therefore rooms are where a connected component of white pixels is. Each of these rooms will then be labeled with a name from the text layer that has text in the area of the detected room.
 
 \begin{figure}[h]
 	\centering
@@ -59,7 +59,7 @@ For the semantic analysis they use SURF as a algorithm to detect doors. This hel
 	\label{fig:paper2_floorplan}
 \end{figure}
 
-Both of those papers have a room detection rate between 80-90\%. The important part though is the room recognition rate which is only around 50\% for the work by Mace, Valveny,Loctea and Tabbone. This is really low for a use in an actual program. The work by Ahmed,Liwicki,Weber and Dengel improved this rate up to about 80\% which is a big improvement. This is most likely due to the fact that they use SURF as a door recognition algorithm which helps separate the rooms more accurately. Both works struggle with the difference in how symbols and walls are depicted in architectural floor plans. They can only detect those rooms if the walls are the thickest lines on a plan and there is no interference from symbols.
+Both of those papers have a room detection rate between 80-90\%. The important part though is the room recognition rate which is only around 50\% for the work by Mace, Valveny,Loctea and Tabbone. This is really low for a use in an actual program. The work by Ahmed,Liwicki,Weber and Dengel improved this rate up to about 80\% which is a big improvement. This is most likely due to the fact that they use \ref{gloss:SURF} as a door recognition algorithm which helps separate the rooms more accurately. Both works struggle with the difference in how symbols and walls are depicted in architectural floor plans. They can only detect those rooms if the walls are the thickest lines on a plan and there is no interference from symbols.
 
 \todo{write on nikie}
  
