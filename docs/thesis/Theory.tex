@@ -70,6 +70,11 @@ This all leads to the resulting effect shown in the image below \citep[Section 3
 Source: http://stackoverflow.com/questions/7426136/fastest-available-algorithm-for-distance-transform
 
 \subsubsection{Find contours}
+The find-contours algorithm was used several times during the implementation of this project for different uses. Those uses will are described in the "Implementation" part of this document. What the algorithm does is that it finds the borders or the contour of different components in an image. The algorithm used by OpenCv was first described by Suzuki and Abe \cite{suzuki_abe_1985}. This will be a short description of what the algorithm does as the algorithm itself is quite complicated and can be reviewed completly in their paper.
+
+The algorithm does is that it searches for borders on a binary image.
+
+
 The find-contours algorithm will not receive a detailed description, since it does little more than a simple threshhold in our program. What it is used for is to create the bassins for the watershed algorithm based on the distance transformation. The distance transformation gives us a way to find bassins that are certainly in a room. With the contours-algorithm we create a sharp border for those bassins. Therefore the resulting has a bassin in the center of every room. We can guarantee that this bassin is part of a room and in no way possible part of a wall. In the watershed we will make use of that fact, we will try to connect all bassins to find separate rooms for those that don't connect to others. A more detailed explanation you will find in the watershed section.
 
 \subsubsection{Corner detection}
@@ -105,8 +110,15 @@ There are several known algorithms that implement this problems. Examples of tho
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.4\textwidth]{convex_hull}
-	\caption{Example image as to what the convex hull algorithm does.}
+	\caption{Example image of a convex hull. The black line around the point-set shows that start of the algorithm as it is closing around all the outer points until  being the convex hull (blue).}
 	\label{fig:convex_hull}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.4\textwidth]{door_closing}
+	\caption{This is an image after being processed by the harris corner detection. All white pixels are part of a corner. The points A,B,C,D will be part of a found door as they create a rectangle. Points E and F will be left out.}
+	\label{fig:door_closing}
 \end{figure}
 
 
@@ -115,8 +127,15 @@ There are several known algorithms that implement this problems. Examples of tho
 The cascade door training algorithm has found the rectangles that represent the doors. What is needed in the end though is not the door itself but the space inbetween the two walls that the door connects. This is so that we can seperate the different rooms that have doors inbetween.
 This algorithm combines the edges that have been found with the Harris-Corner detection and the doors from the cascade door algorithm. It uses a heuristic that works as following. The door algorithm provides four points that mark the edge of the recognized door and build a rectangle.
 Added to the rectangle is  a threshold in all directions in which the algorithm searches for edges. The idea is that due to the structure of walls there will be a rectangle made out of four edge points inside the door area that represents the space inbetween the walls. It is expected to only find one rectangle, due to the fact that it makes no sense to have a wall go through a door. As well as the fact that there should be no further lines because it it a cleaned up image and any other line except the walls should not be in that image.
-To find the rectangle it connects two edges and calculates the angle compared to the x-Axis for all pairs of edges available. Now all the angles get compared to each other. If two edges AB and CD have a similar angle there will be another comparison for the angles between AC and BD or AD and BC. If one of those two is also of a similar angle we have found our door-rectangle.
-\todo{Add image of how those edges are found}
+To find the rectangle it connects two edges and calculates the angle compared to the x-Axis for all pairs of edges available. Now all the angles get compared to each other. If two edges AB and CD have a similar angle there will be another comparison for the angles between AC and BD or AD and BC. If one of those two is also of a similar we then need to prove that two lines that build a corner have an angle of 90 degree between them. If the opposing lines are all parallel and the angle of one corner is 90 degree we can assume that all other angles have to be 90 degree too and it is therefore a rectangle. 
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.4\textwidth]{door_closing}
+	\caption{This is an image after being processed by the harris corner detection. All white pixels are part of a corner. The points A,B,C,D will be part of a found door as they create a rectangle. Points E and F will be left out.}
+	\label{fig:door_closing}
+\end{figure}
+
 
 \subsection{Structural Analysis}
 
@@ -149,9 +168,26 @@ The classifier is trained with a training set of positives and negatives. Each s
 \label{subsubsec:Hough transformation}
 The hough transformation was used as an alternative to the current process to find walls and therefore the rooms. In the implementation it will be explained why this was not implemented in the final project.
 
-What the hough transformation does is to find 
+The hough transformation is a general approach to find forms like lines or circles in images. This section will discuss how to detect lines in an image.
+Any line can be represented as $r = x \cos \theta + y \sin \theta$ which is the "Hessesche Normalenform". The parameter $r$ represents the distance from the origin, in an image the bottom left, to the closest point on a straight line that goes through $(x,y)$. The angle $\theta$ represents the angle between the x-axis and the line we used for our parameter $r$. Any possible straight line that can go through the image can be represented by those parameters. The plane of $(r,\theta)$ is called the Hough space for straight lines.
 
-\todo{finish this chapter!}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.4\textwidth]{hough_gerade}
+	\caption{This is an example image of a hough-line with the distance $r$ and the angle $\theta$. It represents the hough line $r = x \cos \theta + y \sin \theta$.}
+	\label{fig:hough_line}
+\end{figure}
+
+The algorithm now uses a two dimensional array called accumulator to detect the existence of a straight line The algorithm now determines for each pixel and its neighborhood if there is a possibility for a line and then increments the value in the accumulator for the representative $(r,\theta)$ values. When done for all pixels on the image, there will be local maxima for $(r,\theta)$ values in the accumulator. Those maxima are the most likely to represent a straight line in the actual image.  
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.4\textwidth]{hough_accumulator}
+	\caption{The image on the left side represents an image with lines and some noise on it. The right image represents the Hough plane (accumulator) with local maxima which are highlighted as white pixels.}
+	\label{fig:hough_accumulator}
+\end{figure}
+
+To find the actual length of the lines there has to be a further algorithm that checks where on those lines that were found the line on the image exists. This can done in several ways and therefore will not be explained here. There are several algorithms described on the internet or for example in the book "Digital image processing: an algorithmic introduction using Java" \cite{burger_burge_2016}.
 
 \pagebreak
 
