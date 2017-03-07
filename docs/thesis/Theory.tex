@@ -72,10 +72,19 @@ Source: http://stackoverflow.com/questions/7426136/fastest-available-algorithm-f
 \subsubsection{Find contours}
 The find-contours algorithm was used several times during the implementation of this project for different uses. Those uses will are described in the "Implementation" part of this document. What the algorithm does is that it finds the borders or the contour of different components in an image. The algorithm used by OpenCv was first described by Suzuki and Abe \cite{suzuki_abe_1985}. This will be a short description of what the algorithm does as the algorithm itself is quite complicated and can be reviewed completly in their paper.
 
-The algorithm does is that it searches for borders on a binary image.
+The algorithm searches for borders in an image. A border is for example on a binary image where the pixel value changes from 0 to 1 or the other way. The algorithm defines two components that are possible. There are borders, that is where the value changes. Then there are holes, these are the spaces between the borders as well as the background.
 
+The algorithm searches on pixels on the image from the outside for borders. As soon as it meets a pixel that is part of a border it stops and assigns this border a uniquely identifiable number. This marks it as a border. Each found border will also be assigned a parent, this is the border that encloses this border. This will define a hierarchy of all borders. The algorithm then follows the detected border and sets all pixels that are part of it to the same number. This will be repeated until all pixels of the image are visited and all borders are found.
 
-The find-contours algorithm will not receive a detailed description, since it does little more than a simple threshhold in our program. What it is used for is to create the bassins for the watershed algorithm based on the distance transformation. The distance transformation gives us a way to find bassins that are certainly in a room. With the contours-algorithm we create a sharp border for those bassins. Therefore the resulting has a bassin in the center of every room. We can guarantee that this bassin is part of a room and in no way possible part of a wall. In the watershed we will make use of that fact, we will try to connect all bassins to find separate rooms for those that don't connect to others. A more detailed explanation you will find in the watershed section.
+This is a very simplistic explanation of what the algorithm does. The whole algorithm is described and proved in the work of Suzuki and Abe \cite{suzuki_abe_1985} for anyone interested in the exact algorithm.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.4\textwidth]{suzuki_abe}
+	\caption{The representation of borders in an example image in the paper of Suzuki and Abe. The value represent the different borders of connected pixels.}
+	\label{suzuki_abe}
+\end{figure}
+
 
 \subsubsection{Corner detection}
 The corner detection algorithm is used to find corners in an image that contains mostly walls. Its purpose is to find the edges of all walls and therefore provide important information for the door gap closing algorithm. Why this information is needed will be explained in the section about this door gap closing algorithm.
