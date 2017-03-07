@@ -110,9 +110,9 @@ As this is not perfect due to the variety of possible objects on a plan, there i
 As a result of the noise removal we get an image with very basic information about where the walls are. This will be very important for our next step and other steps to come.
 \subsubsection{Normalize Image}
 \subsubsection{Distance transformation \& Geodesic dilation}
-The distance transformation is used to find the centers of the rooms as explained in section~\ref{subsubsec:Distance transformation}. As its base it needs a cleaned up image of all the walls. It is a result of the noise removal we discussed in the previous section. To find the actual area of the of the room there is further processing with a geodesic dilation needed.
+The distance transformation is used to find the centers of the rooms as explained in section~\ref{subsubsec:Distance transformation}. As its base it needs a cleaned up image of all the walls. It is a result of the noise removal we discussed in the previous section. To find the actual area of the of the room there is further processing with a geodesic dilation (Section~\ref{subsubsec:GeodesicDilation}) needed.
 
-The distance transformation gives us an image that represents the distance from the walls (lines in black) as a gradient of gray values going from dark (close to the wall) to bright (farther away). This means that there will be a center in each room that is very bright and has color values close to white.
+The distance transformation gives us an image that represents the distance from the walls (lines in black) as a gradient of grey values going from dark (close to the wall) to bright (farther away). This means that there will be a center in each room that is very bright and has color values close to white.
 
 \begin{figure}[H]
 	\centering
@@ -124,7 +124,9 @@ The distance transformation gives us an image that represents the distance from 
 To find the centers there had to be an additional method that provides us with a specific information where these center areas are.
 \todo{Discuss specific parameters for each image in parameter finding}
 \todo{Distance Transform, Why not Contour Detection}
-\subsubsection{Find Center of Distance Transform}  
+\subsubsection{Find Center of Distance Transform}
+As seen in figure~\ref{fig:dist_transform} the center of a room is always one of the brightest point in the distance transformed image.
+  
 \subsubsection{Hough transformation}
 \subsubsection{JavaCv}
 Hough line transformation was the first algorithm we tried using to find the walls in the floor plan. It finds straight lines  
