@@ -171,6 +171,10 @@ To train and select a small size of features this algorithm uses the "AdaBoost" 
 To achieve improved detection rate and drastically reduce the computation time this algorithm implements a cascade function. This means that the detection process is that of a degenerate decision tree. A positive result from a classifier triggers the evaluation of the next classifier. If at any point the result is negative the algorithm immediately declares the result as negative and won't be computed any further. The idea is that the first layer rules out a large amount of possibilities with very little computation time. Further stages of the process will reduce further negatives but need additional computation power. The idea behind this process is that in an image most sub-windows will be negative and such should be rejected as early as possible in the cascade process to require fewer computational effort.
 The classifier is trained with a training set of positives and negatives. Each stage is trained by adding features until the target detection and false positive rates are met. Stages are added until the overall target for false positive rate and detection rate is met. In the end there is always a balance to between finding high detection rates with low false positive rates and lower time for computation.
 
+\subsubsection{Template Matching}
+
+\subsubsection{Orientated FAST and Rotated BRIEF}
+
  
 \subsection{Semantic Analysis}
 \subsubsection{Hough transformation}
@@ -227,8 +231,4 @@ The algorithm is processed on a gray-scale image on which the color intensity is
 The basic algorithm uses three different markings for all regions. The values I for each region can be:
 \[I(u,v) = \begin{cases} 0 & background \\  255 & foreground \\ 1..254 & regions \end{cases} \]
 
-It is a really simple algorithm where it starts with looking for an unmarked foreground pixel. All pixels of the region that are connected to this starting pixel will be visited and marked. There are three different ways to do this process. It can be a recursive, an iterative depth-first or breadth-first flood filling. It is not clear what implementation OpenCv uses. In the end all of the methods lead to a similar result and thus will not be discussed further. 
-
-\subsubsection{Template Matching}
-
-\subsubsection{Oriented }
+It is a really simple algorithm where it starts with looking for an unmarked foreground pixel. All pixels of the region that are connected to this starting pixel will be visited and marked. There are three different ways to do this process. It can be a recursive, an iterative depth-first or breadth-first flood filling. It is not clear what implementation OpenCv uses. In the end all of the methods lead to a similar result and thus will not be discussed further.
