@@ -1,6 +1,6 @@
 \section{Annex}
 
-\subsection{Listings}
+\subsection{Figures}
 \begin{table}[h]
 \centering
 \caption{DWG / DXF evaluation matrix.}
@@ -22,5 +22,30 @@ CaffViewer   & DeCaff         & 1350 Euro    & May 17, 2016     & Freeware      
 This section describes, how to extend the application developed in this work. It is split into different tasks, which will most likely be done in the future.
 
 \subsubsection{Adding new algorithm}
+We recommend, to split up different parts of a new process into different algorithms, which enhances the maintainability of an algorithm.
+
+To add a new algorithm you have to create a new class, which implements the $IAlgorithm$ interface. The interface and algorithms are described in section~\ref{sub:algorithm}, but we will give you here a short overview over the interface.
+
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.6\textwidth]{IAlgorithm_CD}
+  \caption{Algorithm interface class diagram.}
+  \label{fig:IAlgorithm_CD_DG}
+\end{figure}
+
+In figure~\ref{fig:IAlgorithm_CD_DG} you see the methods, which have to be implemented to run the algorithm. The very basic version of an algorithm just returns the input image as it is (Listing \ref{lst:basicAlgorithm}).
+
+\begin{lstlisting}[caption={Basic version of an algorithm.}, label={lst:basicAlgorithm}, language=Kotlin]
+class MyAlgorithm : IAlgorithm
+{
+    override val name: String
+        get() = "MyAlgorithm"
+
+    override fun run(image: AFImage, history: MutableList<AFImage>): AFImage {
+        return image
+    }
+}
+\end{lstlisting}
+
 \subsubsection{Extending the user interface}
 \subsubsection{Training new classifiers}
