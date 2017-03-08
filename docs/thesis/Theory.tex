@@ -85,8 +85,10 @@ This is a very simplistic explanation of what the algorithm does. The whole algo
 	\label{suzuki_abe}
 \end{figure}
 
+\pagebreak
 
 \subsubsection{Corner detection}
+\label{subsub:CornerDetection}
 The corner detection algorithm is used to find corners in an image that contains mostly walls. Its purpose is to find the edges of all walls and therefore provide important information for the door gap closing algorithm. Why this information is needed will be explained in the section about this door gap closing algorithm.
 This project uses the Harris corner algorithm due to its reliability, simplicity in implementation and the good results we got after the first uses. The algorithm itself is implemented by OpenCv.
 The idea of the algorithm is that there are edges wherever the gradient of the image function is high for more than one direction.
@@ -108,7 +110,44 @@ whereas the parameter \begin{math}\alpha\end{math} defines the sensitivity of th
 with the threshold t\textsubscript{H} being around 10 000 to 1 000 000. To find the exact corner it finds groups of candidates that are close to each other are all eliminated but the best candidate.
 
 \subsubsection{Point clustering}
+Due the fact, that the corner detection (Section~\ref{subsub:CornerDetection}) sometimes detects too many points at a wall corner, the aim of this algorithm is to create a sparse point group. This algorithm assigns a list of points into groups and combines them together to one single point, which represents the average position of all points in the group (Figure~\ref{fig:HCPointClustering}).
 
+\begin{figure}[h!]
+	\centering
+	\subfloat[Multiple points at wall corner]{\includegraphics[width=0.4\textwidth]{hc_overdetection}\label{fig:hc_overdetection}}
+	\hfill
+	\subfloat[Averaged point at wall corner]{\includegraphics[width=0.4\textwidth]{clustered_hc_detection}\label{fig:clustered_hc_detection}}
+	\caption{Harris Corner detection before point clustering (a) and after point clustering (b).}
+	\label{fig:HCPointClustering}
+\end{figure}
+
+The algorithm takes a list of points $M$ in $R^2$ and a maximal distance $d$ as input and returns a list of grouped points. If the $L^2$ distance between two points, is less then the maximal distance $d$, the points are adjacent and assigned to the same group.
+
+For each unprocessed point in the group, the algorithm is repeated to avoid a greedy behaviour of the algorithm.
+
+A single point without any adjacent remains as it is (Figure~\ref{fig:point_clustering_single}). Multiple points are combined into one single point (Figure~\ref{fig:point_clustetring_multiple_close}). Sometimes it leads to large groups, because points which are not adjacent, can be assigned to the same group. In figure~\ref{fig:point_clustering_multiple_spread}, that case is visualised, where multiple points are assigned to the same group, which are further away then the maximal distance $d$.
+
+\begin{figure}[h!]
+	\centering
+	\subfloat[Single point]{\includegraphics[width=0.3\textwidth]{point_clustering_single}\label{fig:point_clustering_single}}
+	\hfill
+	\subfloat[Multiple points]{\includegraphics[width=0.3\textwidth]{point_clustetring_multiple_close}\label{fig:point_clustetring_multiple_close}}
+	\hfill
+	\subfloat[Multiple spread points]{\includegraphics[width=0.3\textwidth]{point_clustering_multiple_spread}\label{fig:point_clustering_multiple_spread}}
+	\caption{Different point clustering cases.}
+	\label{fig:PointClusteringCases}
+\end{figure}
+
+To minimise the group to one single point, which defines the center of the corner, the algorithm uses the average center of all points in the group (Equation~\ref{eq:PointAverage}).
+
+
+\begin{equation} \label{eq:PointAverage}
+\begin{gathered}
+\bar{X} = \sum_{i=1}^{N}X_{i}/N
+\\
+\bar{Y} = \sum_{i=1}^{N}Y_{i}/N
+\end{gathered}
+\end{equation}
 
 \subsubsection{Convex hull}
 Finding the convex hull of a set of points is a good way for this project to find the outer points of our wall that is enclosing the whole building. The convex hull is the smallest convex set of points that contains all points given in a Euclidean space.
@@ -125,14 +164,6 @@ There are several known algorithms that implement this problems. Examples of tho
 	\caption{Example image of a convex hull. The black line around the point-set shows that start of the algorithm as it is closing around all the outer points until  being the convex hull (blue).}
 	\label{fig:convex_hull}
 \end{figure}
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=0.4\textwidth]{door_closing}
-	\caption{This is an image after being processed by the harris corner detection. All white pixels are part of a corner. The points A,B,C,D will be part of a found door as they create a rectangle. Points E and F will be left out.}
-	\label{fig:door_closing}
-\end{figure}
-
 
 \subsubsection{Door gap closing algorithm}
 
