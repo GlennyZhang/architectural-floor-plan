@@ -85,10 +85,9 @@ This is a very simplistic explanation of what the algorithm does. The whole algo
 	\label{suzuki_abe}
 \end{figure}
 
-\pagebreak
 
-\subsubsection{Corner detection}
-\label{subsub:CornerDetection}
+\subsubsection{Harris corner detection}
+\label{subsubsec:HarrisCornerDetection}
 The corner detection algorithm is used to find corners in an image that contains mostly walls. Its purpose is to find the edges of all walls and therefore provide important information for the door gap closing algorithm. Why this information is needed will be explained in the section about this door gap closing algorithm.
 This project uses the Harris corner algorithm due to its reliability, simplicity in implementation and the good results we got after the first uses. The algorithm itself is implemented by OpenCv.
 The idea of the algorithm is that there are edges wherever the gradient of the image function is high for more than one direction.
@@ -109,46 +108,6 @@ whereas the parameter \begin{math}\alpha\end{math} defines the sensitivity of th
 \[Q(u,v) > t_H\]
 with the threshold t\textsubscript{H} being around 10 000 to 1 000 000. To find the exact corner it finds groups of candidates that are close to each other are all eliminated but the best candidate.
 
-\subsubsection{Point clustering}
-Due the fact, that the corner detection (Section~\ref{subsub:CornerDetection}) sometimes detects too many points at a wall corner, the aim of this algorithm is to create a sparse point group. This algorithm assigns a list of points into groups and combines them together to one single point, which represents the average position of all points in the group (Figure~\ref{fig:HCPointClustering}).
-
-\begin{figure}[h!]
-	\centering
-	\subfloat[Multiple points at wall corner]{\includegraphics[width=0.4\textwidth]{hc_overdetection}\label{fig:hc_overdetection}}
-	\hfill
-	\subfloat[Averaged point at wall corner]{\includegraphics[width=0.4\textwidth]{clustered_hc_detection}\label{fig:clustered_hc_detection}}
-	\caption{Harris Corner detection before point clustering (a) and after point clustering (b).}
-	\label{fig:HCPointClustering}
-\end{figure}
-
-The algorithm takes a list of points $M$ in $R^2$ and a maximal distance $d$ as input and returns a list of grouped points. If the $L^2$ distance between two points, is less then the maximal distance $d$, the points are adjacent and assigned to the same group.
-
-For each unprocessed point in the group, the algorithm is repeated to avoid a greedy behaviour of the algorithm.
-
-A single point without any adjacent remains as it is (Figure~\ref{fig:point_clustering_single}). Multiple points are combined into one single point (Figure~\ref{fig:point_clustetring_multiple_close}). Sometimes it leads to large groups, because points which are not adjacent, can be assigned to the same group. In figure~\ref{fig:point_clustering_multiple_spread}, that case is visualised, where multiple points are assigned to the same group, which are further away then the maximal distance $d$.
-
-\begin{figure}[h!]
-	\centering
-	\subfloat[Single point]{\includegraphics[width=0.3\textwidth]{point_clustering_single}\label{fig:point_clustering_single}}
-	\hfill
-	\subfloat[Multiple points]{\includegraphics[width=0.3\textwidth]{point_clustetring_multiple_close}\label{fig:point_clustetring_multiple_close}}
-	\hfill
-	\subfloat[Multiple spread points]{\includegraphics[width=0.3\textwidth]{point_clustering_multiple_spread}\label{fig:point_clustering_multiple_spread}}
-	\caption{Different point clustering cases.}
-	\label{fig:PointClusteringCases}
-\end{figure}
-
-To minimise the group to one single point, which defines the center of the corner, the algorithm uses the average center of all points in the group (Equation~\ref{eq:PointAverage}).
-
-
-\begin{equation} \label{eq:PointAverage}
-\begin{gathered}
-\bar{X} = \sum_{i=1}^{N}X_{i}/N
-\\
-\bar{Y} = \sum_{i=1}^{N}Y_{i}/N
-\end{gathered}
-\end{equation}
-
 \subsubsection{Convex hull}
 Finding the convex hull of a set of points is a good way for this project to find the outer points of our wall that is enclosing the whole building. The convex hull is the smallest convex set of points that contains all points given in a Euclidean space.
 
@@ -165,11 +124,19 @@ There are several known algorithms that implement this problems. Examples of tho
 	\label{fig:convex_hull}
 \end{figure}
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.4\textwidth]{door_closing}
+	\caption{This is an image after being processed by the harris corner detection. All white pixels are part of a corner. The points A,B,C,D will be part of a found door as they create a rectangle. Points E and F will be left out.}
+	\label{fig:door_closing}
+\end{figure}
+
+
 \subsubsection{Door gap closing algorithm}
 
 The cascade door training algorithm has found the rectangles that represent the doors. What is needed in the end though is not the door itself but the space in-between the two walls that the door connects. This is so that we can separate the different rooms that have doors in-between.
-This algorithm combines the edges that have been found with the Harris-Corner detection and the doors from the cascade door algorithm. It uses a heuristic that works as following. The door algorithm provides four points that mark the edge of the recognised door and build a rectangle.
-Added to the rectangle is  a threshold in all directions in which the algorithm searches for edges. The idea is that due to the structure of walls there will be a rectangle made out of four edge points inside the door area that represents the space in between the walls. It is expected to only find one rectangle, due to the fact that it makes no sense to have a wall go through a door. As well as the fact that there should be no further lines because it it a cleaned up image and any other line except the walls should not be in that image.
+This algorithm combines the edges that have been found with the Harris-Corner detection and the doors from the cascade door algorithm. It uses a heuristic that works as following. The door algorithm provides four points that mark the edge of the recognized door and build a rectangle.
+Added to the rectangle is  a threshold in all directions in which the algorithm searches for edges. The idea is that due to the structure of walls there will be a rectangle made out of four edge points inside the door area that represents the space inbetween the walls. It is expected to only find one rectangle, due to the fact that it makes no sense to have a wall go through a door. As well as the fact that there should be no further lines because it it a cleaned up image and any other line except the walls should not be in that image.
 To find the rectangle it connects two edges and calculates the angle compared to the x-Axis for all pairs of edges available. Now all the angles get compared to each other. If two edges AB and CD have a similar angle there will be another comparison for the angles between AC and BD or AD and BC. If one of those two is also of a similar we then need to prove that two lines that build a corner have an angle of 90 degree between them. If the opposing lines are all parallel and the angle of one corner is 90 degree we can assume that all other angles have to be 90 degree too and it is therefore a rectangle. 
 
 \begin{figure}[h]
@@ -181,6 +148,38 @@ To find the rectangle it connects two edges and calculates the angle compared to
 
 
 \subsection{Structural Analysis}
+
+\subsubsection{ORB algorithm}
+The algorithm \acrfull{acro:ORB} was used to detect objects in architectural floor plans. It is similar the the to the two other feature matching algorithms like SIFT or SURF. This algorithm is orientation and size invariant which is really important as object size may differ from plan to plan an orientation might even differ within one plan.
+
+The algorithm itself consists out of two algorithms FAST and BRIEF. The FAST algorithm is for finding keypoints in images that match visual features. FAST keypoints are detected with an intensity threshold between a center pixel and the pixels in a circular ring around the center. To select the best keypoints \acrshort{acro:ORB} employs a Harris corner measure (algorithm described in \ref{subsubsec:HarrisCornerDetection}) to find the best $N$ keypoints. Since FAST keypoints have no rotational awareness \acrshort{acro:ORB} introduces the orientation by intensity centroid. The intensity centroid $C$ (\ref{eq:IntesityCentroid})
+
+\begin{equation}\label{eq:IntesityCentroid} C = \begin{pmatrix}
+\frac{m_{10}}{m_{00}},\frac{m_{1}}{m_{00}}\end{pmatrix} \end{equation}
+
+is defined by the moments in equation (\ref{eq:MomentsIntesityCentroid})
+
+\begin{equation}\label{eq:MomentsIntesityCentroid} m_{pq} = \sum_{x,y} x^p y^q I(x,y)\end{equation}
+
+To find the orientation $\theta$ (\ref{eq:OrientationORB}) the algorithm constructs a vector from the corners center $O$ to the centroid $OC$.
+
+\begin{equation}\label{eq:OrientationORB} \theta = atan2(m_{01},m_10)\end{equation}
+
+Here atan2 is the quadrant aware version of the arcus tangens.
+
+To compare those keypoints to others the algorithm needs the BRIEF descriptor. It does binary test on patches of the image. The binary test $\tau$ \ref{eq:BinaryTest}is defined by the equation:
+
+\begin{equation}\label{eq:BinaryTest} \tau(p;x,y) := \begin{cases} 1 :p(x) < p(y) \\ 0 :p(x) \geq p(y)\end{cases}\end{equation}
+
+where $p(x)$ is the intensity of $p$ at point x. A feature \ref{eq:BinaryFeature} to compare the keypoints together is defined as a vector of binary tests: 
+
+\begin{equation}\label{eq:BinaryFeature} f_{n}(p) := \sum_{1 \leq i \leq n}2^{i-1} \tau(p;x,y)\end{equation}
+
+To allow BRIEF to be rotation invariant the descriptor \ref{eq:BriefDescriptor} will be orientated to the orientation of keypoints. The rotation will be defined by the patch orientation $\theta$ and the rotation matrix $R_{\theta}$ to be $S_{\theta} = R_{\theta}S$.
+This orientated BRIEF descriptor is now defined as
+\begin{equation}\label{eq:BriefDescriptor} g_{n}(p,\theta) := f_{n}(p)|(x_{i},y_{i}) \in S_{\theta}\end{equation}
+
+By creating a matcher for \acrshort{acro:ORB} that is used by descriptor to compare an image or its features to the features of a target image. If any of those features match the algorithm has likely found the object of the first image in the second image and will return its coordinates.
 
 \subsubsection{Cascade training}
 The algorithm used for object detection in this project was first described by Paul Viola in his paper \todo{ACCEPTED CONFERENCE  ON COMPUTER VISION AND PATTERN RECOGNITION 2001 Rapid Object Detection using a Boosted Cascade of Simple Features}. It is based on three key components. One is the "Integral Image" which is an image representation that allows to detect features very quickly. A second component is the learning algorithm "AdaBoost" which select a small number of critical features from a big set. The last component is an algorithm that combines increasingly complex features in a cascade. All of these components provide the basis for a really fast feature detection compared to previously known algorithms.
@@ -205,29 +204,9 @@ To train and select a small size of features this algorithm uses the "AdaBoost" 
 To achieve improved detection rate and drastically reduce the computation time this algorithm implements a cascade function. This means that the detection process is that of a degenerate decision tree. A positive result from a classifier triggers the evaluation of the next classifier. If at any point the result is negative the algorithm immediately declares the result as negative and won't be computed any further. The idea is that the first layer rules out a large amount of possibilities with very little computation time. Further stages of the process will reduce further negatives but need additional computation power. The idea behind this process is that in an image most sub-windows will be negative and such should be rejected as early as possible in the cascade process to require fewer computational effort.
 The classifier is trained with a training set of positives and negatives. Each stage is trained by adding features until the target detection and false positive rates are met. Stages are added until the overall target for false positive rate and detection rate is met. In the end there is always a balance to between finding high detection rates with low false positive rates and lower time for computation.
 
-\pagebreak
 \subsubsection{Template Matching}
-To find a template $T$ (Figure~\ref{fig:door_template}) in a given image $I$ (Figure~\ref{fig:A_N1_cleaned}), it is possible to use template matching. The algorithm slides the template $T$, pixel by pixel over the original image $I$ and stores the metric of the current pixel, in the correlation image $R$.
-
-There are various kinds of formulas to calculate the matching metric. Usually the formula sums up the matching pixels in the template $T$ and the image $I$ and stores the result as color value, in the correlation image $R$.
-
-\begin{figure}[h!]
-	\centering
-	\subfloat[Template $T$]{\includegraphics[width=0.15\textwidth]{door_template}\label{fig:door_template}}
-	\hfill
-	\subfloat[Image $I$]{\includegraphics[width=0.4\textwidth]{A_N1_cleaned}\label{fig:A_N1_cleaned}}
-	\hfill
-	\subfloat[Correlation matrix $R$]{\includegraphics[width=0.4\textwidth]{tm_correlation_matrix}\label{fig:tm_correlation_matrix}}
-	\caption{Template matching example. The red rectangle in \ref{fig:tm_correlation_matrix} indicates the brightest location.}
-	\label{fig:TemplateMatchingExample}
-\end{figure}
 
 
-The brightest points in the correlation image $R$ (Figure~\ref{fig:tm_correlation_matrix})  indicate the highest matches. If multiple occurances of an object should be detected, it is possible to use a threshold on the correlation matrix $R$ to detect all the correlated locations.
-
-Template matching is a very simple matching method and is not rotation and scale invariant.
-
-\subsubsection{Orientated FAST and Rotated BRIEF}
 
  
 \subsection{Semantic Analysis}
@@ -285,4 +264,5 @@ The algorithm is processed on a gray-scale image on which the color intensity is
 The basic algorithm uses three different markings for all regions. The values I for each region can be:
 \[I(u,v) = \begin{cases} 0 & background \\  255 & foreground \\ 1..254 & regions \end{cases} \]
 
-It is a really simple algorithm where it starts with looking for an unmarked foreground pixel. All pixels of the region that are connected to this starting pixel will be visited and marked. There are three different ways to do this process. It can be a recursive, an iterative depth-first or breadth-first flood filling. It is not clear what implementation OpenCv uses. In the end all of the methods lead to a similar result and thus will not be discussed further.
+It is a really simple algorithm where it starts with looking for an unmarked foreground pixel. All pixels of the region that are connected to this starting pixel will be visited and marked. There are three different ways to do this process. It can be a recursive, an iterative depth-first or breadth-first flood filling. It is not clear what implementation OpenCv uses. In the end all of the methods lead to a similar result and thus will not be discussed further. 
+
