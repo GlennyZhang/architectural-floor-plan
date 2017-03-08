@@ -88,7 +88,7 @@ This is a very simplistic explanation of what the algorithm does. The whole algo
 
 \subsubsection{Corner detection}
 The corner detection algorithm is used to find corners in an image that contains mostly walls. Its purpose is to find the edges of all walls and therefore provide important information for the door gap closing algorithm. Why this information is needed will be explained in the section about this door gap closing algorithm.
-This project uses the harris corner algorithm due to its reliability, simplicity in implementation and the good results we got after the first uses. The algorithm itself is implemented by OpenCv.
+This project uses the Harris corner algorithm due to its reliability, simplicity in implementation and the good results we got after the first uses. The algorithm itself is implemented by OpenCv.
 The idea of the algorithm is that there are edges wherever the gradient of the image function is high for more than one direction.
 First it calculates the basic partial derivatives of the image function I\textsubscript{x}(u,v) in horizontal and vertical direction. This is done for every position in the image (u,v).
 \[A(u,v) = I_{x}^2(u,v)\]
@@ -101,7 +101,7 @@ Afterwards all three scalar fields will be smoothed with a linear gaussian filte
 The two eigenvalues of the Matrix \begin{math}\bar{M}\end{math}
 \[\lambda_{1,2} = \dfrac{trace(\bar{M})}{2} \pm \sqrt{(\dfrac{trace(\bar{M})}{2})^2 - det(\bar{M})} \]
 are positive and contain important information about the local structure. In a area with no corners \begin{math}\bar{M} = 0\end{math}  as well as the two eigenvalues \begin{math}\lambda_1 = \lambda_2 = 0\end{math}. To find a corner there needs to be a strong edge in the main direction (bigger eigenvalue) as well as in the direction of its normal (smaller eigenvalue). 
-To find the corner strength itself the harris corner detection uses the function 
+To find the corner strength itself the Harris corner detection uses the function 
 \[Q(u,v) := det(\bar{M}(u,v)) - \alpha * (trace(\bar{M}(u,v)))^2\]
 whereas the parameter \begin{math}\alpha\end{math} defines the sensitivity of the detector. A candidate for a corner is found when
 \[Q(u,v) > t_H\]
@@ -133,7 +133,7 @@ There are several known algorithms that implement this problems. Examples of tho
 
 \subsubsection{Door gap closing algorithm}
 
-The cascade door training algorithm has found the rectangles that represent the doors. What is needed in the end though is not the door itself but the space inbetween the two walls that the door connects. This is so that we can seperate the different rooms that have doors inbetween.
+The cascade door training algorithm has found the rectangles that represent the doors. What is needed in the end though is not the door itself but the space in-between the two walls that the door connects. This is so that we can separate the different rooms that have doors in-between.
 This algorithm combines the edges that have been found with the Harris-Corner detection and the doors from the cascade door algorithm. It uses a heuristic that works as following. The door algorithm provides four points that mark the edge of the recognized door and build a rectangle.
 Added to the rectangle is  a threshold in all directions in which the algorithm searches for edges. The idea is that due to the structure of walls there will be a rectangle made out of four edge points inside the door area that represents the space inbetween the walls. It is expected to only find one rectangle, due to the fact that it makes no sense to have a wall go through a door. As well as the fact that there should be no further lines because it it a cleaned up image and any other line except the walls should not be in that image.
 To find the rectangle it connects two edges and calculates the angle compared to the x-Axis for all pairs of edges available. Now all the angles get compared to each other. If two edges AB and CD have a similar angle there will be another comparison for the angles between AC and BD or AD and BC. If one of those two is also of a similar we then need to prove that two lines that build a corner have an angle of 90 degree between them. If the opposing lines are all parallel and the angle of one corner is 90 degree we can assume that all other angles have to be 90 degree too and it is therefore a rectangle. 
@@ -203,7 +203,7 @@ To find the actual length of the lines there has to be a further algorithm that 
 \subsubsection{Connected Component Analysis}
 Finding connected components is a common way to detect objects in a thresholded image. In this work it is used to detect connected room pixels and calculate the size of each room out of it.
 
-This is accomplished by finding pixels which are adjacent to each other. A pixel is adjacent to another pixel if it is immediate $\mathcal{N}_4$ or $\mathcal{N}_8$ and has the same scalar value. Further the neighbour pixels are labeled with the same label and in the end combined to a region $\mathcal{R}$ \citep[Section 3.3.4]{szeliski_2011}.
+This is accomplished by finding pixels which are adjacent to each other. A pixel is adjacent to another pixel if it is immediate $\mathcal{N}_4$ or $\mathcal{N}_8$ and has the same scalar value. Further the neighbor pixels are labeled with the same label and in the end combined to a region $\mathcal{R}$ \citep[Section 3.3.4]{szeliski_2011}.
 
 \begin{figure}[h]
 	\centering
@@ -222,7 +222,7 @@ For each region $\mathcal{R}$ it is possible to compute statistics like the area
 \label{subsub:watershed}
 The watershed-algorithm in our project is used for segmentation of the different rooms. It can find rooms indifferent of its shape.
 \\
-The algorithm is processed on a grayscale image on which the color intensity is analogous to the height in a height map. The watershed in use does flooding. The idea is to place a water source in each regional minimum and flood the entire relief. It will stop if it meets a different watersource or an impassable barrier.
+The algorithm is processed on a gray-scale image on which the color intensity is analogous to the height in a height map. The watershed in use does flooding. The idea is to place a water source in each regional minimum and flood the entire relief. It will stop if it meets a different water source or an impassable barrier.
 
 The basic algorithm uses three different markings for all regions. The values I for each region can be:
 \[I(u,v) = \begin{cases} 0 & background \\  255 & foreground \\ 1..254 & regions \end{cases} \]
