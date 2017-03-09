@@ -205,6 +205,25 @@ To achieve improved detection rate and drastically reduce the computation time t
 The classifier is trained with a training set of positives and negatives. Each stage is trained by adding features until the target detection and false positive rates are met. Stages are added until the overall target for false positive rate and detection rate is met. In the end there is always a balance to between finding high detection rates with low false positive rates and lower time for computation.
 
 \subsubsection{Template Matching}
+To find a template $T$ (Figure~\ref{fig:door_template}) in a given image $I$ (Figure~\ref{fig:A_N1_cleaned}), it is possible to use template matching. The algorithm slides the template $T$, pixel by pixel over the original image $I$ and stores the metric of the current pixel, in the correlation image $R$.
+
+There are various kinds of formulas to calculate the matching metric. Usually the formula sums up the matching pixels in the template $T$ and the image $I$ and stores the result as color value, in the correlation image $R$.
+
+\begin{figure}[h!]
+	\centering
+	\subfloat[Template $T$]{\includegraphics[width=0.15\textwidth]{door_template}\label{fig:door_template}}
+	\hfill
+	\subfloat[Image $I$]{\includegraphics[width=0.4\textwidth]{A_N1_cleaned}\label{fig:A_N1_cleaned}}
+	\hfill
+	\subfloat[Correlation matrix $R$]{\includegraphics[width=0.4\textwidth]{tm_correlation_matrix}\label{fig:tm_correlation_matrix}}
+	\caption{Template matching example.}
+	\label{fig:TemplateMatchingExample}
+\end{figure}
+
+
+The brightest points in the correlation image $R$ (Figure~\ref{fig:tm_correlation_matrix})  indicate the highest matches. If multiple occurances of an object should be detected, it is possible to use a threshold on the correlation matrix $R$ to detect all the correlated locations.
+
+Template matching is a very simple matching method and is not rotation and scale invariant.
 
 
 
