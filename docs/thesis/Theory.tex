@@ -4,16 +4,16 @@
 \label{subsubsec:Erosion and Dilation}
 In our project we need dilation to strengthen small features that we want to be highlighted as well as to get rid of small details in the picture itself. We use it in early preprocessing. It helps together with the erosion to clean up pictures to further process them without too many interfering objects in the image. The main usage is to extract an image that features all the walls and has as few as possible other lines on it \citep{burger_burge_2016}.
 
-For our project we use the binary grayscale erosion.
+For our project we use the binary grayscale erosion~\eqref{eq:GrayscaleErosion}.
 The erosion uses the following principle to work.
 
 
-\[A \ominus B = \{ z\in E | B \subseteq A \}\]  
-\[where: B_{z} = \{b+z | b \in B\} with \forall z \in E \]
+\begin{equation}\label{eq:GrayscaleErosion}A \ominus B = \{ z\in E | B \subseteq A \}\end{equation}  
+\begin{equation}\label{eq:StructuringElement}where: B_{z} = \{b+z | b \in B\} with \forall z \in E \end{equation}
 
-A is a binary image in the Euclidean space or an integer grid. The erosion is done with the structuring element B on the image A. The structuring element has to be a subset or equal to A, otherwise there will be no erosion. The mask B will be applied to all pixels possible, if the mask fits on the center pixel of A, the value will be retained. Otherwise it will get deleted. This means that only when B is completely contained in A, values of pixels are retained.
+A is a binary image in the Euclidean space or an integer grid. The erosion is done with the structuring element B~\eqref{eq:StructuringElement} on the image A. The structuring element has to be a subset or equal to A, otherwise there will be no erosion. The mask B will be applied to all pixels possible, if the mask fits on the center pixel of A, the value will be retained. Otherwise it will get deleted. This means that only when B is completely contained in A, values of pixels are retained.
 
-Binary dilation uses the exact same process. The only difference compared to the erosion is that the deletion of the pixel will not be setting pixel values to white (1) but to black (0). Both of those processes are inherently the same and can be summed up under the term morphological operation. These are altering the image with a mask, as we did here for erosion and dilation.
+Binary dilation uses the exact same process. The only difference compared to the erosion is that the deletion of the pixel will not be setting pixel values to white 1, but to black 0. Both of those processes are inherently the same and can be summed up under the term morphological operation. These are altering the image with a mask, as we did here for erosion and dilation.
 
 \subsubsection{Geodesic Dilation}
 \label{subsubsec:GeodesicDilation}
@@ -44,7 +44,7 @@ Where:
     \item $n$: is the iteration index
 \end{itemize}
 
-As seen in equation~\ref{eq:geodesic_dilation_iteration}, a geodesic dilation with zero iterations is equal to the initial marker image. In the first iteration the marker image $F$ is dilated with the structural element $B$ and the result of that dilation is intersect with the mask image. This intersection limits the dilation to the marker constraints. After one iteration the next iteration uses the result of the last iteration as new marker image $F$.
+As seen in equation~\eqref{eq:geodesic_dilation_iteration}, a geodesic dilation with zero iterations is equal to the initial marker image. In the first iteration the marker image $F$ is dilated with the structural element $B$ and the result of that dilation is intersect with the mask image. This intersection limits the dilation to the marker constraints. After one iteration the next iteration uses the result of the last iteration as new marker image $F$.
 
 The iteration stops as soon as the the difference (absolute array norm) between $F^{n}$ and $F^{n-1}$ becomes less then $\epsilon$ which in our case is 0.0001.
 
@@ -53,17 +53,17 @@ The iteration stops as soon as the the difference (absolute array norm) between 
 The distance transformation is as well as the erosion and dilation a morphological operation. In our project it serves the purpose to find bassins for the watershed algorithm. This is used to define the foreground picture. We will explain this further in the wathershed discussion.
 It is used after preprocessing to find the center of what is supposed to be rooms. This algorithm is only used in combination with the watershed.
 
-The algorithm that openCV uses is called cvDistTransform and uses an euclidean distance to calculate the output image. The input for this transformation is a binary image \[I(u,v) = I(x)\] which will be separated into a foreground and background image.
-\[FG(I) = {x | I(x) = 1}\]
-\[BG(I) = {x | I(x) = 0}\]
-The formula for the distance transformation of I, D(x) itself is defined as:
+The algorithm that openCV uses is called cvDistTransform and uses an euclidean distance to calculate the output image. The input for this transformation is a binary image $I(u,v) = I(x)$ which will be separated into a foreground \eqref{eq:Foreground} and background \eqref{eq:Background} image.
+\begin{equation}\label{eq:Foreground}FG(I) = {x | I(x) = 1}\end{equation}
+\begin{equation}\label{eq:Background}BG(I) = {x | I(x) = 0}\end{equation}
+The formula for the distance transformation of $I$, $D(x)$ itself is defined as:
 \[D(x) :=\min_{x' \in FG(I)} dist(x,x') \]
-It applies to any pixel x = (u,v) of the input image. If the pixel is part of the foreground image FG(I) then the result of the transformation D(x) is zero. As said above, the distance formula dist(x,x') is the euclidean distance (also called L\textsubscript{2}-Norm) between two pixels.
-\[dist(x,x') = ||x - x'|| = \sqrt{(u - u')^2 + (v - v')^2}\]
+It applies to any pixel $x = (u,v)$ of the input image. If the pixel is part of the foreground image $FG(I)$ then the result of the transformation $D(x)$ is zero. As said above, the distance formula $dist(x,x')$ is the euclidean distance \eqref{eq:EuclideanDistance} (also called $L_{2}-Norm$) between two pixels.
+\begin{equation}\label{eq:EuclideanDistance}dist(x,x') = ||x - x'|| = \sqrt{(u - u')^2 + (v - v')^2}\end{equation}
 
-Since the exact calculation with the euclidean distance takes a lot of computational power openCV uses the Chamfer-Algorithm instead. This algorithm runs a two masks over the image. The first mask M\textsubscript{L} is run over in a diagonal manner over the image starting in the top left corner of the image. The second mask M\textsubscript{R} does the same in reverse starting at the bottom right corner. Those masks are a matrix that represent the euclidean distance between the center and the pixels around it. Each mask only changes the pixels in the direction they are run through the image \citep{burger_burge_2016}. As a result, the masks look similar to the following ones:
-\[M_{L} = \begin{bmatrix} . & . & .\\ . & x & m_1 \\ m_2 & m_1 & m_2 \end{bmatrix}\]
-\[M_{R} = \begin{bmatrix} m2 & m1 & m2 \\ m1 & x & . \\ . & . & . \end{bmatrix}\]
+Since the exact calculation with the euclidean distance takes a lot of computational power openCV uses the Chamfer-Algorithm instead. This algorithm runs a two masks over the image. The first mask $M_{L}$ \eqref{eq:LeftMask} is run over in a diagonal manner over the image starting in the top left corner of the image. The second mask $M_{R}$ \eqref{eq:RightMask} does the same in reverse starting at the bottom right corner. Those masks are a matrix that represent the euclidean distance between the center and the pixels around it. Each mask only changes the pixels in the direction they are run through the image \citep{burger_burge_2016}. As a result, the masks look similar to the following ones:
+\begin{equation}\label{eq:LeftMask} M_{L} = \begin{bmatrix} . & . & .\\ . & x & m_1 \\ m_2 & m_1 & m_2 \end{bmatrix}\end{equation}
+\begin{equation}\label{eq:RightMask}M_{R} = \begin{bmatrix} m2 & m1 & m2 \\ m1 & x & . \\ . & . & . \end{bmatrix} \end{equation}
 
 This all leads to the resulting effect shown in the image below \citep[Section 3.3.3]{szeliski_2011}.
 \todo{Make image of distance transformation before and after}
@@ -91,22 +91,22 @@ This is a very simplistic explanation of what the algorithm does. The whole algo
 The corner detection algorithm is used to find corners in an image that contains mostly walls. Its purpose is to find the edges of all walls and therefore provide important information for the door gap closing algorithm. Why this information is needed will be explained in the section about this door gap closing algorithm.
 This project uses the Harris corner algorithm due to its reliability, simplicity in implementation and the good results we got after the first uses. The algorithm itself is implemented by OpenCv.
 The idea of the algorithm is that there are edges wherever the gradient of the image function is high for more than one direction.
-First it calculates the basic partial derivatives of the image function I\textsubscript{x}(u,v) in horizontal and vertical direction. This is done for every position in the image (u,v).
-\[A(u,v) = I_{x}^2(u,v)\]
-\[B(u,v) = I_{y}^2(u,v)\]
-\[C(u,v) = I_{x}^2(u,v) * I_{y}^2(u,v)\]
+First it calculates the basic partial derivatives of the image function $I_{x}(u,v)$ in horizontal and vertical direction. This is done for every position in the image $(u,v)$.
+\begin{equation}A(u,v) = I_{x}^2(u,v)\end{equation}
+\begin{equation}B(u,v) = I_{y}^2(u,v)\end{equation}
+\begin{equation}C(u,v) = I_{x}^2(u,v) * I_{y}^2(u,v)\end{equation}
 
 All of those elements will be part of a local structure matrix M.
-\[M = \begin{pmatrix} A & C \\ C & B \end{pmatrix}\]
-Afterwards all three scalar fields will be smoothed with a linear gaussian filter and be represented as a Matrix \begin{math}\bar{M}\end{math}.
-The two eigenvalues of the Matrix \begin{math}\bar{M}\end{math}
-\[\lambda_{1,2} = \dfrac{trace(\bar{M})}{2} \pm \sqrt{(\dfrac{trace(\bar{M})}{2})^2 - det(\bar{M})} \]
-are positive and contain important information about the local structure. In a area with no corners \begin{math}\bar{M} = 0\end{math}  as well as the two eigenvalues \begin{math}\lambda_1 = \lambda_2 = 0\end{math}. To find a corner there needs to be a strong edge in the main direction (bigger eigenvalue) as well as in the direction of its normal (smaller eigenvalue). 
+\begin{equation}M = \begin{pmatrix} A & C \\ C & B \end{pmatrix}\end{equation}
+Afterwards all three scalar fields will be smoothed with a linear Gaussian filter and be represented as a Matrix $\bar{M}$.
+The two eigenvalues of the Matrix $\bar{M}$
+\begin{equation}\lambda_{1,2} = \dfrac{trace(\bar{M})}{2} \pm \sqrt{(\dfrac{trace(\bar{M})}{2})^2 - det(\bar{M})} \end{equation}
+are positive and contain important information about the local structure. In a area with no corners $\bar{M} = 0$  as well as the two eigenvalues $\lambda_1 = \lambda_2 = 0$. To find a corner there needs to be a strong edge in the main direction (bigger eigenvalue) as well as in the direction of its normal (smaller eigenvalue). 
 To find the corner strength itself the Harris corner detection uses the function 
-\[Q(u,v) := det(\bar{M}(u,v)) - \alpha * (trace(\bar{M}(u,v)))^2\]
-whereas the parameter \begin{math}\alpha\end{math} defines the sensitivity of the detector. A candidate for a corner is found when
-\[Q(u,v) > t_H\]
-with the threshold t\textsubscript{H} being around 10 000 to 1 000 000. To find the exact corner it finds groups of candidates that are close to each other are all eliminated but the best candidate.
+\begin{equation}Q(u,v) := det(\bar{M}(u,v)) - \alpha * (trace(\bar{M}(u,v)))^2\end{equation}
+whereas the parameter $\alpha$ defines the sensitivity of the detector. A candidate for a corner is found when
+$Q(u,v) > t_H$
+with the threshold $t_{H}$ being around 10 000 to 1 000 000. To find the exact corner it finds groups of candidates that are close to each other are all eliminated but the best candidate.
 
 \subsubsection{Point clustering}
 Due the fact, that the corner detection (Section~\ref{subsub:CornerDetection}) sometimes detects too many points at a wall corner, the aim of this algorithm is to create a sparse point group. This algorithm assigns a list of points into groups and combines them together to one single point, which represents the average position of all points in the group (Figure~\ref{fig:HCPointClustering}).
@@ -137,7 +137,7 @@ A single point without any adjacent remains as it is (Figure~\ref{fig:point_clus
 	\label{fig:PointClusteringCases}
 \end{figure}
 
-To minimise the group to one single point, which defines the center of the corner, the algorithm uses the average center of all points in the group (Equation~\ref{eq:PointAverage}).
+To minimise the group to one single point, which defines the center of the corner, the algorithm uses the average center of all points in the group ~\eqref{eq:PointAverage}.
 
 
 \begin{equation} \label{eq:PointAverage}
@@ -152,11 +152,11 @@ To minimise the group to one single point, which defines the center of the corne
 \subsubsection{Convex hull}
 Finding the convex hull of a set of points is a good way for this project to find the outer points of our wall that is enclosing the whole building. The convex hull is the smallest convex set of points that contains all points given in a Euclidean space.
 
-The convex hull af a set of points X \[conv X \coloneqq \underset{X \subseteq K \subseteq V, K convex}{\bigcap} K  \] is defined as the intersection of all supersets of X.It can also be described as the set of all limited convex combinations:
+The convex hull af a set of points X \begin{equation}conv X \coloneqq \underset{X \subseteq K \subseteq V, K convex}{\bigcap} K  \end{equation} is defined as the intersection of all supersets of X.It can also be described as the set of all limited convex combinations:
 
-\[conv X = \{ \sum_{i=1}^{n}\alpha_{i} * x_{i} \mid x_{i} \in X, n \in \mathbb{N}, \sum_{i=1}^{n} \alpha_i = 1, \alpha_i \geq 0  \}]\]
+\begin{equation}conv X = \{ \sum_{i=1}^{n}\alpha_{i} * x_{i} \mid x_{i} \in X, n \in \mathbb{N}, \sum_{i=1}^{n} \alpha_i = 1, \alpha_i \geq 0  \}]\end{equation}
 
-There are several known algorithms that implement this problems. Examples of those are the Graham-Scan algorithm with a complexity of  \[\mathcal{O}(n log n)\] or the Jarvis-March-algorithm with the complexity of \[\mathcal{O}(n*k)\] where k is the number of points on the hull itself.
+There are several known algorithms that implement this problems. Examples of those are the Graham-Scan algorithm with a complexity of  $\mathcal{O}(n log n)$ or the Jarvis-March-algorithm with the complexity of $\mathcal{O}(n*k)$ where k is the number of points on the hull itself.
 
 \begin{figure}[h]
 	\centering
@@ -172,7 +172,7 @@ There are several known algorithms that implement this problems. Examples of tho
 
 The cascade door training algorithm has found the rectangles that represent the doors. What is needed in the end though is not the door itself but the space in-between the two walls that the door connects. This is so that we can separate the different rooms that have doors in-between.
 This algorithm combines the edges that have been found with the Harris-Corner detection and the doors from the cascade door algorithm. It uses a heuristic that works as following. The door algorithm provides four points that mark the edge of the recognized door and build a rectangle.
-Added to the rectangle is  a threshold in all directions in which the algorithm searches for edges. The idea is that due to the structure of walls there will be a rectangle made out of four edge points inside the door area that represents the space inbetween the walls. It is expected to only find one rectangle, due to the fact that it makes no sense to have a wall go through a door. As well as the fact that there should be no further lines because it it a cleaned up image and any other line except the walls should not be in that image.
+Added to the rectangle is  a threshold in all directions in which the algorithm searches for edges. The idea is that due to the structure of walls there will be a rectangle made out of four edge points inside the door area that represents the space in-between the walls. It is expected to only find one rectangle, due to the fact that it makes no sense to have a wall go through a door. As well as the fact that there should be no further lines because it it a cleaned up image and any other line except the walls should not be in that image.
 To find the rectangle it connects two edges and calculates the angle compared to the x-Axis for all pairs of edges available. Now all the angles get compared to each other. If two edges AB and CD have a similar angle there will be another comparison for the angles between AC and BD or AD and BC. If one of those two is also of a similar we then need to prove that two lines that build a corner have an angle of 90 degree between them. If the opposing lines are all parallel and the angle of one corner is 90 degree we can assume that all other angles have to be 90 degree too and it is therefore a rectangle. 
 
 \begin{figure}[h]
@@ -188,30 +188,30 @@ To find the rectangle it connects two edges and calculates the angle compared to
 \subsubsection{ORB algorithm}
 The algorithm \acrfull{acro:ORB} was used to detect objects in architectural floor plans. It is similar the the to the two other feature matching algorithms like SIFT or SURF. This algorithm is orientation and size invariant which is really important as object size may differ from plan to plan an orientation might even differ within one plan.
 
-The algorithm itself consists out of two algorithms FAST and BRIEF. The FAST algorithm is for finding keypoints in images that match visual features. FAST keypoints are detected with an intensity threshold between a center pixel and the pixels in a circular ring around the center. To select the best keypoints \acrshort{acro:ORB} employs a Harris corner measure (algorithm described in \ref{subsubsec:HarrisCornerDetection}) to find the best $N$ keypoints. Since FAST keypoints have no rotational awareness \acrshort{acro:ORB} introduces the orientation by intensity centroid. The intensity centroid $C$ (\ref{eq:IntesityCentroid})
+The algorithm itself consists out of two algorithms FAST and BRIEF. The FAST algorithm is for finding keypoints in images that match visual features. FAST keypoints are detected with an intensity threshold between a center pixel and the pixels in a circular ring around the center. To select the best keypoints \acrshort{acro:ORB} employs a Harris corner measure (algorithm described in \ref{subsubsec:HarrisCornerDetection}) to find the best $N$ keypoints. Since FAST keypoints have no rotational awareness \acrshort{acro:ORB} introduces the orientation by intensity centroid. The intensity centroid $C$ \eqref{eq:IntesityCentroid}
 
 \begin{equation}\label{eq:IntesityCentroid} C = \begin{pmatrix}
 \frac{m_{10}}{m_{00}},\frac{m_{1}}{m_{00}}\end{pmatrix} \end{equation}
 
-is defined by the moments in equation (\ref{eq:MomentsIntesityCentroid})
+is defined by the moments in equation \eqref{eq:MomentsIntesityCentroid}
 
 \begin{equation}\label{eq:MomentsIntesityCentroid} m_{pq} = \sum_{x,y} x^p y^q I(x,y)\end{equation}
 
-To find the orientation $\theta$ (\ref{eq:OrientationORB}) the algorithm constructs a vector from the corners center $O$ to the centroid $OC$.
+To find the orientation $\theta$ \eqref{eq:OrientationORB} the algorithm constructs a vector from the corners center $O$ to the centroid $OC$.
 
 \begin{equation}\label{eq:OrientationORB} \theta = atan2(m_{01},m_10)\end{equation}
 
 Here atan2 is the quadrant aware version of the arcus tangens.
 
-To compare those keypoints to others the algorithm needs the BRIEF descriptor. It does binary test on patches of the image. The binary test $\tau$ \ref{eq:BinaryTest}is defined by the equation:
+To compare those keypoints to others the algorithm needs the BRIEF descriptor. It does binary test on patches of the image. The binary test $\tau$ \eqref{eq:BinaryTest}is defined by the equation:
 
 \begin{equation}\label{eq:BinaryTest} \tau(p;x,y) := \begin{cases} 1 :p(x) < p(y) \\ 0 :p(x) \geq p(y)\end{cases}\end{equation}
 
-where $p(x)$ is the intensity of $p$ at point x. A feature \ref{eq:BinaryFeature} to compare the keypoints together is defined as a vector of binary tests: 
+where $p(x)$ is the intensity of $p$ at point x. A feature \eqref{eq:BinaryFeature} to compare the keypoints together is defined as a vector of binary tests: 
 
 \begin{equation}\label{eq:BinaryFeature} f_{n}(p) := \sum_{1 \leq i \leq n}2^{i-1} \tau(p;x,y)\end{equation}
 
-To allow BRIEF to be rotation invariant the descriptor \ref{eq:BriefDescriptor} will be orientated to the orientation of keypoints. The rotation will be defined by the patch orientation $\theta$ and the rotation matrix $R_{\theta}$ to be $S_{\theta} = R_{\theta}S$.
+To allow BRIEF to be rotation invariant the descriptor \eqref{eq:BriefDescriptor} will be orientated to the orientation of keypoints. The rotation will be defined by the patch orientation $\theta$ and the rotation matrix $R_{\theta}$ to be $S_{\theta} = R_{\theta}S$.
 This orientated BRIEF descriptor is now defined as
 \begin{equation}\label{eq:BriefDescriptor} g_{n}(p,\theta) := f_{n}(p)|(x_{i},y_{i}) \in S_{\theta}\end{equation}
 
@@ -230,10 +230,10 @@ The object detection for this method is based on features and not pixels. Featur
 
 All features combined are more than 180'000 while the detector has a base resolution of 24x24. This means the rectangle features are overcomplete.
 These rectangle features are computed using the representation "integral image". In an integral every pixel is a sum of pixels of the original image that are above and to the left:
-\[ii(x,y) = \sum_{x'\leq x, y'\leq y} i(x',y')\]
+\begin{equation}ii(x,y) = \sum_{x'\leq x, y'\leq y} i(x',y')\end{equation}
 where ii(x,y) is the integral image and i(x,y) the original. Using two conditions with s(x,y) as the row sum:
-\[s(x,y) = s(x,y-1)+i(x,y)\]
-\[ii(x,y) = ii(x-1,y)+s(x,y)\]
+\begin{equation}s(x,y) = s(x,y-1)+i(x,y)\end{equation}
+\begin{equation}ii(x,y) = ii(x-1,y)+s(x,y)\end{equation}
 the whole image can be computed in one pass.
 This method helps so we can now compute two-rectangular features from just 6 values instead of having to do all the calculations for the sums each time over whole regions. In addition three-rectangular features only take 8 and four-rectangular only 9 values to calculate its value. This algorithm can only recognize features in vertical, horizontal or diagonal direction due to the nature of our rectangle features.
 To train and select a small size of features this algorithm uses the "AdaBoost" method. The basic idea is that there is a feature size over 180'000 features to determine the if an object is recognized or not. The job of this "AdaBoost" is to reduce the amount of features down to a basic set of features that still has a high recognition rate. For each feature the algorithm determines the optimal threshold classification function so that the least amount of examples are misclassified.
@@ -317,7 +317,7 @@ The watershed-algorithm in our project is used for segmentation of the different
 The algorithm is processed on a gray-scale image on which the color intensity is analogous to the height in a height map. The watershed in use does flooding. The idea is to place a water source in each regional minimum and flood the entire relief. It will stop if it meets a different water source or an impassable barrier.
 
 The basic algorithm uses three different markings for all regions. The values I for each region can be:
-\[I(u,v) = \begin{cases} 0 & background \\  255 & foreground \\ 1..254 & regions \end{cases} \]
+\begin{equation}I(u,v) = \begin{cases} 0 & background \\  255 & foreground \\ 1..254 & regions \end{cases} \end{equation}
 
 It is a really simple algorithm where it starts with looking for an unmarked foreground pixel. All pixels of the region that are connected to this starting pixel will be visited and marked. There are three different ways to do this process. It can be a recursive, an iterative depth-first or breadth-first flood filling. It is not clear what implementation OpenCv uses. In the end all of the methods lead to a similar result and thus will not be discussed further. 
 
