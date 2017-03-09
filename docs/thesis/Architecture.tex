@@ -26,7 +26,7 @@ This section shows an example of how the new language is used in the software.
 
 The language feature \flqq Extension Methods\frqq  can be used to make the code more readable. It extends an existing object with a new method, however without the concept of inheritance. The code of the method will be outsourced into a separate file.
 
-\begin{lstlisting}[caption={Erode image without extension methods},label={lst:imageOperations},language=Java]
+\begin{lstlisting}[caption={Erode image without extension methods},label={lst:imageOperations},language=Kotlin]
 // threshold image
 Imgproc.threshold(image, image, 128.0, 255.0, 
 		Imgproc.THRESH_BINARY)
@@ -40,7 +40,7 @@ Imgproc.erode(image, image, element)
 
 It is used in this software to make calls to \gls{gloss:OpenCV} more natural for object oriented developers. For example, instead of using the static Imgproc class (Listing \ref{lst:imageOperations}), it is possible to call a lot of methods on the Mat object itself (Listing \ref{lst:imageOperationsWithExtensions}).
 
-\begin{lstlisting}[caption={Erode image with extension methods},label={lst:imageOperationsWithExtensions},language=Java]
+\begin{lstlisting}[caption={Erode image with extension methods},label={lst:imageOperationsWithExtensions},language=Kotlin]
 // threshold image
 image.threshold(128.0, 255.0, Imgproc.THRESH_BINARY)
 

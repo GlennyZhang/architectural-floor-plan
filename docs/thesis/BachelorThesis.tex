@@ -9,6 +9,8 @@
 \renewcommand{\thesection}{\arabic{section}}
 
 \usepackage[utf8]{inputenc}
+\usepackage[dvipsnames]{xcolor}
+
 \usepackage{txfonts}
 \usepackage{pdflscape}
 \usepackage{todonotes}
@@ -50,41 +52,33 @@
 
 \usepackage{color}
 
-\definecolor{mygray}{rgb}{0.4,0.4,0.4}
-\definecolor{mygreen}{rgb}{0,0.8,0.6}
-\definecolor{myorange}{rgb}{1.0,0.4,0}
-
 \lstset{
 basicstyle=\scriptsize\sffamily\color{black},
-commentstyle=\color{mygray},
 frame=single,
 numbers=left,
 numbersep=5pt,
-numberstyle=\tiny\color{mygray},
-keywordstyle=\color{mygreen},
+numberstyle=\tiny\color{gray},
 showspaces=false,
 showstringspaces=false,
-stringstyle=\color{myorange},
-tabsize=1,
-emph={get,val,var,override,fun},
-emphstyle={\color{blue}}
+tabsize=1
 }
 
 \lstdefinelanguage{Kotlin}{
-  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
-  keywordstyle=\color{blue}\bfseries,
-  ndkeywords={class, export, boolean, throw, implements, import, this},
-  ndkeywordstyle=\color{darkgray}\bfseries,
+  keywords={package, as, typealias, this, super, val, var, fun, for, null, true, false, is, in, throw, return, break, continue, object, if, try, else, while, do, when, yield, typeof, yield, typeof, class, interface, enum, object, override, public, private, get, set, import, abstract, },
+  keywordstyle=\color{NavyBlue}\bfseries,
+  ndkeywords={@Deprecated, Iterable, Int, Integer, Float, Double, String, Runnable, dynamic},
+  ndkeywordstyle=\color{BurntOrange}\bfseries,
+  emph={println, return@, forEach,},
+  emphstyle={\color{OrangeRed}},
   identifierstyle=\color{black},
-  sensitive=false,
+  sensitive=true,
+  commentstyle=\color{gray}\ttfamily,
   comment=[l]{//},
   morecomment=[s]{/*}{*/},
-  commentstyle=\color{purple}\ttfamily,
-  stringstyle=\color{red}\ttfamily,
-  morestring=[b]',
-  morestring=[b]"
+  stringstyle=\color{ForestGreen}\ttfamily,
+  morestring=[b]",
+  morestring=[s]{"""*}{*"""},
 }
-
 
 \begin{document}
 	\title{\textbf{Bachelor Thesis \\ - \\Automatic analysis and simplification of architectural floor plans}}
