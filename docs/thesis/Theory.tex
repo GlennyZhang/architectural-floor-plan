@@ -179,7 +179,7 @@ To allow BRIEF to be rotation invariant the descriptor \ref{eq:BriefDescriptor} 
 This orientated BRIEF descriptor is now defined as
 \begin{equation}\label{eq:BriefDescriptor} g_{n}(p,\theta) := f_{n}(p)|(x_{i},y_{i}) \in S_{\theta}\end{equation}
 
-By creating a matcher for \acrshort{acro:ORB} that is used by descriptor to compare an image or its features to the features of a target image. If any of those features match the algorithm has likely found the object of the first image in the second image and will return its coordinates.
+By creating a matcher for \acrshort{acro:ORB} that is used by descriptor to compare an image or its features to the features of a target image. If any of those features match the algorithm has likely found the object of the first image in the second image and will return its coordinates \citep{rublee_rabaud_konolige_bradski_2011}.
 
 \subsubsection{Cascade training}
 The algorithm used for object detection in this project was first described by Paul Viola in his paper \todo{ACCEPTED CONFERENCE  ON COMPUTER VISION AND PATTERN RECOGNITION 2001 Rapid Object Detection using a Boosted Cascade of Simple Features}. It is based on three key components. One is the "Integral Image" which is an image representation that allows to detect features very quickly. A second component is the learning algorithm "AdaBoost" which select a small number of critical features from a big set. The last component is an algorithm that combines increasingly complex features in a cascade. All of these components provide the basis for a really fast feature detection compared to previously known algorithms.
