@@ -58,11 +58,21 @@ opening for exterior wall
 
 \subsection{Workflow 1}
 This section describes the first combination of algorithms that was implemented to try and achieve room detection. It is based on research of the paper by Ahmed,Liwicki,Weber and Dengel \citep{mace_valveny_loctea_tabbone_2010} to find the walls in an image with a Hough transformation. To then detect the rooms the idea was to detect them with a watershed algorithm. This algorithm is used by several project on the internet on the context off room segmentation. The general idea how this algorithm is supposed to work and what problems were found are described in this section.
+
 \subsubsection{Hough transformation}
+This implementation is based on the fact that the Hough transformation will find long lines on an image. These lines will usually be the walls. Cleaned up images of architectural floor plans were used to start off. This was done so there was no noise on those plans and the walls could be extracted easily.
+
+As described in section~\ref{subsubsec:Hough transformation} the hough transformation finds straight lines on an image. Long straight lines on a floor plan are usually the walls, therefore the Hough transformation is supposed to detect them on the plan. At first, the Hough transformation by OpenCv called HoughLines was used. It finds the all suspected lines and returns it in an array represented with the $(r,\theta)$ orientation representation. The problem with this implementation was, that this just represents the orientation and location of the line but not its size.
+As a replacement HoughLinesP was used. It does the exact same but additionally calculates where those lines actually are. The resulting array returns the actual starting and ending position of the lines. 
+
+There were several problems with that algorithm. The algorithm separated a wall line into a lot of small lines. To retrieve the actual wall there would have to be additional computation that connects those several small parts into one big line. As an addition due to no preprocessing what was left as a wall were the actual outlines of the original walls. Therefore any wall was represented by two parallel lines. This would have led to additional effort. Before any of those efforts were made a different algorithm was found that showed more promising results. Therefore the optimization of this algorithm was not pursued further.
+  
 \subsubsection{Watershed}
+The idea to find the different rooms within the floor plan was to create a watershed algorithm described in section~\ref{subsub:watershed} on the image. It is a flood filling algorithm that starts at given starting points and extends its area until it meets a wall or a different flood from an other starting point. A further explanation will be done in section~\ref{subsubsub:watershed} as it was actually implemented and used in our second workflow.  
 \subsection{Workflow 2}
 \subsubsection{Morphological transformation}
 \subsubsection{Room detection}
+\label{subsubsub:watershed}
 \subsection{Workflow 3}
 \subsubsection{Morphological tranformation}
 \subsubsection{Object detection}
