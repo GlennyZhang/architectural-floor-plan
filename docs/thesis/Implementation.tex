@@ -70,15 +70,30 @@ There were several problems with that algorithm. The algorithm separated a wall 
 \subsubsection{Watershed}
 The idea to find the different rooms within the floor plan was to create a watershed algorithm described in section~\ref{subsub:watershed} on the image. It is a flood filling algorithm that starts at given starting points and extends its area until it meets a wall or a different flood from an other starting point. A further explanation will be done in section~\ref{subsubsub:watershed} as it was actually implemented and used in our second workflow.  
 \subsection{Workflow 2}
-\subsubsection{Morphological transformation}
+\subsubsection{Noise removal}
+\paragraph{Morphological transformation}
 \subsubsection{Room detection}
+\paragraph{Distance transformation}
+\paragraph{Geodesic dilation}
+\paragraph{Watershed}
 \label{subsubsub:watershed}
 \subsection{Workflow 3}
-\subsubsection{Morphological tranformation}
+\subsubsection{Noise removal}
+\paragraph{Morphological transformation}
 \subsubsection{Object detection}
+\paragraph{Template matching}
+\paragraph{ORB}
+\paragraph{Cascade classifier}
 \subsubsection{Poly DP}
 \subsubsection{Gap closing}
+\paragraph{Edge door closing}
+\paragraph{Simple door closing}
+\paragraph{Wall closing}
 \subsubsection{Room detection}
+\paragraph{Watershed improvements}
+\paragraph{Connected components}
+\paragraph{Minimum room deletion}
+
 
 \todo{subsubsubsections for further titles?}
 
