@@ -22,9 +22,9 @@ CaffViewer   & DeCaff         & 1350 Euro    & May 17, 2016     & Freeware      
 This section describes, how to extend the application developed in this work. It is split into different tasks, which will most likely be done in the future.
 
 \subsubsection{Adding new algorithm}
-We recommend, to split up different parts of a new process into different algorithms, which enhances the maintainability of an algorithm.
-
 To add a new algorithm you have to create a new class, which implements the $IAlgorithm$ interface. The interface and algorithms are described in section~\ref{sub:algorithm}, but we will give you here a short overview over the interface and how to implement it.
+
+We recommend, to split up different parts of a new process into different algorithms, which enhances the maintainability of an algorithm.
 
 \begin{figure}[h]
   \centering
@@ -49,28 +49,28 @@ class MyAlgorithm : IAlgorithm
 
 If you change the original image, it makes sense to create a copy of the incoming image, because the algorithm will maybe run multiple times. There are multiple ways to copy a $Mat$, but we have provided an extension method called $copy()$ (Listing~\ref{lst:extendedAlgorithm}, Line~\ref{line:AlgorithmCopy}), which creates a deep copy of the image.
 
-If your algorithm uses parameters, which should be possible to change by the user, you can flag the parameter variables with an $AlgorithmParameter$ attribute (Listing~\ref{lst:extendedAlgorithm}, Line~\ref{line:AlgorithmParameter}). You then also have the possibility to set the range of the parameter and provide a short help text (Figure~\ref{lst:extendedAlgorithm}). These informations will be read by the parameter window and shown during the process.
+If your algorithm uses parameters, which should be possible to change by the user, you can flag the parameter variables with an $AlgorithmParameter$ attribute (Listing~\ref{lst:extendedAlgorithm}, Line~\ref{line:AlgorithmParameter}). You then also have the possibility to set the range of the parameter and provide a short help text (Listing~\ref{lst:extendedAlgorithm}, Line~\ref{line:AlgorithmHelpText}). These informations will be read by the parameter window and shown during the process.
 
-\begin{lstlisting}[caption={Extended version of an algorithm.}, label={lst:extendedAlgorithm}, language=Kotlin,escapechar=|]
+\begin{lstlisting}[caption={Extended version of an algorithm.}, label={lst:extendedAlgorithm}, language=Kotlin, escapechar=$]
 class MyAlgorithm : IAlgorithm
 {
     @AlgorithmParameter(name = "Threshold",
             minValue = 0.0,
             maxValue = 255.0,
             majorTick = 1.0,
-            helpText = "Set the threshold value!")
-    var threshold = 128.0|\label{line:AlgorithmParameter}|
+            helpText = "Set the threshold value!") $\label{line:AlgorithmHelpText}$
+    var threshold = 128.0 $\label{line:AlgorithmParameter}$
 
     override val name: String
         get() = "MyAlgorithm"
 
     override fun run(image: AFImage, history: MutableList<AFImage>): AFImage {
-        val img = image.image.copy() |\label{line:AlgorithmCopy}|
+        val img = image.image.copy() $\label{line:AlgorithmCopy}$
         
         // do image processing
         img.threshold(threshold)
 
-        history.add(AFImage(image.image, "Image before threshold")) |\label{line:AlgorithmHistory}|
+        history.add(AFImage(image.image, "Image before threshold")) $\label{line:AlgorithmHistory}$
         return AFImage(img, "Result")
     }
 }
@@ -79,4 +79,12 @@ class MyAlgorithm : IAlgorithm
 To provide images to the user from between the algorithm, you just have to add the image to the $history$ list (Listing~\ref{lst:extendedAlgorithm}, Line~\ref{line:AlgorithmHistory}). The images provided in there are shown in the parameter window (Section~\ref{sub:parameter_window}).
 
 \subsubsection{Extending the user interface}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.8\textwidth]{fxmlArchitecture}
+	\caption{User interface architecture.}
+	\label{fig:fxmlArchitecture}
+\end{figure}
+
 \subsubsection{Training new classifiers}
