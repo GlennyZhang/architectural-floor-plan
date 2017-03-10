@@ -70,6 +70,18 @@ showstringspaces=false,
 tabsize=1
 }
 
+\newcommand*{\Signatures}[2]{%
+	\par\noindent\makebox[1.5in]{Location, Date, Signature}
+	\hfill\makebox[1.5in]{Location, Date, Signature}
+	\hfill\makebox[0.5in]{}%
+	\vspace{0.7in}
+	\par\noindent\makebox[1.5in]{\hrulefill}
+	\hfill\makebox[1.5in]{\hrulefill}
+	\hfill\makebox[0.5in]{}%
+	\par\noindent\makebox[1.5in][l]{#1}      \hfill\makebox[1.5in][l]{#2}
+	\hfill\makebox[0.5in]{}%
+}%
+
 \lstdefinelanguage{Kotlin}{
   keywords={package, as, typealias, this, super, val, var, fun, for, null, true, false, is, in, throw, return, break, continue, object, if, try, else, while, do, when, yield, typeof, yield, typeof, class, interface, enum, object, override, public, private, get, set, import, abstract, },
   keywordstyle=\color{NavyBlue}\bfseries,
@@ -111,8 +123,8 @@ tabsize=1
 \include{Result}
 \include{Conclusion}
 \include{Annex}
-	
 \bibliography{quotations}
+\include{AuthenticityAgreement}
 
 \clearpage
 \printglossary

@@ -62,10 +62,27 @@ This section describes the first combination of algorithms that was implemented 
 \subsubsection{Hough transformation}
 This implementation is based on the fact that the Hough transformation will find long lines on an image. These lines will usually be the walls. Cleaned up images of architectural floor plans were used to start off. This was done so there was no noise on those plans and the walls could be extracted easily.
 
-As described in section~\ref{subsubsec:Hough transformation} the hough transformation finds straight lines on an image. Long straight lines on a floor plan are usually the walls, therefore the Hough transformation is supposed to detect them on the plan. At first, the Hough transformation by OpenCv called HoughLines was used. It finds the all suspected lines and returns it in an array represented with the $(r,\theta)$ orientation representation. The problem with this implementation was, that this just represents the orientation and location of the line but not its size.
+As described in section~\ref{subsubsec:Hough transformation} the hough transformation finds straight lines on an image. Long straight lines on a floor plan are usually the walls, therefore the Hough transformation is supposed to detect them on the plan. As a precondition for the Hough algorithm a binary image is needed. To create this binary image we used the Canny Edge detection algorithm by OpenCV. Wherever it detects an edge its pixel will be white, all other pixels will be black. There will be two edges for each wall, one where the background changes to the wall and the other where the wall ends and the background starts again. To then detect the lines, the Hough transformation by OpenCv called HoughLines was first used. It finds the all suspected lines and returns it in an array represented with the $(r,\theta)$ orientation representation. The problem with this implementation was, that this just represents the orientation and location of the line but not its size.
 As a replacement HoughLinesP was used. It does the exact same but additionally calculates where those lines actually are. The resulting array returns the actual starting and ending position of the lines. 
 
+\begin{lstlisting}[caption={Hough transformation example code}, label={lst:HoughTransfCode}, language=Kotlin]
+//Canny Image
+var canny = Mat()
+val threshlow = 1.0
+val threshhigh = 254.0
+Imgproc.Canny(destination, canny, threshlow, threshhigh);
+
+//HoughTransformation
+val lines = Mat()
+val rho = 1.0
+val theta = Math.PI / 180
+Imgproc.HoughLinesP(canny, lines, rho, theta, 0)
+\end{lstlisting}
+
+The parameters used in the code listing~\ref{lst:HoughTransfCode} are not optimized. Those were chosen as to what worked best with few test runs done on the algorithm. The parameters "threshlow" and "threshhigh" set the threshold for the  hysteresis procedure. The parameter for $\rho$ is set to 1 as a standard, it describes its resolution in pixels. The parameter for $\theta$ describes its resolution in radians.
+
 There were several problems with that algorithm. The algorithm separated a wall line into a lot of small lines. To retrieve the actual wall there would have to be additional computation that connects those several small parts into one big line. As an addition due to no preprocessing what was left as a wall were the actual outlines of the original walls. Therefore any wall was represented by two parallel lines. This would have led to additional effort. Before any of those efforts were made a different algorithm was found that showed more promising results. Therefore the optimization of this algorithm was not pursued further.
+
   
 \subsubsection{Watershed}
 The idea to find the different rooms within the floor plan was to create a watershed algorithm described in section~\ref{subsub:watershed} on the image. It is a flood filling algorithm that starts at given starting points and extends its area until it meets a wall or a different flood from an other starting point. A further explanation will be done in section~\ref{subsubsub:watershed} as it was actually implemented and used in our second workflow.  
