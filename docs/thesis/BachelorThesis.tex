@@ -59,17 +59,6 @@
 
 \usepackage{color}
 
-\lstset{
-basicstyle=\scriptsize\sffamily\color{black},
-frame=single,
-numbers=left,
-numbersep=5pt,
-numberstyle=\tiny\color{gray},
-showspaces=false,
-showstringspaces=false,
-tabsize=1
-}
-
 \newcommand*{\Signatures}[2]{%
 	\par\noindent\makebox[1.5in]{Location, Date, Signature}
 	\hfill\makebox[1.5in]{Location, Date, Signature}
@@ -81,6 +70,17 @@ tabsize=1
 	\par\noindent\makebox[1.5in][l]{#1}      \hfill\makebox[1.5in][l]{#2}
 	\hfill\makebox[0.5in]{}%
 }%
+
+\lstset{
+basicstyle=\scriptsize\sffamily\color{black},
+frame=single,
+numbers=left,
+numbersep=5pt,
+numberstyle=\tiny\color{gray},
+showspaces=false,
+showstringspaces=false,
+tabsize=1
+}
 
 \lstdefinelanguage{Kotlin}{
   keywords={package, as, typealias, this, super, val, var, fun, for, null, true, false, is, in, throw, return, break, continue, object, if, try, else, while, do, when, yield, typeof, yield, typeof, class, interface, enum, object, override, public, private, get, set, import, abstract, },
@@ -97,6 +97,17 @@ tabsize=1
   stringstyle=\color{ForestGreen}\ttfamily,
   morestring=[b]",
   morestring=[s]{"""*}{*"""},
+}
+
+\lstdefinelanguage{XML}
+{
+  morestring=[b]",
+  morestring=[s]{>}{<},
+  morecomment=[s]{<?}{?>},
+  stringstyle=\color{ForestGreen},
+  identifierstyle=\color{NavyBlue},
+  keywordstyle=\color{OrangeRed},
+  morekeywords={xmlns,version,type,onAction,text,orientation}
 }
 
 \begin{document}

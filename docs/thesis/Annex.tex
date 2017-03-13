@@ -22,7 +22,7 @@ CaffViewer   & DeCaff         & 1350 Euro    & May 17, 2016     & Freeware      
 This section describes, how to extend the application developed in this work. It is split into different tasks, which will most likely be done in the future.
 
 \subsubsection{Adding new algorithm}
-To add a new algorithm you have to create a new class, which implements the $IAlgorithm$ interface. The interface and algorithms are described in section~\ref{sub:algorithm}, but we will give you here a short overview over the interface and how to implement it.
+To add a new algorithm you have to create a new class, which implements the \textit{IAlgorithm} interface. The interface and algorithms are described in section~\ref{sub:algorithm}, but we will give you here a short overview over the interface and how to implement it.
 
 We recommend, to split up different parts of a new process into different algorithms, which enhances the maintainability of an algorithm.
 
@@ -47,9 +47,9 @@ class MyAlgorithm : IAlgorithm
 }
 \end{lstlisting}
 
-If you change the original image, it makes sense to create a copy of the incoming image, because the algorithm will maybe run multiple times. There are multiple ways to copy a $Mat$, but we have provided an extension method called $copy()$ (Listing~\ref{lst:extendedAlgorithm}, Line~\ref{line:AlgorithmCopy}), which creates a deep copy of the image.
+If you change the original image, it makes sense to create a copy of the incoming image, because the algorithm will maybe run multiple times. There are multiple ways to copy a \textit{Mat}, but we have provided an extension method called \textit{copy()} (Listing~\ref{lst:extendedAlgorithm}, Line~\ref{line:AlgorithmCopy}), which creates a deep copy of the image.
 
-If your algorithm uses parameters, which should be possible to change by the user, you can flag the parameter variables with an $AlgorithmParameter$ attribute (Listing~\ref{lst:extendedAlgorithm}, Line~\ref{line:AlgorithmParameter}). You then also have the possibility to set the range of the parameter and provide a short help text (Listing~\ref{lst:extendedAlgorithm}, Line~\ref{line:AlgorithmHelpText}). These informations will be read by the parameter window and shown during the process.
+If your algorithm uses parameters, which should be possible to change by the user, you can flag the parameter variables with an \textit{AlgorithmParameter} attribute (Listing~\ref{lst:extendedAlgorithm}, Line~\ref{line:AlgorithmParameter}). You then also have the possibility to set the range of the parameter and provide a short help text (Listing~\ref{lst:extendedAlgorithm}, Line~\ref{line:AlgorithmHelpText}). These informations will be read by the parameter window and shown during the process.
 
 \begin{lstlisting}[caption={Extended version of an algorithm.}, label={lst:extendedAlgorithm}, language=Kotlin, escapechar=$]
 class MyAlgorithm : IAlgorithm
@@ -76,15 +76,60 @@ class MyAlgorithm : IAlgorithm
 }
 \end{lstlisting}
 
-To provide images to the user from between the algorithm, you just have to add the image to the $history$ list (Listing~\ref{lst:extendedAlgorithm}, Line~\ref{line:AlgorithmHistory}). The images provided in there are shown in the parameter window (Section~\ref{sub:parameter_window}).
+To provide images to the user from between the algorithm, you just have to add the image to the \textit{history} list (Listing~\ref{lst:extendedAlgorithm}, Line~\ref{line:AlgorithmHistory}). The images provided in there are shown in the parameter window (Section~\ref{sub:parameter_window}).
 
 \subsubsection{Extending the user interface}
 
-\begin{figure}[h]
+To edit the user interface, you have to edit the \textit{MainWindow} controller class. In this section we will explain how to add a new button to the user interface, to export the current displayed image.
+
+The user interface is written with the UI Framework JavaFX 2 and uses FXML files to define the layout of the different forms. We recommend to use the \todo{add link}SceneManager application from Oracle to edit these layout files.
+
+For more information about the user interface, have a look at the section~\ref{sub:userInterface}.
+
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{fxmlArchitecture}
 	\caption{User interface architecture.}
 	\label{fig:fxmlArchitecture}
 \end{figure}
+
+As seen on figure~\ref{fig:fxmlArchitecture}, the user interface is split into two parts. The first one is called FXML and defines the layout of the interface. The second one is the controller, which defines the actions and events, which can happen on the interface. For example, for the \textit{MainWindow} there is a \textit{MainWindow.fxml} and a \textit{MainWindow.kt} file in the source code.
+
+\begin{lstlisting}[caption={MainWindow.fxml with new button.}, label={lst:fxmlwithbutton}, language=XML, escapechar=$]
+    <Separator orientation="VERTICAL" />
+    <Button onAction="#exportLayer" text="Export SVG" />
+    <Button onAction="#exportToCSV" text="Export CSV" />
+    <Button onAction="#saveImage" text="Save Image" /> $\label{line:fxmlSaveImage}$
+</children>
+\end{lstlisting}
+
+First of all, you have to add the extra button to the layout. In listing~\ref{lst:fxmlwithbutton} on line~\ref{line:fxmlSaveImage} there is the new button defined. The \textit{onAction} attribute is a link to a method in the controller of the view.
+
+Now, you have to implement the behaviour of the button on the controller side. There you have to create a function, which is called like the \textit{onAction} attribute value.
+
+\begin{lstlisting}[caption={Save image controller code.}, label={lst:saveImage}, language=Kotlin, escapechar=$]
+fun saveImage(e : ActionEvent)
+{
+    val stage = (e.source as Node).scene.window as Stage
+
+    val fileChooser = FileChooser()
+    fileChooser.initialFileName = "image.png"
+    fileChooser.title = "Export image as png"
+    fileChooser.extensionFilters.addAll(
+            FileChooser.ExtensionFilter("PNG", "*.png"))
+
+    val file = fileChooser.showSaveDialog(stage)
+
+    if (file != null) {
+        val writableImage = WritableImage(canvas.canvas.width.toInt(),
+                canvas.canvas.height.toInt())
+        canvas.canvas.snapshot(null, writableImage)
+        val renderedImage = SwingFXUtils.fromFXImage(writableImage, null)
+        ImageIO.write(renderedImage, "png", file)
+    }
+}
+\end{lstlisting}
+
+First, you have to show a file chooser, where the user is able to choose the file output location. To save the current image, you have to copy the canvas element into a writable image.
 
 \subsubsection{Training new classifiers}
