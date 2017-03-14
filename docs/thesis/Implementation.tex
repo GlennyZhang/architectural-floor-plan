@@ -1,63 +1,10 @@
 \section{Implementation}
-Detected 19 objects
-00:00:00:37
-Distanztransform
-00:00:00:43
-GeodesicDilation
-00:00:04:4923
-Cornerdetection
-found 1011 corners!
-00:00:10:10859
-Sparsing Points
-00:00:00:28
-prepare watershed
-00:00:01:1968
+The following sections describe, how the implementation of the automatic room recognition was achieved. Basically it is split into three parts, later called workflows. Each workflow is a combination of algorithms, which solves a different problem.
 
-HoughP Line Detection
-Canny Line Detection
-Find Contours
-
-NikieRoomDetection
-Distance Transform
-Geodesic Dilation
-Marker Distance Transform
-Watershed
-Normalize Image
-Find Contours nikie
-Watershed inverse binarization
-Find Center of Distance Transform
-FG/BG Watershed (Multi labeled)
-
-Scale Test
-
-Template Matching
-
-Harris Corner Detection
-Sparse Point Cloud
-Gap Closing Alg
-Improved Gap Closing
-Corner sharpening
-Simple gap closing
-
-ORB
-JavaCv
-
-CascadeClassifier
-Bad Results
-Shape Distance Matching
-Erosion for better Results
-Detection with more Pos/Neg
-
-Component analysis
-Border removal
-Minimum room
-
-Exterior wall closing algorithm
-Polygon approx
-opening for exterior wall
+Every section will describe why and how the algorithm is implemented and what the results of the implementation was.
 
 \subsection{Workflow 1}
-This section describes the first combination of algorithms that was implemented to try and achieve room detection. It is based on research of the paper by Ahmed,Liwicki,Weber and Dengel \citep{mace_valveny_loctea_tabbone_2010} to find the walls in an image with a Hough transformation. To then detect the rooms, the idea was to detect them with a watershed algorithm. This algorithm is used by several projects on the internet, on the context of room segmentation. The general idea, how this algorithm is supposed to work and what problems were found, are described in this section.
+This section describes the first combination of algorithms that was implemented to try and achieve room detection. It is based on research of the paper by Ahmed, Liwicki, Weber and Dengel \citep{mace_valveny_loctea_tabbone_2010} to find the walls in an image with a Hough transformation. To then detect the rooms, the idea was to detect them with a watershed algorithm. This algorithm is used by several projects on the internet, on the context of room segmentation. The general idea, how this algorithm is supposed to work and what problems were found, are described in this section.
 
 \subsubsection{Hough transformation}
 This implementation is based on the fact that the Hough transformation will find long lines on an image. These lines will usually be the walls. Cleaned up images of architectural floor plans were used to start off. This was done to remove noise on plans and the walls could be extracted easily.
@@ -88,48 +35,11 @@ There were several problems with that algorithm. The algorithm separated a wall 
 The idea to find the different rooms within the floor plan, was to run the watershed algorithm on the image (Section~\ref{subsub:watershed}). It is a flood filling algorithm that starts at given starting points and extends its area, until it meets a wall or a different flood from an other starting point. A further explanation will be done in section~\ref{subsubsub:watershed}, as it was actually implemented and used in our second workflow.
 
 \subsection{Workflow 2}
+
 \subsubsection{Noise removal}
-\paragraph{Morphological transformation}
-\subsubsection{Room detection}
-\paragraph{Distance transformation}
-\paragraph{Geodesic dilation}
-\paragraph{Watershed}
-\label{subsubsub:watershed}
-\subsection{Workflow 3}
-\subsubsection{Noise removal}
-\paragraph{Morphological transformation}
-\subsubsection{Object detection}
-\paragraph{Template matching}
-\paragraph{ORB}
-\paragraph{Cascade classifier}
-\subsubsection{Poly DP}
-\subsubsection{Gap closing}
-\paragraph{Edge door closing}
-\paragraph{Simple door closing}
-\paragraph{Wall closing}
-\subsubsection{Room detection}
-\paragraph{Watershed improvements}
-\paragraph{Connected components}
-\paragraph{Minimum room deletion}
-
-
-\todo{subsubsubsections for further titles?}
-
-
-
-\subsection{Parameter Finding}
-\label{subsec:Parameter Finding}
-\subsubsection{Scale Test}
-\todo{Parameter finding and description}
-
-
-\subsection{Information Segmentation}
-
-
 All of the following topics in this section are used to remove or add specific information from our image. The idea is to standardize all incoming floor plans regardless of what "noise" is around in the basic floor plan. Noise is anything that is of no importance to all the following algorithms. This contains elements such as "personal-property" (cars, pianos, etc.) as well as text or any lines to show dimensions on the plan. The idea would be that most of this noise is erased by the user in advance. But it is practically impossible to remove all the noise beforehand due to it being so time intensive that it would ruin all the benefits of the algorithm using less time than doing everything by hand.
 
-
-\subsubsection{Noise removal (erosion and dilation)}
+\paragraph{Morphological transformation}
 The basic principle to remove noise is erosion and dilation. How the algorithm is processed is explained in section~\ref{subsubsec:Erosion and Dilation}.
 The purpose of both of those algorithms in this project is to remove any information on the starting picture to get a picture containing only the walls. This works due to the fact that usually the walls are the thickest lines on the floor plan. It is a simple heuristic to extract the walls and is according to the method other papers use. \todo{Link papers}
 
@@ -165,8 +75,10 @@ The same was done to the cleaned up image. As a result of different image sizes 
 As this is not perfect due to the variety of possible objects on a plan, there is the option to delete those beforehand or afterwards with our built in editor. This is so we can manually improve the quality of the outcome of noise removal.
 
 As a result of the noise removal we get an image with very basic information about where the walls are. This will be very important for our next step and other steps to come.
-\subsubsection{Normalize Image}
-\subsubsection{Distance transformation \& Geodesic dilation}
+
+
+\subsubsection{Room detection}
+\paragraph{Distance transformation}
 The distance transformation is used to find the centers of the rooms as explained in section~\ref{subsubsec:Distance transformation}. As its base it needs a cleaned up image of all the walls. It is a result of the noise removal we discussed in the previous section. To find the actual area of the of the room there is further processing with a geodesic dilation (Section~\ref{subsubsec:GeodesicDilation}) needed.
 
 The distance transformation gives us an image that represents the distance from the walls (lines in black) as a gradient of grey values going from dark (close to the wall) to bright (farther away). This means that there will be a center in each room that is very bright and has color values close to white.
@@ -181,57 +93,11 @@ The distance transformation gives us an image that represents the distance from 
 To find the centers there had to be an additional method that provides us with a specific information where these center areas are.
 \todo{Discuss specific parameters for each image in parameter finding}
 \todo{Distance Transform, Why not Contour Detection}
-\subsubsection{Find Center of Distance Transform}
-As seen in figure~\ref{fig:dist_transform} the center of a room is always one of the brightest point in the distance transformed image.
-  
-\subsubsection{Hough transformation}
-\subsubsection{JavaCv}
-Hough line transformation was the first algorithm we tried using to find the walls in the floor plan. It finds straight lines  
-\subsubsection{Harris corner detection}
-\subsubsection{Corner sharpening}
 
+\paragraph{Geodesic dilation}
+\paragraph{Watershed}
+\label{subsubsub:watershed}
 
-\subsubsection{Sparse Point Cloud}
-\subsection{Structural Analysis}
-test
-\todo{Object Detection: TM, Hough Lines, ORB}
-\subsubsection{Canny Line Detection} 
-\subsubsection{Find Contours}
-\subsubsection{Geodesic Dilation}
-\subsubsection{Marker Distance Transform}
-\subsubsection{HoughP Line Detection}
-\subsubsection{Template Matching}
-\subsubsection{Gap Closing Alg}
-\subsubsection{Simple gap closing}
-\subsubsection{Cascade classifier}
-The cascade classifier is used for object recognition of doors, windows and other objects that are important for the room detection and zone identification. This algorithm is a machine learning algorithm that has to be trained with positive and negative images. The resulting learned parameters are safed in an XML file. Since this is a crucial part of this project, it is described more detailed than most other algorithms. In the following lines the implementation process is described as well as all the experiences we made during this project.
-
-The basic problem was to find an algorithm that can find objects that vary in their details and regardless of their rotation and size. This is important due to the fact that there is no standard for objects in architectural floor plans that are used by a wide audience of architects. The decision to go with a machine learning approach and not an algorithm that works with heuristics is because we wanted to be able to process a broad variety of floor plans. Regardless wheter they show a small house with just basic features or a big plan with a lot of details and special objects.
-
-
-
-
-\todo{Cascading Classifier: To few samples, Cat images prove, more positive, thickening, polydp, positive negative ratio, more specific negative samples}
-\todo{Object Single Cases}
-\todo{Gaps Closing: Clustering, Rotation / MinBox}
-\subsubsection{Orientated FAST and Rotated BRIEF}
-\todo{Write why SURF not used: License}
-\subsubsection{Bad results}
-\subsubsection{Shape Distance Matching}
-\subsubsection{Erosion for better Results}
-\subsubsection{Detection with more Pos/Neg}
-\subsubsection{Component analysis}
-\subsubsection{Border removal}
-\subsubsection{Minimum room}
-\subsubsection{Exterior wall closing algorithm}
-\subsubsection{Polygon approx}
-\subsubsection{opening for exterior wall}
-\subsubsection{Image size}
-As a result of a lot of the testing we found out that images that have too big of a size use a lot of ram to process. Images below 100 kBytes did not affect the heap too much. There was an increased use of RAM due to the program of around 1-2 GB. When images of size 300 kBytes and bigger, the computer used for testing used more than 5 GB of additional RAM to process during one instance. This can lead to huge problems. The program will crash if there is no more RAM available. Therefore it is necessary to reduce the size of the image to a size below 150 kBytes. Otherwise there is no guarantee that the given RAM is enough to process. Especially when there are different programs running. For example an additional architecture program. Those usually use a lot of Heap-Space themselves. \todo{This is wrong, it depends on the pixel size not the file size.}
-
-\subsection{Semantic Analysis}
-\subsubsection{NikieRoomDetection}
-\subsubsection{Watershed}
 The watershed is the core of our room search algorithm. Its purpose is to fill  the unknown areas that are provided in a foreground/background image from previous images. It needs extremely good preprocessing. If it has any previous errors, the resulting rooms will not make sense.
 
 We use the watershed to its ability to find connected rooms with a simple method. It is a simple algorithm that has low computational cost. This and the fact that it was already implemented in openCV makes us use this algorithm.
@@ -247,5 +113,40 @@ As a solution to the fact that not all the doors are found, there is the option 
 To erase object from the image we initially planned to do an object detection. There was time to do some additional object detection other than just door and window. Those can be found in the code. But there are too many different object only within those few plans we got to catch them all. To implement all of the and erase those objects is a next step for this project. For now the user has to erase all object that do not get caught by noise removal by hand.
 \todo{Watershed}
 
-\subsubsection{Watershed inverse binarization}
-\todo{Polygon Smoothing}
+
+\subsection{Workflow 3}
+With all the 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{workflow3Layout}
+	\caption{Workflow 3 flowchart.}
+	\label{fig:workflow3Layout}
+\end{figure}
+
+\subsubsection{Noise removal}
+\paragraph{Morphological transformation}
+\subsubsection{Object detection}
+\paragraph{Template matching}
+\paragraph{ORB}
+
+\todo{JavaCV}
+Hough line transformation was the first algorithm we tried using to find the walls in the floor plan. It finds straight lines  
+
+\paragraph{Poly DP}
+\paragraph{Cascade classifier}
+The cascade classifier is used for object recognition of doors, windows and other objects that are important for the room detection and zone identification. This algorithm is a machine learning algorithm that has to be trained with positive and negative images. The resulting learned parameters are safed in an XML file. Since this is a crucial part of this project, it is described more detailed than most other algorithms. In the following lines the implementation process is described as well as all the experiences we made during this project.
+
+The basic problem was to find an algorithm that can find objects that vary in their details and regardless of their rotation and size. This is important due to the fact that there is no standard for objects in architectural floor plans that are used by a wide audience of architects. The decision to go with a machine learning approach and not an algorithm that works with heuristics is because we wanted to be able to process a broad variety of floor plans. Regardless wheter they show a small house with just basic features or a big plan with a lot of details and special objects.
+
+\subsubsection{Gap closing}
+\paragraph{Edge door closing}
+\paragraph{Simple door closing}
+\paragraph{Wall closing}
+\subsubsection{Room detection}
+\paragraph{Watershed improvements}
+\paragraph{Connected components}
+\paragraph{Minimum room deletion}
+
+
+\todo{subsubsubsections for further titles?}
