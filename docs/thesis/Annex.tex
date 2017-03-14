@@ -133,3 +133,87 @@ fun saveImage(e : ActionEvent)
 First, you have to show a file chooser, where the user is able to choose the file output location. To save the current image, you have to copy the canvas element into a writable image.
 
 \subsubsection{Training new classifiers}
+
+The objection detection in this project is primarily achieved with cascade classifiers (Section~\ref{sub:CascadeTraining}). This section gives a brief overview, how to train new objects with cascading classifiers and how to add it to the current process.
+
+To train a new object, you should have following prerequisites:
+
+\renewcommand{\labelenumi}{\alph{enumi})}
+\begin{enumerate}
+    \item Minimum 25 images of the object to detect (positives).
+    \item Minimum 50 large images of the background (negatives).
+    \item OpenCV installed (http://opencv.org/).
+    \item ImageMagick installed (https://www.imagemagick.org/).
+    \item OpenCV Sample Annotator installed (https://github.com/cansik/opencv-sample-annotator).
+\end{enumerate}
+
+\paragraph{Setup new training project}
+
+The source code of this project contains a folder called \textit{/training}, which contains a shell script called \textit{train.sh}. This shell script is there to train a new classifier, but it needs some files at the right place to run.
+
+The folder also contains an example directory structure called \textit{/training/example}. We recommend to copy this structure, rename it to the object, you want to recognise (for example \textit{doors}) and add your positive images to the \textit{positive} folder and the negative images to the \textit{negative} folder.
+
+\paragraph{Annotate positive images}
+
+Now you have to annotate your positive files, which means that you have to select the object in your positive images. We have developed a simple application (Figure~\ref{fig:SampleAnnotator}), which helps you to annotate the images.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{SampleAnnotator}
+	\caption{OpenCV Sample Annotator.}
+	\label{fig:SampleAnnotator}
+\end{figure}
+
+If you start the application, you have to select the dataset. These are your positive images, which are stored in the \textit{positive} folder. The second thing to select, is the output file. You should store it directly into the project folder (\textit{/training/doors}) as \textit{positives.txt}.
+
+Then you have to draw a rectangle around every object, that occurs in the image. If you have annotated all objects, click next and annotate the next image until you are finished. The application automatically saves the annotated regions into the \textit{positives.txt} file.
+
+
+\paragraph{Process negative images}
+If you have just 50 negative images, you should process these images first and create cropped versions of it, which helps to get better training results \citep{ball}. We recommend to gather large negative images and then split the images into smaller parts.
+
+This can be done with \textit{ImageMagick} batch processing. Navigate into your \textit{negative} folder and run following command of listing~\ref{lst:ImageCropping}.
+
+\begin{lstlisting}[caption={Image cropping.}, label={lst:ImageCropping}, language=Kotlin, escapechar=$]
+convert -crop 10%x10% +repage image.jpg image_part_%d.jpg
+\end{lstlisting}
+
+\paragraph{Start training}
+Now all preprocessing steps are finished and you finally can start the training of your new object. The training process is started by running the script \textit{train.sh} with following attributes:
+
+\begin{enumerate}
+    \item \textit{PROJECT}: The name of your project folder.
+    \item \textit{WIDTH}: The width of your positive objects.
+    \item \textit{HEIGHT}: The height of your positive objects.
+    \item \textit{NUMPOS}: The number of annotated positive objects.
+    \item \textit{NUMNEG}: The number of negative images.
+\end{enumerate}
+
+We recommend a small \textit{WIDTH} and \textit{HEIGHT}, because the training process is faster and you are abel to detect smaller objects. In listing~\ref{lst:RunTraining} you see an example how to run the training.
+
+\begin{lstlisting}[caption={Run training.}, label={lst:RunTraining}, language=Kotlin, escapechar=$]
+./train.sh doors 14 14 10 200
+\end{lstlisting}
+
+\paragraph{Add trained classifier to algorithm}
+When the training is finished, you will find the \textit{cascade.xml} in your project folder in the directory \textit{trained}. This file contains the trained data and is used by the algorithm to run the detection.
+
+To add this file to the existing process, you have to add it into the \textit{cascade-files} folder and add a new classifier detector algorithm, to the default workflow (Listing~\ref{lst:CCDefaultWorkflow}).
+
+\begin{lstlisting}[caption={New classifier in default worfklow.}, label={lst:CCDefaultWorkflow}, language=Kotlin, escapechar=$]
+val defaultWorkflow = Workflow(
+        arrayListOf(
+                CascadeClassifierDetector("cascade.xml", "doors"),
+                MorphologicalTransform(),
+                ExteriorWallClosing(),
+\end{lstlisting}
+
+
+
+
+
+
+
+
+
+---
