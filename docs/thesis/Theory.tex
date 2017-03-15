@@ -242,6 +242,7 @@ To achieve improved detection rate and drastically reduce the computation time t
 The classifier is trained with a training set of positives and negatives. Each stage is trained by adding features until the target detection and false positive rates are met. Stages are added until the overall target for false positive rate and detection rate is met. In the end there is always a balance to between finding high detection rates with low false positive rates and lower time for computation.
 
 \subsubsection{Template Matching}
+\label{sub:TemplateMatching}
 To find a template $T$ (Figure~\ref{fig:door_template}) in a given image $I$ (Figure~\ref{fig:A_N1_cleaned}), it is possible to use template matching. The algorithm slides the template $T$, pixel by pixel over the original image $I$ and stores the metric of the current pixel, in the correlation image $R$.
 
 There are various kinds of formulas to calculate the matching metric. Usually the formula sums up the matching pixels in the template $T$ and the image $I$ and stores the result as color value, in the correlation image $R$.
