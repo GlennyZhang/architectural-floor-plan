@@ -130,6 +130,18 @@ The algorithm to locate the centers after having done the distance transformatio
 
 \paragraph{Find contours}
 \label{sub:FindContours}
+The find contours algorithm was used to find the centers found in the marker image and give each of those their own color value. This was done so the watershed algorithm automatically creates a border between rooms as soon as the different flooding zones from the algorithm meet each other. This process is further described in the next paragraph. What the find contours algorithm does on the marker image is, that it finds all the borders of the defined centers. With the implementation of findContours in OpenCv you can specify to also fill the found borders with a specified color value. Therefore each marker found got a new color value. As it is a grayscale image, a base value of 200 was defined and for each new room found we increased that color for that room by one. This gives the option the detect up to around 50 rooms.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{findContourForeground}
+	\caption{This image shows the different marker centers colored in pixel values around 200 and higher on the plan AN1.}
+	\label{fig:findContour}
+\end{figure}
+
+An additional idea that was tried was to ignore rooms found that had any connection to the border of the image. The findContours algorithm finds a hierarchy on what contour contains other contours. We therefore tried to use the heuristic that the out-most contour that contains all other contours is the contour that contains all "room-centers" that are outside of the house. Therefore this contour could be ignored. As you can see on the image \ref{fig:geodesicDilation}, this heuristic does not work very well as there are to many conditions that can make it fail. One problem was that windows weren't closed and actual room centers existed that connected to the wall itself and therefore were not an inner contour. Additionally there are sometimes inner contours that are not part of the house itself. As a result of those experiments we came up with a solution that is described in workflow three as wall closing~\ref{sub:WallClosing}.
+
+ 
 \paragraph{Watershed}
 \label{subsubsub:watershed}
 
