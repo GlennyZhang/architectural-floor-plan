@@ -18,7 +18,7 @@ Binary dilation uses the exact same process. The only difference compared to the
 \subsubsection{Geodesic Dilation}
 \label{subsubsec:GeodesicDilation}
 
-Geodesic dilation is an iterative morphological transformation for reconstruction of marked foreground objects. Instead of the normal dilation (Section~\ref{subsubsec:Erosion and Dilation}) it uses a marker image $F$ which defines the starting points of the dilation, a mask image $G$ which defines the constraints of the dilation and a structuring element $B$ which describes the dilation itself.
+Geodesic dilation is an iterative morphological transformation for the reconstruction of marked foreground objects. Instead of the normal dilation (Section~\ref{subsubsec:Erosion and Dilation}) it uses a marker image $F$ which defines the starting points of the dilation, a mask image $G$ which defines the constraints of the dilation and a structuring element $B$ which describes the dilation itself.
 
 For example the algorithm is used to reconstruct the area of the brightest points of a distance transformed image (Section~\ref{subsubsec:Distance transformation}). We used this for extracting and enhancing the room center points which then are used as marker points of the watershed marker image (Section~\ref{subsub:watershed}).
 
