@@ -151,7 +151,7 @@ To erase object from the image we initially planned to do an object detection. T
 
 \subsection{Workflow 3}
 \label{sub:workflow3}
-With all the gained experience in workflow one (Section~\ref{sub:workflow1}) and workflow two (Section~\ref{sub:workflow2}), we started to implement workflow three. This workflow improves the room detection by the usage object detection, to fill gaps caused by the morphological transformation (Section~\ref{sub:MorphologicalTransformation}).
+With all the gained experience in workflow one (Section~\ref{sub:workflow1}) and workflow two (Section~\ref{sub:workflow2}), we started to implement workflow three. This workflow improves the room detection with the use of object detection, to fill gaps caused by the morphological transformation (Section~\ref{sub:MorphologicalTransformation}).
 
 \begin{figure}[H]
 	\centering
@@ -168,6 +168,12 @@ Noise removal has not been changed from the previews workflow. Morphological tra
 For more information about the noise removal, have a look at section~\ref{sub:MorphologicalTransformation}.
 
 \subsubsection{Object detection}
+One of the major problems of workflow two (Section~\ref{sub:workflow2}) is, that the morphological transformation erases too many elements from the floor plan. The doors and windows are also removed, but they are needed to separate the individual rooms.
+
+Object detection was contemplated from the beginning of the project, to detect furnishings and other parts of a room, which define the room zones (Section~\ref{sub:RoomZones}). So the idea was to use it, to detect doors and windows and solve the problem of workflow two.
+
+There are many 
+
 \paragraph{Template matching}
 \paragraph{ORB}
 
