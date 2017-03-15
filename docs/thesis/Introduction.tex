@@ -74,11 +74,14 @@ Grundriss\_OG
 H\_OG
 A1\_OG
 
+\todo{add images of plans}
+
 The time was taken with a countdown clock on an iPhone and was stopped manually by hand. This led to the time being usually 1-2 seconds longer than the actual time. The way this was done for all tests will be the same so that this will not matter and the tests are comparable to each other. The clicks made were counted by hand.
 An estimate for how many clicks are made on a floor plan is made along the following rules. For every room there is it usually takes the amount of edges the room has plus two additional clicks to create and confirm the room. There are also some additional clicks at the beginning to start the selection as well as the end to confirm and save it.
 What was not taken into consideration in these tests are miss-clicks. These do happen quite often. There are two different types of errors that can come from those. Either the last selected edge was way off and has to be corrected which will take 3 additional clicks. The second error is that it deletes all the work done by now and all rooms have to be reselected. During our testing this second error happened twice during six test-runs. That the edge selection is not correct happens around every third or fourth room. All together it can generate an additional 10 percent of clicks over an several floor plans.
 
 
+\todo{name table right}
 \begin{table}[]
 	\centering
 	\caption{My caption}
@@ -96,5 +99,58 @@ What was not taken into consideration in these tests are miss-clicks. These do h
 
 This table shows the test results for all the different floor plans. With this data we will make comparisons in the "Implementation" to test how effective our product is compared to the one in use.
 
-Based on information from the Planfabrik GmbH each hour of work costs them 80 CHF. Therefore any time saved on those room selections saves them a considerable amount of money. This is why the time measurement takes an important part in our metrics. Additionally any time the algorithm is running and the worker can focus on other things will not count towards the time taken for room recognition. This may also be and advantage of this project, due to the fact that its an automated algorithm and there doesn't have to be a worker to select all the edges. 
+Based on information from the Planfabrik GmbH each hour of work costs them 80 CHF. Therefore any time saved on those room selections saves them a considerable amount of money. This is why the time measurement takes an important part in our metrics. Additionally any time the algorithm is running and the worker can focus on other things will not count towards the time taken for room recognition. This may also be and advantage of this project, due to the fact that its an automated algorithm and there doesn't have to be a worker to select all the edges.
+
+\subsubsection{Object detection perfomance}
+\label{sub:ObjectDetectionPerfomance}
+
+To measure the performance of the object detection, we calculate the precision and recall of the different algorithm results (Figure~\ref{fig:PrecisionAndRecall}). Both scores together give us a comparable metric, called F1 score.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{PrecisionAndRecall}
+	\caption{Precision and Recall visualisation. On the left side are the relevant elements.}
+	\label{fig:PrecisionAndRecall}
+\end{figure}
+
+The reason to use precision and recall is, that both together create an accurate tool to measure the accuracy of an object detection algorithm. For further explanation of the used metrics, we use the abbreviation of the following terms:
+
+\begin{enumerate}[label=]
+    \item \textit{TP}: true positives
+    \item \textit{FP}: false positives
+    \item \textit{TN}: true negatives
+    \item \textit{FN}: false negatives
+\end{enumerate}
+
+\paragraph{Precision}
+\label{sub:Precision}
+
+The precision score takes \textit{TP} and all retrieved documents (\textit{TP} and \textit{FP}), to calculate a score, which reflects the normalised amount, of how many selected elements are relevant (Equation~\ref{eq:Precision}).
+
+\begin{equation} \label{eq:Precision}
+\begin{gathered}
+precision = \frac{TP}{TP \cup  FP}
+\end{gathered}
+\end{equation}
+
+\paragraph{Recall}
+\label{sub:recall}
+
+The recall score takes \textit{TP} and all positive documents (\textit{TP} and \textit{TN}), to calculate a score, which reflects the normalised amount, of how many relevant elements are selected (Equation~\ref{eq:Recall}).
+
+\begin{equation} \label{eq:Recall}
+\begin{gathered}
+recall = \frac{TP}{TP \cup  TN}
+\end{gathered}
+\end{equation}
+
+\paragraph{F1 Score}
+\label{sub:F1Score}
+The \textit{F1} score combines the precision and recall with the harmonic mean (Equation~\ref{eq:F1Score}).
+
+\begin{equation} \label{eq:F1Score}
+\begin{gathered}
+F_{1} = 2 * \frac{precision * recall}{precision + recall}
+\end{gathered}
+\end{equation}
 

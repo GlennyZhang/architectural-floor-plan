@@ -44,7 +44,7 @@ The idea to find the different rooms within the floor plan, was to run the water
 
 \subsection{Workflow 2}
 \label{sub:workflow2}
-This section describes the second workflow and what algorithms it is composed of. It is a mix of the work of Sébastien Macé and Peter Dawkins and Hervé Locteau and Salvatore Tabbone~\citep{mace_valveny_loctea_tabbone_2010} and the experiences we made with the first workflow~\ref{{sub:workflow1}}. What it does is, it removes any noise on the floor plan first with morphological operations like erosion and dilation. This is followed up with a room detection algorithm that, in the end, uses the watershed algorithm to determine the rooms. In contrast to the first workflow, where the preprocessing for the watershed was not done sufficiently, this algorithm improved on that. After optimizing this workflow, it was the first workflow that showed actual potential and was able detect the rooms and therefore solve the given problem.
+This section describes the second workflow and what algorithms it is composed of. It is a mix of the work of Sébastien Macé and Peter Dawkins and Hervé Locteau and Salvatore Tabbone~\citep{mace_valveny_loctea_tabbone_2010} and the experiences we made with the first workflow~\ref{sub:workflow1}. What it does is, it removes any noise on the floor plan first with morphological operations like erosion and dilation. This is followed up with a room detection algorithm that, in the end, uses the watershed algorithm to determine the rooms. In contrast to the first workflow, where the preprocessing for the watershed was not done sufficiently, this algorithm improved on that. After optimizing this workflow, it was the first workflow that showed actual potential and was able detect the rooms and therefore solve the given problem.
 
 
 \begin{figure}[H]
@@ -184,18 +184,33 @@ For more information about the noise removal, have a look at section~\ref{sub:Mo
 \subsubsection{Object detection}
 One of the major problems of workflow two (Section~\ref{sub:workflow2}) is, that the morphological transformation erases too many elements from the floor plan. The doors and windows are also removed, but they are needed to separate the individual rooms.
 
-Object detection was contemplated from the beginning of the project, to detect furnishings and other parts of a room, which define the room zones (Section~\ref{sub:RoomZones}). So the idea was to use it, to detect doors and windows and solve the problem of workflow two.
+Object detection was contemplated from the beginning of the project, to detect furnishings and other parts of a room, which define the room zones (Section~\ref{sub:RoomZones}). So the idea was to use it, to detect doors and windows and close the gaps between the walls. This would solve the problem of workflow two.
 
-There are many 
+In the following sections, we will take a look at different object detection approaches and how well they performed, to detect doors. The performance will be measured with the 
 
 \paragraph{Template matching}
+\label{sub:ImpTemplateMatching}
+
+Template matching is a very simple matching method, which can be used to find one or multiple occurrences of a template $T$ in an image $I$. For a better understanding of the algorithm, have a look at section~\ref{sub:TemplateMatching}.
+
+First of all we have to define the template $T$ (Figure~\ref{fig:DoorTemplate}), which in our case is a door of the floor plan \textit{AN\_1}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.2\textwidth]{door_template}
+	\caption{Template $T$.}
+	\label{fig:DoorTemplate}
+\end{figure}
+
 \paragraph{ORB}
+\label{sub:ImpORB}
 
 \todo{JavaCV}
 Hough line transformation was the first algorithm we tried using to find the walls in the floor plan. It finds straight lines  
 
 \paragraph{Poly DP}
 \paragraph{Cascade classifier}
+\label{sub:ImpCascadeClassifier}
 The cascade classifier is used for object recognition of doors, windows and other objects that are important for the room detection and zone identification. This algorithm is a machine learning algorithm that has to be trained with positive and negative images. The resulting learned parameters are saved in an XML file. Since this is a crucial part of this project, it is described more detailed than most other algorithms. In the following lines the implementation process is described as well as all the experiences we made during this project.
 
 The basic problem was to find an algorithm that can find objects that vary in their details and regardless of their rotation and size. This is important due to the fact that there is no standard for objects in architectural floor plans that are used by a wide audience of architects. The decision to go with a machine learning approach and not an algorithm that works with heuristics is because we wanted to be able to process a broad variety of floor plans. Regardless whether they show a small house with just basic features or a big plan with a lot of details and special objects.
