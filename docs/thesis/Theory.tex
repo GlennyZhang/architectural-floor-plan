@@ -296,6 +296,7 @@ To find the actual length of the lines there has to be a further algorithm that 
 \pagebreak
 
 \subsubsection{Connected Component Analysis}
+\label{sub:ConnectedComponentAnalysis}
 Finding connected components is a common way to detect objects in a thresholded image. In this work it is used to detect connected room pixels and calculate the size of each room out of it.
 
 This is accomplished by finding pixels which are adjacent to each other. A pixel is adjacent to another pixel if it is immediate $\mathcal{N}_4$ or $\mathcal{N}_8$ and has the same scalar value. Further the neighbor pixels are labeled with the same label and in the end combined to a region $\mathcal{R}$ \citep[Section 3.3.4]{szeliski_2011}.
