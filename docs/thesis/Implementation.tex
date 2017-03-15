@@ -139,6 +139,8 @@ The find contours algorithm was used to find the centers found in the marker ima
 	\label{fig:findContour}
 \end{figure}
 
+\todo{redo image}
+
 An additional idea that was tried was to ignore rooms found that had any connection to the border of the image. The findContours algorithm finds a hierarchy on what contour contains other contours. We therefore tried to use the heuristic that the out-most contour that contains all other contours is the contour that contains all "room-centers" that are outside of the house. Therefore this contour could be ignored. As you can see on the image \ref{fig:geodesicDilation}, this heuristic does not work very well as there are to many conditions that can make it fail. One problem was that windows weren't closed and actual room centers existed that connected to the wall itself and therefore were not an inner contour. Additionally there are sometimes inner contours that are not part of the house itself. As a result of those experiments we came up with a solution that is described in workflow three as wall closing~\ref{sub:WallClosing}.
 
  
