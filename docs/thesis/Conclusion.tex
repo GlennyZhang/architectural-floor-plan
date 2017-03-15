@@ -1,4 +1,12 @@
 \section{Conclusion}
-\subsection{Future}
+\subsection{Extensions}
+In this topic we discuss what additional measures can be taken to improve and extend this program. It will also show what the preparations were to provide an easy implementation for future extensions.
+
+\subsubsection{Object detection}
+As of now, only doors are being matched with the cascade classifier. There are several objects that could further be identified. Those objects are showers, toilets, baths, windows and different sorts of closets.
+There was a try to identify windows with the cascade classifier already. But for the case of windows it is near impossible to find a good classifier. Most of the plans provided have a different structure or a different symbol and even sometimes they are marked differently on one plan. But with the other objects this should be possible. Those objects would help remove noise on the initial plan if you could remove them after they were detected. Additionally these object define different zones as described in section~\ref{sub:ZoneDetection}. Therefore this project already has trained cascade files for each of those objects. Additionally the class that implements the cascade classifier in this project can reference a cascade file and discover the object trained. Therefore all steps to detect the objects are already provided. It is the implementation in a workflow and the usage to define zones that are not yet implemented and need work. In our opinion, implementing this additional detection will make detecting the walls easier as there is less noise and it will improve the room detection as a direct result of that.
+
+\subsubsection{Zone detection}
+\label{sub:ZoneDetection}
 
 \todo{Danksagung!}
