@@ -98,7 +98,10 @@ As a result of the noise removal we get an image with very basic information abo
 
 
 \subsubsection{Room detection}
+To implement the room detection, the preprocessing had to be improved compared to the first workflow. What was needed is a proper creation of the foreground and background image. The foreground image contains all the centers of the room. Each center receiving its own color value to differentiate them from each other. The background image contains the all the walls. Those are then combined into a single image and handed over to the watershed algorithm that then finds the rooms. The center of the rooms are found with a combination of a distance transformation~\ref{sub:DistanceTransformation}, a geodesic dilation~\ref{sub:GeodesicDilation} and a contour finding~\ref{sub:FindContours}. All of those are described in the following paragraphs.
+
 \paragraph{Distance transformation}
+\label{sub:DistanceTransformation}
 The distance transformation is used to find the centers of the rooms as explained in section~\ref{subsubsec:Distance transformation}. As its base it needs a cleaned up image of all the walls. It is a result of the noise removal we discussed in the previous section. To find the actual area of the of the room there is further processing with a geodesic dilation (Section~\ref{subsubsec:GeodesicDilation}) needed.
 
 The distance transformation gives us an image that represents the distance from the walls (lines in black) as a gradient of grey values going from dark (close to the wall) to bright (farther away). This means that there will be a center in each room that is very bright and has color values close to white.
@@ -115,6 +118,18 @@ To find the centers there had to be an additional method that provides us with a
 \todo{Distance Transform, Why not Contour Detection}
 
 \paragraph{Geodesic dilation}
+\label{sub:GeodesicDilation}
+The algorithm to locate the centers after having done the distance transformation is the geodesic dilation~\ref{subsubsec:GeodesicDilation}. The purpose of this algorithm is to find the brightest points in an image and create a marker image. This marker image is a binary image that has all the bright points represented with white color and all other with black color. Based upon the assumption that the distance transformation marked points brighter the further away they are from walls, all room centers consist of bright pixels. Therefore the marker image contains all the room centers. Additionally though, since the plan usually has open space outside the bounding wall, it finds room centers outside of the house as well. The idea was that to close the outside walls and then delete all rooms that are connected to the border of the picture. There is an implementation of this algorithm in workflow 3~\ref{sub:WallClosing}. An implementation of how we tried to avoid this problem is described in the next paragraph about finding contours.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{MarkersGeodesicDilation}
+	\caption{This image shows the markers (black areas) for the geodesic dilation of the floor plan AN1.}
+	\label{fig:geodesicDilation}
+\end{figure}
+
+\paragraph{Find contours}
+\label{sub:FindContours}
 \paragraph{Watershed}
 \label{subsubsub:watershed}
 
@@ -169,6 +184,7 @@ The basic problem was to find an algorithm that can find objects that vary in th
 \paragraph{Edge door closing}
 \paragraph{Simple door closing}
 \paragraph{Wall closing}
+\label{sub:WallClosing}
 \subsubsection{Room detection}
 \paragraph{Watershed improvements}
 \paragraph{Connected components}
