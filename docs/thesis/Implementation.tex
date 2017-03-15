@@ -205,6 +205,8 @@ H\_OG01       & 12    & 19    \\ \bottomrule
 
 Table~\ref{tbl:FloorPlanData} shows each test floor plan, with its number of rooms and doors. The data has been raised by hand and does not include doors of windows or closets. This data will be used to calculate the metrics of each object detection algorithm.
 
+To test the algorithms, we decided to just use three of the five experiment images (\textit{50er\_eg}, \textit{A\_N1}, \textit{A\_1OG}). This is due the fact, that we have to run the test on the original version and the cleaned version of the image. These three images represent the average floor plans, that will be processed by this software.
+
 \paragraph{Template matching}
 \label{sub:ImpTemplateMatching}
 
@@ -219,6 +221,25 @@ First of all we have to define the template $T$ (Figure~\ref{fig:DoorTemplate}),
 	\label{fig:DoorTemplate}
 \end{figure}
 
+If we run the template matching algorithm on an image, it returns a correlation matrix of the input image. Brighter spots indicate that the area correlates better. Now to retrieve the best correlated areas, we threshold the image with a threshold value of \textit{250}, to only get the best correlation locations. These bright spots are then analysed with the connected component analysis (Section~\ref{sub:ConnectedComponentAnalysis}), to count the amount.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{TMAN1Correlation}
+	\caption{Correlation matrix of \textit{A\_N1\_C}.}
+	\label{fig:TMAN1Correlation}
+\end{figure}
+
+As shown on figure~\ref{fig:TMAN1Correlation}, the template correlates with a lot of objects in the image, like the walls. Instead of doors that will be recognised, the algorithm returns a lot of false positives and only one true positive.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{TMAN1Result}
+	\caption{Image \textit{A\_N1\_C} with detected doors.}
+	\label{fig:TMAN1Result}
+\end{figure}
+
+This over-correlation can also be seen in figure~\ref{fig:TMAN1Result} which shows the result of the component analysis. The red areas are the marked bright spots of the correlation matrix. Only one door in the middle of the plan is nearly marked. This door is counted as true positive, even if the location does not perfectly fit.
 
 \begin{figure}[H]
 	\centering
@@ -227,6 +248,11 @@ First of all we have to define the template $T$ (Figure~\ref{fig:DoorTemplate}),
 	\label{fig:TMResultDiagram}
 \end{figure}
 
+This behaviour is also recognisable in the result graph (Figure~\ref{fig:TMResultDiagram}). The precision is very high, if something was detected. This is attributable to the fact, that very few positives have been detected. Recall instead is very low, because of the same reason. If no positives are recognised, whether \textit{true} or \textit{false}, the recall is very low. This is also reflected by the F1 score, which is nearby zero.
+
+Interesting to mention is, that over all floor plans, the cleaned version (\textit{NAME\_C}) is better for the template matching, then the original image. But even the results of the clean versions are very poor.
+
+We think that this bad result arise, because the template matching algorithm is not scale or rotation invariant. This leads to very few true positives. On the other hand, the correlation matrix shows, that the doors correlated with every straight wall on the plan. This could be a problem of the very common shape of doors.
 
 \paragraph{Oriented FAST and Rotated BRIEF (ORB) OpenCV}
 \label{sub:ImpORB}
@@ -239,6 +265,8 @@ For our tests, the same template $T$ is used, like for template matching (Figure
 
 After implementing the algorithm, we recognised, that it was not able to detect any elements on the images. A visualisation of the features of our template image $T$, showed that zero features have been detected in hour image.
 
+http://answers.opencv.org/question/76074/send-parameters-to-orb-feature-detector-android/
+
 \paragraph{Oriented FAST and Rotated BRIEF (ORB) JavaCV}
 \label{sub:ImpORBJVCV}
 
@@ -248,6 +276,13 @@ After implementing the algorithm, we recognised, that it was not able to detect 
 The cascade classifier is used for object recognition of doors, windows and other objects that are important for the room detection and zone identification. This algorithm is a machine learning algorithm that has to be trained with positive and negative images. The resulting learned parameters are saved in an XML file. Since this is a crucial part of this project, it is described more detailed than most other algorithms. In the following lines the implementation process is described as well as all the experiences we made during this project.
 
 The basic problem was to find an algorithm that can find objects that vary in their details and regardless of their rotation and size. This is important due to the fact that there is no standard for objects in architectural floor plans that are used by a wide audience of architects. The decision to go with a machine learning approach and not an algorithm that works with heuristics is because we wanted to be able to process a broad variety of floor plans. Regardless whether they show a small house with just basic features or a big plan with a lot of details and special objects.
+
+1. Classifier -> Het wenig detektiert, defür fasch kei false positives
+2. Classifier -> het viel z viel detektiert, defür fasch kei true positives
+3. Classifier (line thickening) -> wengier detektiert, aber immerno viel z viel
+3. Classifier thickening + PolyDP detection -> nid würkli besseri resultat bracht
+4. Classifier -> Viel negativi -> besseri resultast
+5. Classifier -> no meh negativi (chlineri bildli) -> super resultat
 
 \paragraph{PolyDP}
 
