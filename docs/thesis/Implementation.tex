@@ -44,6 +44,8 @@ The idea to find the different rooms within the floor plan, was to run the water
 
 \subsection{Workflow 2}
 \label{sub:workflow2}
+This section describes the second workflow and what algorithms it is composed of. It is a mix of the work of Sébastien Macé and Peter Dawkins and Hervé Locteau and Salvatore Tabbone~\citep{mace_valveny_loctea_tabbone_2010} and the experiences we made with the first workflow~\ref{{sub:workflow1}}. What it does is, it removes any noise on the floor plan first with morphological operations like erosion and dilation. This is followed up with a room detection algorithm that, in the end, uses the watershed algorithm to determine the rooms. In contrast to the first workflow, where the preprocessing for the watershed was not done sufficiently, this algorithm improved on that. After optimizing this workflow, it was the first workflow that showed actual potential and was able detect the rooms and therefore solve the given problem.
+
 
 \begin{figure}[H]
 	\centering
