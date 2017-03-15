@@ -184,7 +184,24 @@ One of the major problems of workflow two (Section~\ref{sub:workflow2}) is, that
 
 Object detection was contemplated from the beginning of the project, to detect furnishings and other parts of a room, which define the room zones (Section~\ref{sub:RoomZones}). So the idea was to use it, to detect doors and windows and close the gaps between the walls. This would solve the problem of workflow two.
 
-In the following sections, we will take a look at different object detection approaches and how well they performed, to detect doors. The performance will be measured with the 
+In the following sections, we will take a look at different object detection approaches and how well they performed, to detect doors. The performance for each algorithm will be measured with the F1 score (Section~\ref{sub:F1Score}).
+
+\begin{table}[H]
+\centering
+\caption{Floor plans with total count of rooms and doors.}
+\label{tbl:FloorPlanData}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Name          & Rooms & Doors \\ \midrule
+50er\_eg      & 21    & 26    \\
+A\_N1         & 9     & 13    \\
+A\_1OG        & 50    & 75    \\
+Grundriss\_OG & 4     & 2     \\
+H\_OG01       & 12    & 19    \\ \bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tbl:FloorPlanData} shows each test floor plan, with its number of rooms and doors. The data has been raised by hand and does not include doors of windows or closets. This data will be used to calculate the metrics of each object detection algorithm.
 
 \paragraph{Template matching}
 \label{sub:ImpTemplateMatching}
@@ -200,18 +217,37 @@ First of all we have to define the template $T$ (Figure~\ref{fig:DoorTemplate}),
 	\label{fig:DoorTemplate}
 \end{figure}
 
-\paragraph{ORB}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{TMResultDiagram}
+	\caption{Results of the template matching experiment.}
+	\label{fig:TMResultDiagram}
+\end{figure}
+
+
+\paragraph{Oriented FAST and Rotated BRIEF (ORB) OpenCV}
 \label{sub:ImpORB}
 
-\todo{JavaCV}
-Hough line transformation was the first algorithm we tried using to find the walls in the floor plan. It finds straight lines  
+As you see in the results of the template matching method (Section~\ref{sub:ImpTemplateMatching}), the scale and rotation variance of the algorithm, delivers very bad results. The idea with ORB is to use an algorithm for object detection, which is rotation and scale invariant.
 
-\paragraph{Poly DP}
+We use the algorithm implemented in \textit{OpenCV 3.1}. ORB also takes a template image $T$ and tries to find the objects in the image $I$. But ORB tries to find scale and rotation invariant features on the template image $T$. These feature are used to run the detection (Section~\ref{sub:ORBAlgorithm}). 
+
+For our tests, the same template $T$ is used, like for template matching (Figure~\ref{fig:DoorTemplate}).
+
+After implementing the algorithm, we recognised, that it was not able to detect any elements on the images. A visualisation of the features of our template image $T$, showed that zero features have been detected in hour image.
+
+\paragraph{Oriented FAST and Rotated BRIEF (ORB) JavaCV}
+\label{sub:ImpORBJVCV}
+
+
 \paragraph{Cascade classifier}
 \label{sub:ImpCascadeClassifier}
 The cascade classifier is used for object recognition of doors, windows and other objects that are important for the room detection and zone identification. This algorithm is a machine learning algorithm that has to be trained with positive and negative images. The resulting learned parameters are saved in an XML file. Since this is a crucial part of this project, it is described more detailed than most other algorithms. In the following lines the implementation process is described as well as all the experiences we made during this project.
 
 The basic problem was to find an algorithm that can find objects that vary in their details and regardless of their rotation and size. This is important due to the fact that there is no standard for objects in architectural floor plans that are used by a wide audience of architects. The decision to go with a machine learning approach and not an algorithm that works with heuristics is because we wanted to be able to process a broad variety of floor plans. Regardless whether they show a small house with just basic features or a big plan with a lot of details and special objects.
+
+\paragraph{PolyDP}
 
 \subsubsection{Gap closing}
 \paragraph{Edge door closing}

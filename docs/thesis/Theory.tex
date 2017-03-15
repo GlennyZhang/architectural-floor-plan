@@ -186,6 +186,7 @@ To find the rectangle it connects two edges and calculates the angle compared to
 \subsection{Structural Analysis}
 
 \subsubsection{ORB algorithm}
+\label{sub:ORBAlgorithm}
 The algorithm \acrfull{acro:ORB} was used to detect objects in architectural floor plans. It is similar the the to the two other feature matching algorithms like SIFT or SURF. This algorithm is orientation and size invariant which is really important as object size may differ from plan to plan an orientation might even differ within one plan.
 
 The algorithm itself consists out of two algorithms FAST and BRIEF. The FAST algorithm is for finding keypoints in images that match visual features. FAST keypoints are detected with an intensity threshold between a center pixel and the pixels in a circular ring around the center. To select the best keypoints \acrshort{acro:ORB} employs a Harris corner measure (algorithm described in \ref{subsubsec:HarrisCornerDetection}) to find the best $N$ keypoints. Since FAST keypoints have no rotational awareness \acrshort{acro:ORB} introduces the orientation by intensity centroid. The intensity centroid $C$ \eqref{eq:IntesityCentroid}
