@@ -261,11 +261,11 @@ As you see in the results of the template matching method (Section~\ref{sub:ImpT
 
 We use the algorithm implemented in \textit{OpenCV 3.1}. ORB also takes a template image $T$ and tries to find the objects in the image $I$. But ORB tries to find scale and rotation invariant features on the template image $T$. These feature are used to run the detection (Section~\ref{sub:ORBAlgorithm}). 
 
-For our tests, the same template $T$ is used, like for template matching (Figure~\ref{fig:DoorTemplate}).
+For our tests, the same template $T$ is used, as for template matching (Figure~\ref{fig:DoorTemplate}).
 
-After implementing the algorithm, we recognised, that it was not able to detect any elements on the images. A visualisation of the features of our template image $T$, showed that zero features have been detected in hour image.
+After implementing the algorithm, we recognised, that it was not able to detect any objects on the images. A visualisation of the features of our template image $T$ showed, that zero features have been detected in our image. Our investigations lead us to the conclusion, that the \textit{nFeatures} parameter of the ORB algorithm, was to low.
 
-http://answers.opencv.org/question/76074/send-parameters-to-orb-feature-detector-android/
+We tried to increase this feature count, but then realised, that it is not possible to set parameters for detectors in OpenCV 3.1. The problem is that the method, to read and write algorithm parameters, is implemented in the Java wrapper, but is missing in the C++ implementation (http://answers.opencv.org/question/76074/send-parameters-to-orb-feature-detector-android/).
 
 \paragraph{Oriented FAST and Rotated BRIEF (ORB) JavaCV}
 \label{sub:ImpORBJVCV}
