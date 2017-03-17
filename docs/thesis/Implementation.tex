@@ -169,7 +169,7 @@ With all the gained experience in workflow one (Section~\ref{sub:workflow1}) and
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.0\textwidth]{Workflow3Flowchart}
+	\includegraphics[width=1\textwidth]{Workflow3Flowchart}
 	\caption{Workflow 3 flowchart.}
 	\label{fig:Workflow3Flowchart}
 \end{figure}
@@ -273,16 +273,16 @@ We tried to increase this feature count, but then realised, that it is not possi
 
 \paragraph{Cascade classifier}
 \label{sub:ImpCascadeClassifier}
-The cascade classifier is used for object recognition of doors, windows and other objects that are important for the room detection and zone identification. This algorithm is a machine learning algorithm that has to be trained with positive and negative images. The resulting learned parameters are saved in an XML file. Since this is a crucial part of this project, it is described more detailed than most other algorithms. In the following lines the implementation process is described as well as all the experiences we made during this project.
+The cascade classifier is used for object recognition of doors, windows and other objects that are important for the room detection and zone identification. This algorithm is a machine learning algorithm that has to be trained with positive and negative images. The resulting learned parameters are saved in an XML file (Section~\ref{sub:CascadeTraining}). Since this is a crucial part of this project, it is described more detailed than most other algorithms. In the following lines the implementation process is described as well as all the experiences we made during this project.
 
 The basic problem was to find an algorithm that can find objects that vary in their details and regardless of their rotation and size. This is important due to the fact that there is no standard for objects in architectural floor plans that are used by a wide audience of architects. The decision to go with a machine learning approach and not an algorithm that works with heuristics is because we wanted to be able to process a broad variety of floor plans. Regardless whether they show a small house with just basic features or a big plan with a lot of details and special objects.
 
-1. Classifier -> Het wenig detektiert, defür fasch kei false positives
-2. Classifier -> het viel z viel detektiert, defür fasch kei true positives
-3. Classifier (line thickening) -> wengier detektiert, aber immerno viel z viel
+1. Classifier -> Het wenig detektiert, defür fasch kei false positives door\_cascade\_old.xml
+2. Classifier -> het viel z viel detektiert, defür fasch kei true positives cascade\_door\_alex.xml
+3. Classifier (line thickening) -> wengier detektiert, aber immerno viel z viel cascade\_thicken.xml
 3. Classifier thickening + PolyDP detection -> nid würkli besseri resultat bracht
-4. Classifier -> Viel negativi -> besseri resultast
-5. Classifier -> no meh negativi (chlineri bildli) -> super resultat
+4. Classifier -> Viel negativi -> besseri resultast cascade\_600\_600.xml
+5. Classifier -> no meh negativi (chlineri bildli) -> super resultat cascade\_600\_1500.xml
 
 \paragraph{PolyDP}
 
