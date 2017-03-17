@@ -70,6 +70,7 @@ This all leads to the resulting effect shown in the image below \citep[Section 3
 Source: http://stackoverflow.com/questions/7426136/fastest-available-algorithm-for-distance-transform
 
 \subsubsection{Find contours}
+\label{sub:FindContoursTheory}
 The find-contours algorithm was used several times during the implementation of this project for different uses. Those uses will are described in the "Implementation" part of this document. What the algorithm does is that it finds the borders or the contour of different components in an image. The algorithm used by OpenCv was first described by Suzuki and Abe \cite{suzuki_abe_1985}. This will be a short description of what the algorithm does as the algorithm itself is quite complicated and can be reviewed completly in their paper.
 
 The algorithm searches for borders in an image. A border is for example on a binary image where the pixel value changes from 0 to 1 or the other way. The algorithm defines two components that are possible. There are borders, that is where the value changes. Then there are holes, these are the spaces between the borders as well as the background.
@@ -150,6 +151,7 @@ To minimise the group to one single point, which defines the center of the corne
 
 
 \subsubsection{Convex hull}
+\label{sub:ConvexHull}
 Finding the convex hull of a set of points is a good way for this project to find the outer points of our wall that is enclosing the whole building. The convex hull is the smallest convex set of points that contains all points given in a Euclidean space.
 
 The convex hull af a set of points X \begin{equation}conv X \coloneqq \underset{X \subseteq K \subseteq V, K convex}{\bigcap} K  \end{equation} is defined as the intersection of all supersets of X.It can also be described as the set of all limited convex combinations:

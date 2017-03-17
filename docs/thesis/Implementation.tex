@@ -287,10 +287,15 @@ The basic problem was to find an algorithm that can find objects that vary in th
 \paragraph{PolyDP}
 
 \subsubsection{Gap closing}
+In this section gap closing will be discussed. There are two different types of gap closing in this project. There is the outer-wall gap closing. This is mainly a gap closing of all the existing windows. This is important to circumvent the rooms to outside of the house. The second part of gap closing is the door closing. It is important as per definition all rooms are separated by a door. By closing the door gap the room finding algorithm will then be able to easily find each room.
 \paragraph{Edge door closing}
 \paragraph{Simple door closing}
 \paragraph{Wall closing}
 \label{sub:WallClosing}
+As for wall closing there were two different approaches tested. The most obvious approach was to find all the windows with object detection and then close those gaps. The problem with this attempt was that the way windows are represented in architectural floor plans changed on most plans. The few tests done showed horrible results and therefore it was decided that there had to be a different method to close the windows.
+
+This new algorithm is finds the outer walls by finding the convex hull for the polygon of the outside walls. It then closes them by drawing a line, that represents the closed wall, along the outer hull. This way, the outer bounds are all enclosed.
+The algorithm will first find all the contours as described in section~\ref{sub:FindContoursTheory}. Based on those contours it will find the convex hull (see section~\ref{sub:ConvexHull}) of the outer polygon from all the drawn contours. This leads to the exact convex hulls of the outer walls. Sometimes there are outliers from the wall that have no connection to any room and would therefore create additional rooms. To try and prevent this, the polyDP (see section~\ref{sub:PolyDP}) was implemented. It can straighten out lines and therefore reject outliers of walls. This helped to create a more realistic outer wall.
 \subsubsection{Room detection}
 \paragraph{Watershed improvements}
 \paragraph{Connected components}
