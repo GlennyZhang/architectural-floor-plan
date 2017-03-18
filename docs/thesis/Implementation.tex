@@ -290,7 +290,24 @@ The basic problem was to find an algorithm that can find objects that vary in th
 \subsubsection{Gap closing}
 In this section gap closing will be discussed. There are two different types of gap closing in this project. There is the outer-wall gap closing. This is mainly a gap closing of all the existing windows. This is important to circumvent the rooms to outside of the house. The second part of gap closing is the door closing. It is important as per definition all rooms are separated by a door. By closing the door gap the room finding algorithm will then be able to easily find each room.
 \paragraph{Edge door closing}
+The edge door closing algorithm was the first algorithm that was implemented to solve the problem of closing doors. The idea behind it was, that in the area of any found door with the cascade classifier, there would be a rectangle of corners that represent the edges of the walls where the door is attached to. Therefore an algorithm was implemented that detected those corners and then tested if there was an actual rectangle within that area.
+
+The idea is that in the are where a door was found that there is usually no other rectangle of corners other than the door frame itself. This assumption is made after the morphological cleaning is done, therefore most noise that could have created a rectangle of corners should have been extinguished. On the image of the walls the algorithm performs a Corner Detection (see section~\ref{subsubsec:HarrisCornerDetection}). This results in an image that represents all locations that are likely to be a corner with white pixels. Usually one corner is detected as several white pixels, to find the exact position of this corner the algorithm uses Point Clustering (see section~\ref{sec:PointClustering}) to find its center. After all corners and doors are found, the door gap closing algorithm (see section~\ref{sec:DoorGapAlgorithm}) kicks in. It finds the rectangles that create the door frame within the area of the detected door and some additional margin. This margin was added as the detected door symbol usually does not contain the door frame and the wall enclosing it and therefore does not have the corners within the original detection square.
+When a door rectangle was found, it was filled with black color. This closed the gap on the image.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{CornerNotFound}
+	\caption{This image shows the result of a corner detection. Blue circles represent corners that should have been found but were not. Rec circles represent corners. In this image the door frame rectangle can not be found because two out of four corners are missing.}
+	\label{fig:CornerNotFound}
+\end{figure}
+
+A big problem with this approach was, that on some corners on floor plans were too round. As soon as one corner of the needed four was not detected the algorithm wouldn't close the gap. Additionally if a wrongly detected door was enclosing a room within itself. The whole room was identified as a gap and therefore filled. This was a seldom occurrence. This algorithm didn't deliver very good results as to its very restrictive conditions.
+
 \paragraph{Simple door closing}
+As a result an easier solution for gap closing was created. It again uses the squares with the location of the found doors. It makes use of the fact that on the image where all the noise was removed the symbol of the detected door is erased. All that is left within the square are walls. Due to the fact, that the found door will always be where the gap for a door is, there have to be two ends a wall too. The algorithm connects those walls with a simple combination of erosion and dilation. The lines of the wall within that square are eroded until they connect and then dilated back to their original size. The difference is that the gap is now filled and looks like it is part of the wall. This algorithm doesn't have to deal with undetected corners. It will also not change any existing walls with no gaps that are within one of the squares. These walls will just be expanded and then resized to its original size. The only problem that was found with this algorithm was, that if the erosion size was too big, the whole square will be filled. This is obviously not intended and wrong.
+
+\paragraph{Door closing comparison}
 \paragraph{Wall closing}
 \label{sub:WallClosing}
 As for wall closing there were two different approaches tested. The most obvious approach was to find all the windows with object detection and then close those gaps. The problem with this attempt was that the way windows are represented in architectural floor plans changed on most plans. The few tests done showed horrible results and therefore it was decided that there had to be a different method to close the windows.
