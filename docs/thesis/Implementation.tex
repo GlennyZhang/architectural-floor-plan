@@ -315,12 +315,12 @@ With this modifications, it was possible to detect much more objects on a plan t
 	\label{fig:CCT2ExampleAN1}
 \end{figure}
 
-Figure~\ref{fig:CCT2ExampleAN1} shows an example of how the second iteration was performing. Nearly every element on the floor plan is detected as door. This lead us to conclusion, that the door is trained with too few features.
+Figure~\ref{fig:CCT2ExampleAN1} shows an example of how the second iteration was performing. Nearly every element on the floor plan is detected as door. This lead us to conclusion, that the door is trained with too few features, like the ORB method (Section~\ref{sub:ImpORB}).
 
 \paragraph{Iteration 3 (CC\_T3)}
 \label{sub:CCT3}
 
-3. Classifier (line thickening) -> wengier detektiert, aber immerno viel z viel cascade\_thicken.xml
+To increase the features which can be detected on the positive samples, the decision was made to add a thickening to the trained floor plans. This thickening was also applied to the test images with the same parameters.
 
 \begin{figure}[H]
 	\centering
@@ -329,17 +329,33 @@ Figure~\ref{fig:CCT2ExampleAN1} shows an example of how the second iteration was
 	\label{fig:CCT3Result}
 \end{figure}
 
+As seen on figure~\ref{fig:CCT3Result}, the precision slightly increased to iteration 2 (Figure~\ref{fig:CCT2Result}). This directly leads to a better F1-Score, because there were more true positives found in the images.
+
+But the F1-Score is still very low, because a lot of the found images are not doors (false positive).
+
 \paragraph{Iteration 3 with polygon matching (CC\_T3\_PolyDP)}
 \label{sub:CCT3PolyDP}
 \label{sub:PolyDP}
 
-3. Classifier thickening + PolyDP detection -> nid würkli besseri resultat bracht
+As improvement, we tried to use the cascade classification together with an other method, which would classify the huge amount of positive images and filter out the false positives.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\textwidth]{CCT3PolyDPResult}
 	\caption{Results of the third cascade classification experiment with polygon matching.}
 	\label{fig:CCT3PolyDPResult}
+\end{figure}
+
+
+\begin{figure}[h!]
+	\centering
+	\subfloat[Template door]{\includegraphics[width=0.3\textwidth]{PolyDPTemplate}\label{fig:PolyDPTemplate}}
+	\hfill
+	\subfloat[Matched door]{\includegraphics[width=0.3\textwidth]{PolyDPMatch163}\label{fig:PolyDPMatch163}}
+	\hfill
+	\subfloat[Matched door]{\includegraphics[width=0.3\textwidth]{point_clustering_multiple_spread}\label{fig:PolyDPMatch41}}
+	\caption{Polygon matching template and matches.}
+	\label{fig:PolyDPMatch41}
 \end{figure}
 
 \paragraph{Iteration 4 (CC\_T4)}
