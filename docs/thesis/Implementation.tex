@@ -186,6 +186,8 @@ One of the major problems of workflow two (Section~\ref{sub:workflow2}) is, that
 
 Object detection was contemplated from the beginning of the project, to detect furnishings and other parts of a room, which define the room zones (Section~\ref{sub:RoomZones}). So the idea was to use it, to detect doors and windows and close the gaps between the walls. This would solve the problem of workflow two.
 
+The basic problem was to find an algorithm that can find objects that vary in their details and regardless of their rotation and size. This is important due to the fact that there is no standard for objects in architectural floor plans that are used by a wide audience of architects. The decision to go with a machine learning approach and not an algorithm that works with heuristics is because we wanted to be able to process a broad variety of floor plans. Regardless whether they show a small house with just basic features or a big plan with a lot of details and special objects.
+
 In the following sections, we will take a look at different object detection approaches and how well they performed, to detect doors. The performance for each algorithm will be measured with the F1 score (Section~\ref{sub:F1Score}).
 
 \begin{table}[H]
@@ -271,21 +273,114 @@ We tried to increase this feature count, but then realised, that it is not possi
 \label{sub:ImpORBJVCV}
 
 
-\paragraph{Cascade classifier}
+\subsubsection{Cascade classification}
 \label{sub:ImpCascadeClassifier}
-The cascade classifier is used for object recognition of doors, windows and other objects that are important for the room detection and zone identification. This algorithm is a machine learning algorithm that has to be trained with positive and negative images. The resulting learned parameters are saved in an XML file (Section~\ref{sub:CascadeTraining}). Since this is a crucial part of this project, it is described more detailed than most other algorithms. In the following lines the implementation process is described as well as all the experiences we made during this project.
+The following section describes the cascade classifier algorithm to detect doors and other objects on the floor plan. After a short introduction, we will discuss the results and improvements of the different iterations of the algorithm training.
 
-The basic problem was to find an algorithm that can find objects that vary in their details and regardless of their rotation and size. This is important due to the fact that there is no standard for objects in architectural floor plans that are used by a wide audience of architects. The decision to go with a machine learning approach and not an algorithm that works with heuristics is because we wanted to be able to process a broad variety of floor plans. Regardless whether they show a small house with just basic features or a big plan with a lot of details and special objects.
+The cascade classifier is used for object recognition of doors, windows and other objects that are important for the room detection and zone identification. This algorithm is a machine learning algorithm that has to be trained with positive and negative images. The resulting learned parameters are saved in an XML file (Section~\ref{sub:CascadeTraining}). \todo{Do we need to say that?} Since this is a crucial part of this project, it is described more detailed than most other algorithms. In the following lines the implementation process is described as well as all the experiences we made during this project.
 
-1. Classifier -> Het wenig detektiert, defür fasch kei false positives door\_cascade\_old.xml
-2. Classifier -> het viel z viel detektiert, defür fasch kei true positives cascade\_door\_alex.xml
+The algorithm itself is trained with positive and negative images. It took multiple iterations to get to the trained classifier, we now use in the project. Each iteration differs by the parameters we have set during the training stage and the images we trained with.
+
+\paragraph{Iteration 1 (CC\_T1)}
+\label{sub:CCT1}
+The first iteration of the training was to test out the capabilities of the cascade classifier. The results were not satisfying, but we were able to recognise something at all. We used a window size of \textit{32x24} and about \textit{20} positives samples and \textit{5} negative images. The positive images were a mix between floor plans of the customer and floor plans found in the internet. Negative images were original floor plans, where the object to train was removed.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{CCT1Result}
+	\caption{Results of the first cascade classification iteration.}
+	\label{fig:CCT1Result}
+\end{figure}
+
+Figure~\ref{fig:CCT1Result} shows, that the trained classifier could not really find any doors on most of the floor plans. But if something was found, the precision is very high. This showed us that cascading classification is able to detect objects on a floor plan, but we needed to to detect more objects.
+
+\paragraph{Iteration 2 (CC\_T2)}
+\label{sub:CCT2}
+
+Regarding iteration 1, we decided to increase the amount of positive samples to train more variations of doors. The second improvement was to lower the window size to \textit{20x20}. This lead to a better recognition of doors on floor plans with a low resolution. This is because the window size defines the lowest object size, which can be recognised by the cascade classifier.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{CCT2Result}
+	\caption{Results of the second cascade classification iteration.}
+	\label{fig:CCT2Result}
+\end{figure}
+
+With this modifications, it was possible to detect much more objects on a plan then in iteration 1. The downside of this was, that the classifier was very inaccurate. There are very few true positives recognised, but a lot of false positives which leads to a low precision (Figure~\ref{fig:CCT2Result}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{CCT2ExampleAN1}
+	\caption{Example of the second cascade classification iteration.}
+	\label{fig:CCT2ExampleAN1}
+\end{figure}
+
+Figure~\ref{fig:CCT2ExampleAN1} shows an example of how the second iteration was performing. Nearly every element on the floor plan is detected as door. This lead us to conclusion, that the door is trained with too few features.
+
+\paragraph{Iteration 3 (CC\_T3)}
+\label{sub:CCT3}
+
 3. Classifier (line thickening) -> wengier detektiert, aber immerno viel z viel cascade\_thicken.xml
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{CCT3Result}
+	\caption{Results of the third cascade classification iteration.}
+	\label{fig:CCT3Result}
+\end{figure}
+
+\paragraph{Iteration 3 with polygon matching (CC\_T3\_PolyDP)}
+\label{sub:CCT3PolyDP}
+\label{sub:PolyDP}
+
 3. Classifier thickening + PolyDP detection -> nid würkli besseri resultat bracht
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{CCT3PolyDPResult}
+	\caption{Results of the third cascade classification experiment with polygon matching.}
+	\label{fig:CCT3PolyDPResult}
+\end{figure}
+
+\paragraph{Iteration 4 (CC\_T4)}
+\label{sub:CCT4}
+
 4. Classifier -> Viel negativi -> besseri resultast cascade\_600\_600.xml
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{CCT4Result}
+	\caption{Results of the fourth cascade classification iteration.}
+	\label{fig:CCT4Result}
+\end{figure}
+
+\paragraph{Iteration 5 (CC\_T5)}
+\label{sub:CCT5}
+
 5. Classifier -> no meh negativi (chlineri bildli) -> super resultat cascade\_600\_1500.xml
 
-\paragraph{PolyDP}
-\label{sub:PolyDP}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{CCT5Result}
+	\caption{Results of the fifth cascade classification iteration.}
+	\label{fig:CCT5Result}
+\end{figure}
+
+\paragraph{Results}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{CCF1ScoreGraph}
+	\caption{F1-Score results of the floor plans.}
+	\label{fig:CCF1ScoreGraph}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{CCF1ScoreGraphOCAverage}
+	\caption{Averaged F1-Score of original (blue) and cleaned plans (red).}
+	\label{fig:CCF1ScoreGraphOCAverage}
+\end{figure}
 
 \subsubsection{Gap closing}
 In this section gap closing will be discussed. There are two different types of gap closing in this project. There is the outer-wall gap closing. This is mainly a gap closing of all the existing windows. This is important to circumvent the rooms to outside of the house. The second part of gap closing is the door closing. It is important as per definition all rooms are separated by a door. By closing the door gap the room finding algorithm will then be able to easily find each room.
@@ -298,7 +393,7 @@ When a door rectangle was found, it was filled with black color. This closed the
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\textwidth]{CornerNotFound}
-	\caption{This image shows the result of a corner detection. Blue circles represent corners that should have been found but were not. Rec circles represent corners. In this image the door frame rectangle can not be found because two out of four corners are missing.}
+	\caption{This image shows the result of a corner detection. Blue circles represent corners that should have been found but were not. Red circles represent corners. In this image the door frame rectangle can not be found because two out of four corners are missing.}
 	\label{fig:CornerNotFound}
 \end{figure}
 
