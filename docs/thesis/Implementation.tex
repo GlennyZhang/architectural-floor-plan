@@ -265,13 +265,13 @@ We use the algorithm implemented in \textit{OpenCV 3.1}. ORB also takes a templa
 
 For our tests, the same template $T$ is used, as for template matching (Figure~\ref{fig:DoorTemplate}).
 
-After implementing the algorithm, we recognised, that it was not able to detect any objects on the images. A visualisation of the features of our template image $T$ showed, that zero features have been detected in our image. Our investigations lead us to the conclusion, that the \textit{nFeatures} parameter of the ORB algorithm, was to low.
+After implementing the algorithm, we recognized, that it was not able to detect any objects on the images. A visualisation of the features of our template image $T$ showed, that zero features have been detected in our image. Our investigations lead us to the conclusion, that the \textit{nFeatures} parameter of the ORB algorithm, was to low.
 
-We tried to increase this feature count, but then realised, that it is not possible to set parameters for detectors in OpenCV 3.1. The problem is that the method, to read and write algorithm parameters, is implemented in the Java wrapper, but is missing in the C++ implementation (http://answers.opencv.org/question/76074/send-parameters-to-orb-feature-detector-android/).
+We tried to increase this feature count, but then realized, that it is not possible to set parameters for detectors in OpenCV 3.1. The problem is that the method, to read and write algorithm parameters, is implemented in the Java wrapper, but is missing in the C++ implementation (http://answers.opencv.org/question/76074/send-parameters-to-orb-feature-detector-android/).
 
 \paragraph{Oriented FAST and Rotated BRIEF (ORB) JavaCV}
 \label{sub:ImpORBJVCV}
-
+We then tried to use JavaCV to be able to access all parameters. The difference to OpenCV's method call is that each parameter can be specified. The problem with that approach was that the matrices used for JavaCV and OpenCV are different. Therefore we had to copy the whole image, process it and then copy it back into the old matrix. To do this efficiently we had to used a buffer, or do it manually by hand. Both of those options took a lot of time as well as lot of memory and the buffer usually ran out of memory with larger images. At the same time we had a different approach with the Cascade classifier in the pipeline that looked a lot more promising. Therefore this idea was put on hold and as the cascade classifier turned out very promising it was never actually completely implemented.
 
 \subsubsection{Cascade classification}
 \label{sub:ImpCascadeClassifier}
