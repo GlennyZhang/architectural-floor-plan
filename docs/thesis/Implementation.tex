@@ -429,6 +429,8 @@ The algorithm will first find all the contours as described in section~\ref{sub:
 \paragraph{Watershed improvements}
 \paragraph{Connected components}
 \paragraph{Minimum room deletion}
+To improve the actual room detection a simple heuristic was created. The problem was, that due to the fact that the wall closing algorithm was not perfect and other factors, very small rooms were detected, that were no rooms. This was so obvious that those detected rooms could not be a room itself, because they were more than a hundred times smaller than the biggest room.
+To reject these rooms the program provides a factor, usually one percent, that the rooms to be removed have to be smaller than the biggest room of the house. This one percent is calculated on the area of both rooms and it is a measure that proved to be solid for all tested plans.
 
 
 \todo{subsubsubsections for further titles?}
