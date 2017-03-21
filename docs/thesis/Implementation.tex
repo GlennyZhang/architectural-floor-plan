@@ -411,6 +411,7 @@ By default we use \textit{minNeighbors} with value $3.0$, but on some plans it i
 We currently use this training iteration for the door detection in the software. It is not perfect, but it is enough accurate to use it and detect most of the doors.
 
 \paragraph{Results}
+In this section, we will summarise the results of the cascading classification iterations and discuss the general improvements between each step.
 
 \begin{figure}[H]
 	\centering
@@ -419,6 +420,10 @@ We currently use this training iteration for the door detection in the software.
 	\label{fig:CCF1ScoreGraph}
 \end{figure}
 
+Figure~\ref{fig:CCF1ScoreGraph} shows the F1-Score of each floor plan, over each training iteration. With more samples to train the classifier, the results increased over each training. Only the \textit{CC\_T3\_PolyDP} training was a retrogressive step, because the stacked filter system was to restrictive and rejected even true positives. In step \textit{CC\_T5}, all tested floor plans achieved an accuracy (F1-Score) over 0.75 percent, which was enough to use it in the gap closing algorithms (Section~\ref{sub:GapClosing}).
+
+Another interesting graphic is the comparison between the performance of the original and cleaned floor plans. Figure~\ref{fig:CCF1ScoreGraphOCAverage} shows the averaged F1-Score of the original and cleaned floor plans, over each iteration. The cleaned floor plans always perform better then the original ones. This has to do with noise on the plans like furniture, text or markings, which falsely are classified as object. This behaviour was expected by us.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\textwidth]{CCF1ScoreGraphOCAverage}
@@ -426,7 +431,13 @@ We currently use this training iteration for the door detection in the software.
 	\label{fig:CCF1ScoreGraphOCAverage}
 \end{figure}
 
+Interesting is the difference in iteration 4 (\textit{CC\_T4}), because the cleaned floor plans have drastically increased its accuracy, but the original ones only marginally. This has to do with the false positive detection count. There is much more noise in the original plans, which leads to a higher count of false positives. Only when we increased the negative sample count to 1600, also the original plans could make a big step and double its accuracy.
+
+The graph shows that it is recommended to do a clean up before processing the image. This includes removing unnecessary walls, furniture and markers.
+
+
 \subsubsection{Gap closing}
+\label{sub:GapClosing}
 In this section gap closing will be discussed. There are two different types of gap closing in this project. There is the outer-wall gap closing. This is mainly a gap closing of all the existing windows. This is important to circumvent the rooms to outside of the house. The second part of gap closing is the door closing. It is important as per definition all rooms are separated by a door. By closing the door gap the room finding algorithm will then be able to easily find each room.
 \paragraph{Edge door closing}
 The edge door closing algorithm was the first algorithm that was implemented to solve the problem of closing doors. The idea behind it was, that in the area of any found door with the cascade classifier, there would be a rectangle of corners that represent the edges of the walls where the door is attached to. Therefore an algorithm was implemented that detected those corners and then tested if there was an actual rectangle within that area.
