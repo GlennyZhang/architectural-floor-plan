@@ -455,7 +455,16 @@ When a door rectangle was found, it was filled with black color. This closed the
 A big problem with this approach was, that on some corners on floor plans were too round. As soon as one corner of the needed four was not detected the algorithm wouldn't close the gap. Additionally if a wrongly detected door was enclosing a room within itself. The whole room was identified as a gap and therefore filled. This was a seldom occurrence. This algorithm didn't deliver very good results as to its very restrictive conditions.
 
 \paragraph{Simple door closing}
-As a result an easier solution for gap closing was created. It again uses the squares with the location of the found doors. It makes use of the fact that on the image where all the noise was removed the symbol of the detected door is erased. All that is left within the square are walls. Due to the fact, that the found door will always be where the gap for a door is, there have to be two ends a wall too. The algorithm connects those walls with a simple combination of erosion and dilation. The lines of the wall within that square are eroded until they connect and then dilated back to their original size. The difference is that the gap is now filled and looks like it is part of the wall. This algorithm doesn't have to deal with undetected corners. It will also not change any existing walls with no gaps that are within one of the squares. These walls will just be expanded and then resized to its original size. The only problem that was found with this algorithm was, that if the erosion size was too big, the whole square will be filled. This is obviously not intended and wrong.
+As a result an easier solution for gap closing was created. It again uses the squares with the location of the found doors. It makes use of the fact that on the image where all the noise was removed the symbol of the detected door is erased. All that is left within the square are walls. Due to the fact, that the found door will always be where the gap for a door is, there have to be two ends a wall too. The algorithm connects those walls with a simple combination of erosion and dilation.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{SimplifiedGapClosingAN1}
+	\caption{Simplified gap closing visualised on the plan AN\_1. The red areas represent the closed gaps.}
+	\label{fig:SimplifiedGapClosingAN1}
+\end{figure}
+
+The lines of the wall within that square are eroded until they connect and then dilated back to their original size. The difference is that the gap is now filled and looks like it is part of the wall (Figure~\ref{fig:SimplifiedGapClosingAN1}). This algorithm doesn't have to deal with undetected corners. It will also not change any existing walls with no gaps that are within one of the squares. These walls will just be expanded and then resized to its original size. The only problem that was found with this algorithm was, that if the erosion size was too big, the whole square will be filled. This is obviously not intended and wrong.
 
 \paragraph{Door closing comparison}
 \paragraph{Wall closing}
