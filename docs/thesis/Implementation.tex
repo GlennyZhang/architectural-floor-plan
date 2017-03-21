@@ -337,15 +337,7 @@ But the F1-Score is still very low, because a lot of the found images are not do
 \label{sub:CCT3PolyDP}
 \label{sub:PolyDP}
 
-As improvement, we tried to use the cascade classification together with an other method, which would classify the huge amount of positive images and filter out the false positives.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=1.0\textwidth]{CCT3PolyDPResult}
-	\caption{Results of the third cascade classification experiment with polygon matching.}
-	\label{fig:CCT3PolyDPResult}
-\end{figure}
-
+As improvement, we tried to use the cascade classification together with an other method, which would classify the huge amount of positive images and filter out the false positives. The second method is called contour matching. It is a method to compare two shapes and get a value which represents the matching of the two shapes.
 
 \begin{figure}[h!]
 	\centering
@@ -353,10 +345,27 @@ As improvement, we tried to use the cascade classification together with an othe
 	\hfill
 	\subfloat[Matched door]{\includegraphics[width=0.3\textwidth]{PolyDPMatch163}\label{fig:PolyDPMatch163}}
 	\hfill
-	\subfloat[Matched door]{\includegraphics[width=0.3\textwidth]{point_clustering_multiple_spread}\label{fig:PolyDPMatch41}}
-	\caption{Polygon matching template and matches.}
-	\label{fig:PolyDPMatch41}
+	\subfloat[Matched door]{\includegraphics[width=0.3\textwidth]{PolyDPMatch41}\label{fig:PolyDPMatch41}}
+	\caption{Shape matching template and matches.}
+	\label{fig:ShapeDistanceMatching}
 \end{figure}
+
+To get the a template shape, we analyse the contours of the template image $T$ from the template matching method (Section~\ref{sub:TemplateMatching}). The largest contour on the template image (marked in blue on figure~\ref{fig:PolyDPTemplate}) is used as template shape.
+
+Now this shape detection is processed on every area, that the cascade classification has marked as positive. With the information of the largest contour, it is possible to calculate the distance to the template door. If both shapes have the exact same shape, the distance will be zero.
+
+To filter out false positives, we have set a threshold, which only shows the areas, which match with a lower value then the threshold.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{CCT3PolyDPResult}
+	\caption{Results of the third cascade classification experiment with shape matching.}
+	\label{fig:CCT3PolyDPResult}
+\end{figure}
+
+To stack multiple detection methods behind each other was not as effective as we thought. As shown on figure~\ref{fig:CCT3PolyDPResult}, the F1-Score was on some images increased and on some decreased. This has todo with the template image $T$. It is very specific for one plan and if the doors do look a bit different on the plan, the contour will not match.
+
+An advantage of this method is, that the amount of positive objects is decreased, because of the second filter method. But this also effects the recall on most of the images.
 
 \paragraph{Iteration 4 (CC\_T4)}
 \label{sub:CCT4}
