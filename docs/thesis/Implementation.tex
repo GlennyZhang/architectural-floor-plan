@@ -169,7 +169,7 @@ With all the gained experience in workflow one (Section~\ref{sub:workflow1}) and
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\textwidth]{Workflow3Flowchart}
+	\includegraphics[width=1.0\textwidth]{Workflow3Flowchart}
 	\caption{Workflow 3 flowchart.}
 	\label{fig:Workflow3Flowchart}
 \end{figure}
@@ -315,7 +315,7 @@ With this modifications, it was possible to detect much more objects on a plan t
 	\label{fig:CCT2ExampleAN1}
 \end{figure}
 
-Figure~\ref{fig:CCT2ExampleAN1} shows an example of how the second iteration was performing. Nearly every element on the floor plan is detected as door. This lead us to conclusion, that the door is trained with too few features, like the ORB method (Section~\ref{sub:ImpORB}).
+Figure~\ref{fig:CCT2ExampleAN1} shows an example of how the second iteration was performing. Nearly every element on the floor plan is detected as door. This lead us to conclusion, that the door is trained with too few features, like the ORB method did (Section~\ref{sub:ImpORB}).
 
 \paragraph{Iteration 3 (CC\_T3)}
 \label{sub:CCT3}
@@ -337,7 +337,7 @@ But the F1-Score is still very low, because a lot of the found images are not do
 \label{sub:CCT3PolyDP}
 \label{sub:PolyDP}
 
-As improvement, we tried to use the cascade classification together with an other method, which would classify the huge amount of positive images and filter out the false positives. The second method is called contour matching. It is a method to compare two shapes and get a value which represents the matching of the two shapes.
+As improvement, we tried to use the cascade classification together with an other method, which would classify the huge amount of positive images and filter out the false positives. The second method is called contour matching. It is a method to compare two shapes and get a value, which represents the difference between the two shapes.
 
 \begin{figure}[h!]
 	\centering
