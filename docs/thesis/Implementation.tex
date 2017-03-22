@@ -467,6 +467,29 @@ As a result an easier solution for gap closing was created. It again uses the sq
 The lines of the wall within that square are eroded until they connect and then dilated back to their original size. The difference is that the gap is now filled and looks like it is part of the wall (Figure~\ref{fig:SimplifiedGapClosingAN1}). This algorithm doesn't have to deal with undetected corners. It will also not change any existing walls with no gaps that are within one of the squares. These walls will just be expanded and then resized to its original size. The only problem that was found with this algorithm was, that if the erosion size was too big, the whole square will be filled. This is obviously not intended and wrong.
 
 \paragraph{Door closing comparison}
+In this section both of the algorithms are compared to each other. It will describe how effective they were and explain the results.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{pointDoorClosing}
+	\caption{Precision, Recall and F1-Score for all images processed with the edge door closing algorithm. }
+	\label{fig:pointDoorClosing}
+\end{figure}
+
+As shown in the graph \ref{fig:pointDoorClosing}, the images A\_1OG and A\_N1 do not have any scores at all. For image A\_1OG the problem is, that due to the structure of the doors within this plan the algorithm can't find 4 corners to connect. The door frame is already closed, as the door symbol itself had a "wall" connecting the enclosing walls. The problem with the image A\_N1 is that there are never four edges detected for one door, because at least one of the supposed corners is too round. It is not detected as a corner and therefore no door closing is done. For the last plan the cleaned version shows decent result. The precision is on 90\%. The problem is that not all doors are correctly detected and provide the four corners. Therefore the recall is only on 50\%.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{simpleDoorClosing}
+	\caption{Precision, Recall and F1-Score for all images processed with the simple door closing algorithm. }
+	\label{fig:simpleDoorClosing}
+\end{figure}
+
+In comparison, the simple door closing algorithm shows much better results. The recall for all the is comparably low. This is due to the fact that the cascade classifier has identified more doors than there are actually on the map. All of those additional found doors count as false positives. Important to note is that this does not impact the algorithm in a strong matter. Almost all of those false positives have no negative effect on the future algorithm as they usually draw over a present wall. This has no effect on the resulting image. This shows especially in the recall, where in two out of the three images all doors are closed.
+For this door closing algorithm a good recall is the most important number as closing of false positives seldom real impact on the image itself.
+
+As you can see from the results of both of the algorithms. The second algorithm is a lot more robust to noise and like rounded corners and already closed doors. It does not need to identify any corners to work and closed doors are treated like a preexisting wall. This shows an extreme improvement for door gap closing on any image and has almost no drawbacks to our current knowledge. With the first algorithm, the implementation is very restricted to good conditions. The simple door closing algorithm in contrary will work under almost all circumstances and was therefore used for the final workflow.
+
 \paragraph{Wall closing}
 \label{sub:WallClosing}
 As for wall closing there were two different approaches tested. The most obvious approach was to find all the windows with object detection and then close those gaps. The problem with this attempt was that the way windows are represented in architectural floor plans changed on most plans. The few tests done showed horrible results and therefore it was decided that there had to be a different method to close the windows.
