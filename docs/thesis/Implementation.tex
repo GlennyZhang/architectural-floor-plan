@@ -497,20 +497,24 @@ As for wall closing there were two different approaches tested. The most obvious
 This new algorithm is finds the outer walls by finding the convex hull for the polygon of the outside walls. It then closes them by drawing a line, that represents the closed wall, along the outer hull. This way, the outer bounds are all enclosed.
 The algorithm will first find all the contours as described in section~\ref{sub:FindContoursTheory}. Based on those contours it will find the convex hull (see section~\ref{sub:ConvexHull}) of the outer polygon from all the drawn contours. This leads to the exact convex hulls of the outer walls. Sometimes there are outliers from the wall that have no connection to any room and would therefore create additional rooms. To try and prevent this, the polyDP (see section~\ref{sub:PolyDP}) was implemented. It can straighten out lines and therefore reject outliers of walls. This helped to create a more realistic outer wall.
 \subsubsection{Room detection}
-\paragraph{Watershed improvements}
+In the following section the room detection used in the third workflow will be discussed. It features a short description of how what algorithm was used for the room detection and then discusses the different results.
 \paragraph{Connected components}
+To detect the rooms in workflow three the connected components algorithm was used. This algorithm is described in detail in section \ref{sub:ConnectedComponentAnalysis}. What it does is, that it creates groups of white pixels that are connected to each other. Each group then represents its own room. The connected component search is done after all noise removal, object detection and gap closing. An additional heuristic implemented is, that all rooms connected to the border of the image are not recognized as rooms. It is expected that any building has an outer wall, therefore no room can touch the border of the image.
 
+In the figure \ref{fig:RoomDDResult} the numbers for Precision, Recall and F1-Score for the room detection are listed. All of the tests were done by our team and a detailed description can be found \todo{link graph doc}. Any information to replicate those can be found within this document. The tests resulting in this graph were done without any user interaction other than adjusting the algorithm parameters. There was no manual deletion of noise or closing of rooms by hand.
+
+As seen on the figure \ref{fig:RoomDDResult} the results for two uncleaned images are much worse than for the cleaned ones. This is due to the fact, that the outer wall closing does not work properly on an uncleaned image. This messes up most rooms as a lot of windows are not closed. Unclosed windows create wrong rooms and have a negative effect on all three bench marks. The cleaned versions show a high precision with all of them being around 90\%. This shows that the room detection works really good even without any user interaction. The high recall value shows, that no matter how complicated a plan is or how many rooms a plan has, that most of the rooms are still correctly detected. Any of these values can be further improved if the user takes more time to find better parameters for the algorithm. But these results should show a good representation of a daily detection, where the user will not take all their time to find the best possible parameter. Instead he will correct minor mistakes by hand.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\textwidth]{RoomDDResult}
-	\caption{Results of }
+	\caption{This graph represents precision, recall and F1-score for all tested images. Each image was tested with an uncleaned and a cleaned version. The letter "C" represents that the image is the cleaned version. In the tests represented, there was no additional cleaning of the images with the tools available within the editor. }
 	\label{fig:RoomDDResult}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\textwidth]{RoomDDEResult}
-	\caption{Results of }
+	\caption{This graph represents precision, recall and F1-score for all tested images. Each image was tested with an uncleaned and a cleaned version. The letter "C" represents that the image is the cleaned version. In the tests represented, the tester did additional cleaning of the images with the tools available within the editor. These tools can create or erase lines. }
 	\label{fig:RoomDDEResult}
 \end{figure}
 
