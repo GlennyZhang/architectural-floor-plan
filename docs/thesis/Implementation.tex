@@ -455,7 +455,7 @@ When a door rectangle was found, it was filled with black color. This closed the
 A big problem with this approach was, that on some corners on floor plans were too round. As soon as one corner of the needed four was not detected the algorithm wouldn't close the gap. Additionally if a wrongly detected door was enclosing a room within itself. The whole room was identified as a gap and therefore filled. This was a seldom occurrence. This algorithm didn't deliver very good results as to its very restrictive conditions.
 
 \paragraph{Simple door closing}
-As a result an easier solution for gap closing was created. It again uses the squares with the location of the found doors. It makes use of the fact that on the image where all the noise was removed the symbol of the detected door is erased. All that is left within the square are walls. Due to the fact, that the found door will always be where the gap for a door is, there have to be two ends a wall too. The algorithm connects those walls with a simple combination of erosion and dilation.
+As a result an easier solution for gap closing was created. It again uses the squares with the location of the found doors. It makes use of the fact that on the image where all the noise was removed the symbol of the detected door is erased. All that is left within the square are walls. Due to the fact, that the found door will always be where the gap for a door is, there have to be two ends of a wall too. The algorithm connects those walls with a simple combination of erosion and dilation.
 
 \begin{figure}[H]
 	\centering
@@ -476,7 +476,7 @@ In this section both of the algorithms are compared to each other. It will descr
 	\label{fig:pointDoorClosing}
 \end{figure}
 
-As shown in the graph \ref{fig:pointDoorClosing}, the images A\_1OG and A\_N1 do not have any scores at all. For image A\_1OG the problem is, that due to the structure of the doors within this plan the algorithm can't find 4 corners to connect. The door frame is already closed, as the door symbol itself had a "wall" connecting the enclosing walls. The problem with the image A\_N1 is that there are never four edges detected for one door, because at least one of the supposed corners is too round. It is not detected as a corner and therefore no door closing is done. For the last plan the cleaned version shows decent result. The precision is on 90\%. The problem is that not all doors are correctly detected and provide the four corners. Therefore the recall is only on 50\%.
+As shown in the figure \ref{fig:pointDoorClosing}, the images A\_1OG and A\_N1 do not have any scores at all. For image A\_1OG the problem is, that due to the structure of the doors within this plan the algorithm can not find 4 corners to connect. The door frame is already closed, as the door symbol itself had a "wall" connecting the enclosing walls. The problem with the image A\_N1 is that there are never four edges detected for one door, because at least one of the supposed corners is too round. It is not detected as a corner and therefore no door closing is done. For the last plan the cleaned version shows decent result. The precision is on 90\%. The problem is that not all doors are correctly detected and provide the four corners. Therefore the recall is only on 50\%.
 
 \begin{figure}[H]
 	\centering
@@ -492,7 +492,7 @@ As you can see from the results of both of the algorithms. The second algorithm 
 
 \paragraph{Wall closing}
 \label{sub:WallClosing}
-As for wall closing there were two different approaches tested. The most obvious approach was to find all the windows with object detection and then close those gaps. The problem with this attempt was that the way windows are represented in architectural floor plans changed on most plans. The few tests done showed horrible results and therefore it was decided that there had to be a different method to close the windows.
+As for wall closing there were two different approaches tested. The most obvious approach was to find all the windows with object detection and then close those gaps. The problem with this attempt was, that the way windows are represented in architectural floor plans, changed on most plans. The few tests done showed very bad results and therefore it was decided that there had to be a different method to close the windows.
 
 This new algorithm is finds the outer walls by finding the convex hull for the polygon of the outside walls. It then closes them by drawing a line, that represents the closed wall, along the outer hull. This way, the outer bounds are all enclosed.
 The algorithm will first find all the contours as described in section~\ref{sub:FindContoursTheory}. Based on those contours it will find the convex hull (see section~\ref{sub:ConvexHull}) of the outer polygon from all the drawn contours. This leads to the exact convex hulls of the outer walls. Sometimes there are outliers from the wall that have no connection to any room and would therefore create additional rooms. To try and prevent this, the polyDP (see section~\ref{sub:PolyDP}) was implemented. It can straighten out lines and therefore reject outliers of walls. This helped to create a more realistic outer wall.
@@ -536,7 +536,7 @@ The same as in figure \ref{fig:ClicksPerPlan} was done in figure \ref{fig:TimePe
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\textwidth]{TimePerPlan}
-	\caption{This figure shows the time that was needed to fully process a plan. The blue bar represents the tests that were done with the old program within the PlanfabrikGmbH. The red bar represents the tests without user editing of plans, while the orange bar represents wit user editing.}
+	\caption{This figure shows the time that was needed to fully process a plan. The blue bar represents the tests, that were done with the current process within the PlanfabrikGmbH. The red bar represents the tests without user editing of plans, while the orange bar represents with user editing.}
 	\label{fig:TimePerPlan}
 \end{figure}
 
