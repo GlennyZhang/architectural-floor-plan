@@ -457,6 +457,7 @@ When a door rectangle was found, it was filled with black color. This closed the
 A big problem with this approach was, that on some corners on floor plans were too round. As soon as one corner of the needed four was not detected the algorithm wouldn't close the gap. Additionally if a wrongly detected door was enclosing a room within itself. The whole room was identified as a gap and therefore filled. This was a seldom occurrence. This algorithm didn't deliver very good results as to its very restrictive conditions.
 
 \paragraph{Simple door closing}
+\label{sub:SimpleDoorClosing}
 As a result an easier solution for gap closing was created. It again uses the squares with the location of the found doors. It makes use of the fact that on the image where all the noise was removed the symbol of the detected door is erased. All that is left within the square are walls. Due to the fact, that the found door will always be where the gap for a door is, there have to be two ends of a wall too. The algorithm connects those walls with a simple combination of erosion and dilation.
 
 \begin{figure}[H]
@@ -499,6 +500,7 @@ As for wall closing there were two different approaches tested. The most obvious
 This new algorithm is finds the outer walls by finding the convex hull for the polygon of the outside walls. It then closes them by drawing a line, that represents the closed wall, along the outer hull. This way, the outer bounds are all enclosed.
 The algorithm will first find all the contours as described in section~\ref{sub:FindContoursTheory}. Based on those contours it will find the convex hull (see section~\ref{sub:ConvexHull}) of the outer polygon from all the drawn contours. This leads to the exact convex hulls of the outer walls. Sometimes there are outliers from the wall that have no connection to any room and would therefore create additional rooms. To try and prevent this, the polyDP (see section~\ref{sub:PolyDP}) was implemented. It can straighten out lines and therefore reject outliers of walls. This helped to create a more realistic outer wall.
 \subsubsection{Room detection}
+\label{sub:RoomDetection}
 In the following section the room detection used in the third workflow will be discussed. It features a short description of how what algorithm was used for the room detection and then discusses the different results.
 \paragraph{Connected components}
 To detect the rooms in workflow three the connected components algorithm was used. This algorithm is described in detail in section \ref{sub:ConnectedComponentAnalysis}. What it does is, that it creates groups of white pixels that are connected to each other. Each group then represents its own room. The connected component search is done after all noise removal, object detection and gap closing. An additional heuristic implemented is, that all rooms connected to the border of the image are not recognized as rooms. It is expected that any building has an outer wall, therefore no room can touch the border of the image.
@@ -545,6 +547,7 @@ The same as in figure \ref{fig:ClicksPerPlan} was done in figure \ref{fig:TimePe
 In general we can say, that this algorithm does solve the problem faster and with less user interaction than the old program.
 
 \paragraph{Minimum room deletion}
+\label{sub:MinimumRoom}
 To improve the actual room detection a simple heuristic was created. The problem was, that due to the fact that the wall closing algorithm was not perfect and other factors, very small rooms were detected, that were no rooms. This was so obvious that those detected rooms could not be a room itself, because they were more than a hundred times smaller than the biggest room.
 To reject these rooms the program provides a factor, usually one percent, that the rooms to be removed have to be smaller than the biggest room of the house. This one percent is calculated on the area of both rooms and it is a measure that proved to be solid for all tested plans.
 
