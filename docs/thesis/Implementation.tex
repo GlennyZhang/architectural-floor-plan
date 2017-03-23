@@ -546,5 +546,27 @@ In general we can say, that this algorithm does solve the problem faster and wit
 To improve the actual room detection a simple heuristic was created. The problem was, that due to the fact that the wall closing algorithm was not perfect and other factors, very small rooms were detected, that were no rooms. This was so obvious that those detected rooms could not be a room itself, because they were more than a hundred times smaller than the biggest room.
 To reject these rooms the program provides a factor, usually one percent, that the rooms to be removed have to be smaller than the biggest room of the house. This one percent is calculated on the area of both rooms and it is a measure that proved to be solid for all tested plans.
 
+\paragraph{Result}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{50erRoomSize}
+	\caption{This figure shows the 50er\_C room plan with the marked room polygons. For the accuracy test, the red marked rooms are used.}
+	\label{fig:50erRoomSize}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{50erRoomAccuracy}
+	\caption{This figure shows the accuracy test results of the 50er\_C room plan in $m^{2}$.}
+	\label{fig:50erRoomAccuracy}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{50erRoomAccuracyPercent}
+	\caption{This figure shows the accuracy test results of the 50er\_C room plan in percent.}
+	\label{fig:50erRoomAccuracyPercent}
+\end{figure}
 
 \todo{subsubsubsections for further titles?}
