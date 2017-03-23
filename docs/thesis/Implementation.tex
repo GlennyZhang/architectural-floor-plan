@@ -422,7 +422,7 @@ In this section, we will summarise the results of the cascading classification i
 	\label{fig:CCF1ScoreGraph}
 \end{figure}
 
-Figure~\ref{fig:CCF1ScoreGraph} shows the F1-Score of each floor plan, over each training iteration. With more samples to train the classifier, the results increased over each training. Only the \textit{CC\_T3\_PolyDP} training was a retrogressive step, because the stacked filter system was to restrictive and rejected even true positives. In step \textit{CC\_T5}, all tested floor plans achieved an accuracy (F1-Score) over 0.75 percent, which was enough to use it in the gap closing algorithms (Section~\ref{sub:GapClosing}).
+Figure~\ref{fig:CCF1ScoreGraph} shows the F1-Score of each floor plan, over each training iteration. With more samples to train the classifier, the results increased over each training. Only the \textit{CC\_T3\_PolyDP} training was a retrogressive step, because the stacked filter system was to restrictive and rejected even true positives. In step \textit{CC\_T5}, all tested floor plans achieved an accuracy (F1-Score) over 75 percent, which was enough to use it in the gap closing algorithms (Section~\ref{sub:GapClosing}).
 
 Another interesting graphic is the comparison between the performance of the original and cleaned floor plans. Figure~\ref{fig:CCF1ScoreGraphOCAverage} shows the averaged F1-Score of the original and cleaned floor plans, over each iteration. The cleaned floor plans always perform better then the original ones. This has to do with noise on the plans like furniture, text or markings, which falsely are classified as object. This behaviour was expected by us.
 
