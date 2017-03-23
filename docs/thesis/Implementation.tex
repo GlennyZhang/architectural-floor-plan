@@ -177,11 +177,13 @@ With all the gained experience in workflow one (Section~\ref{sub:workflow1}) and
 As shown on figure~\ref{fig:Workflow3Flowchart}, the morphological transformation and object detection step can be run in parallel. Because the user interface needs the assistance of the user, we decided to first run the object detection and then run the morphological transformation.
 
 \subsubsection{Noise removal}
+\label{sub:NoiseRemoval}
 Noise removal has not been changed from the previews workflow. Morphological transformation is still used in this workflow, to detect the inner and outer walls of the building and to remove unwanted noise from the image like furniture or architectural markings.
 
 For more information about the noise removal, have a look at section~\ref{sub:MorphologicalTransformation}.
 
 \subsubsection{Object detection}
+\label{sub:ObjectDetection}
 One of the major problems of workflow two (Section~\ref{sub:workflow2}) is, that the morphological transformation erases too many elements from the floor plan. The doors and windows are also removed, but they are needed to separate the individual rooms.
 
 Object detection was contemplated from the beginning of the project, to detect furnishings and other parts of a room, which define the room zones (Section~\ref{sub:RoomZones}). So the idea was to use it, to detect doors and windows and close the gaps between the walls. This would solve the problem of workflow two.
