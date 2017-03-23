@@ -547,6 +547,7 @@ To improve the actual room detection a simple heuristic was created. The problem
 To reject these rooms the program provides a factor, usually one percent, that the rooms to be removed have to be smaller than the biggest room of the house. This one percent is calculated on the area of both rooms and it is a measure that proved to be solid for all tested plans.
 
 \paragraph{Result}
+To test how accurate the room detection works, we analysed a floor plan and compared the results of the software, with the values which are stated on the actual plan. The test uses the plan \textit{50er} and \textit{50er\_C} and its \textit{BF} (\textit{Boden Fläche}) label as room size.
 
 \begin{figure}[H]
 	\centering
@@ -555,12 +556,16 @@ To reject these rooms the program provides a factor, usually one percent, that t
 	\label{fig:50erRoomSize}
 \end{figure}
 
+Only five of the rooms have been tested, because most of the rooms have the same size. We tried to use different room sizes to get a representative result of the accuracy. The rooms are marked in figure~\ref{fig:50erRoomSize} with a red label. The test was done with default small edits by the user, to simulate a real workflow.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\textwidth]{50erRoomAccuracy}
 	\caption{This figure shows the accuracy test results of the 50er\_C room plan in $m^{2}$.}
 	\label{fig:50erRoomAccuracy}
 \end{figure}
+
+As shown on figure~\ref{fig:50erRoomAccuracy}, the detected room sizes are always smaller then the actual values. The larger the room, the bigger is the deviation in m$^{2}$. We think this is, because the algorithm is missing some areas at the doors and because of the inaccuracy of the ruler tool. With this tool, it is possible to set the distance relations and if this is done inaccurate, all room sizes will suffer from it.
 
 \begin{figure}[H]
 	\centering
@@ -569,4 +574,8 @@ To reject these rooms the program provides a factor, usually one percent, that t
 	\label{fig:50erRoomAccuracyPercent}
 \end{figure}
 
-\todo{subsubsubsections for further titles?}
+This deviation is even stronger on original plans than on cleaned plans (Figure~\ref{fig:50erRoomAccuracyPercent}). We think this comes from the fact, that the cleaned plans have less noise on it, which could create interferences in the room polygons.
+
+Our test showed that there is an average deviation of 10.55\% on original plans and 6.25\% on cleaned floor plans.
+
+
