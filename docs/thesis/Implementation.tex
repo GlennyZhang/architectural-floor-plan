@@ -531,12 +531,16 @@ As seen in figure \ref{fig:ClicksPerPlan}, the clicks or the user input is far l
 	\label{fig:ClicksPerPlan}
 \end{figure}
 
+The same as in figure \ref{fig:ClicksPerPlan} was done in figure \ref{fig:TimePerPlan}. The difference is that figure \ref{fig:TimePerPlan} shows the time instead of the clicks needed. This graph indicates the same results as the first graph. It takes more time to find the rooms on a bigger plan when done with the old program. This program shows only small differences in time consumed, no matter the plan that was tested. 
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\textwidth]{TimePerPlan}
-	\caption{Results of }
+	\caption{This figure shows the time that was needed to fully process a plan. The blue bar represents the tests that were done with the old program within the PlanfabrikGmbH. The red bar represents the tests without user editing of plans, while the orange bar represents wit user editing.}
 	\label{fig:TimePerPlan}
 \end{figure}
+
+In general we can say, that this algorithm solves the problem faster and with less user interaction than the old program.
 
 \paragraph{Minimum room deletion}
 To improve the actual room detection a simple heuristic was created. The problem was, that due to the fact that the wall closing algorithm was not perfect and other factors, very small rooms were detected, that were no rooms. This was so obvious that those detected rooms could not be a room itself, because they were more than a hundred times smaller than the biggest room.
