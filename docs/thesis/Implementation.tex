@@ -511,6 +511,8 @@ As seen on the figure \ref{fig:RoomDDResult} the results for two uncleaned image
 	\label{fig:RoomDDResult}
 \end{figure}
 
+The following figure \ref{fig:RoomDDResult} shows the results of the same tests as the ones done above. The difference is, that in these tests the tester was able to use the tools provided within the editor. The figure shows a precision of a 100\% percent. This improvement, especially in the uncleaned plans, was created due to the fact, that the editor can basically create a cleaned version of the plan. Therefore even the "uncleaned" versions show high precision and recall. If taken enough time, all those bench marks could be on 100\% as you can basically redraw the plan with the existing tools. But those tests had to be done within a considerable amount of time. Therefore some of the plans do not have 100\% recall.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\textwidth]{RoomDDEResult}
@@ -518,10 +520,14 @@ As seen on the figure \ref{fig:RoomDDResult} the results for two uncleaned image
 	\label{fig:RoomDDEResult}
 \end{figure}
 
+All of these bench marks discussed show how good the actual room detection works. But there is no comparison of what the improvements are compared to the old program used at the PlanfabrikGmbH. As defined in the metrics, the whole process to detect the rooms was measured with clicks and time used to detect the rooms.
+
+As seen in figure \ref{fig:ClicksPerPlan}, the clicks or the user input is far less, than the amount needed with the old program. This come from the fact, that algorithms finds the room corners directly and does not need one click per corner. As seen, the amount of clicks needed stays about the same for each detection run. This shows, that the user input will be about the same no matter how complicated or how many rooms a plan has. The clicks used are mostly to adjust the parameters for the algorithms. This is fare less than most plans have room corners on them. Additionally, most tests with cleaning done by the user take some more clicks. But it is within a very small margin, compared to the run with no error correction. What can be said about this program is, that it generally takes less clicks than the old program. Not only that, but the bigger the plan, the fewer additional clicks it takes to process compared to the old program. 
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\textwidth]{ClicksPerPlan}
-	\caption{Results of }
+	\caption{This figure shows the clicks that were needed to fully process a plan. The blue bar represents the tests that were done with the old program within the PlanfabrikGmbH. The red bar represents the tests without user editing of plans, while the orange bar represents wit user editing.}
 	\label{fig:ClicksPerPlan}
 \end{figure}
 
