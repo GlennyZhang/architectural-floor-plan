@@ -71,13 +71,13 @@ Source: http://stackoverflow.com/questions/7426136/fastest-available-algorithm-f
 
 \subsubsection{Find contours}
 \label{sub:FindContoursTheory}
-The find-contours algorithm was used several times during the implementation of this project for different uses. Those uses are described in the "Implementation" part of this document. What the algorithm does is that it finds the borders or the contour of different components in an image. The algorithm used by OpenCv was first described by Suzuki and Abe \cite{suzuki_abe_1985}. This will be a short description of what the algorithm does, as the algorithm itself is quite complicated and can be reviewed completly in their paper.
+The find-contours algorithm was used several times during the implementation of this project for different uses. Those uses are described in the "Implementation" part of this document. What the algorithm does is that it finds the borders or the contour of different components in an image. The algorithm used by OpenCv was first described by Suzuki and Abe \citep{suzuki_abe_1985}. This will be a short description of what the algorithm does, as the algorithm itself is quite complicated and can be reviewed completly in their paper.
 
 The algorithm searches for borders in an image. A border is for example on a binary image where the pixel value changes from 0 to 1 or the other way. The algorithm defines two components that are possible. There are borders, that is where the value changes. Then there are holes, these are the spaces between the borders as well as the background.
 
 The algorithm searches for borders on the images. It starts at the border of the image and goes inwards. As soon as it meets a pixel that is part of a border it stops and assigns this border a uniquely identifiable number. This marks it as a border. Each found border will also be assigned a parent, this is the border that encloses this border. This will define a hierarchy of all borders. The algorithm then follows the detected border and sets all pixels that are part of it to the same number. This will be repeated until all pixels of the image are visited and all borders are found.
 
-This is a very simplistic explanation of what the algorithm does. The whole algorithm is described and proved in the work of Suzuki and Abe \cite{suzuki_abe_1985} for anyone interested in the exact algorithm.
+This is a very simplistic explanation of what the algorithm does. The whole algorithm is described and proved in the work of Suzuki and Abe \citep{suzuki_abe_1985} for anyone interested in the exact algorithm.
 
 \begin{figure}[h]
 	\centering
@@ -295,7 +295,7 @@ The algorithm now uses a two dimensional array called accumulator to detect the 
 	\label{fig:hough_accumulator}
 \end{figure}
 
-To find the actual length of the lines, there has to be a further algorithm that checks where on the found, the lines of the image correspond. This can done in several ways and therefore will not be explained here. There are several algorithms described on the internet, or for example in the book "Digital image processing: an algorithmic introduction using Java" \cite{burger_burge_2016}.
+To find the actual length of the lines, there has to be a further algorithm that checks where on the found, the lines of the image correspond. This can done in several ways and therefore will not be explained here. There are several algorithms described on the internet, or for example in the book "Digital image processing: an algorithmic introduction using Java" \citep{burger_burge_2016}.
 
 \pagebreak
 
