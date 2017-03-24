@@ -1,23 +1,25 @@
 \section{Annex}
 
 \subsection{Figures}
-\begin{table}[h]
+\begin{table}[H]
+\small
 \centering
 \caption{DWG / DXF evaluation matrix.}
 \label{tbl:DWGEvaluationMatrix}
+\makebox[\linewidth]{
 \begin{tabular}{@{}llllllll@{}}
 \toprule
-Name         & Vendor         & Price        & Last Update      & License           & Read & Write & Comment                             \\ \midrule
-YCAD Library & Ed Karlo       & -            & August 07, 2015  & LGPLv2            & Yes  & ?     & Very confusing \& no documentation. \\
-Teigha       & ODA            & 2000 USD / Y &                  & Commercial        & Yes  & Yes   &                                     \\
-Kabeja       &                & -            & March 12, 2008   & Apache License v2 & Yes  & No    &                                     \\
-Tika         & Apache         & -            & October 19, 2016 & Apache License v2 & Yes* & No    & *Meta text reader.                  \\
-jnetcad      & Johannes Raida & ?            & April 28, 2016   & Commercial        & Yes* & Yes*  & *Only converter for 3D Objects.     \\
-CaffViewer   & DeCaff         & 1350 Euro    & May 17, 2016     & Freeware          & Yes  & Yes   &                                     \\ \bottomrule
+Name & Vendor & Price & Last Update & License & Read & Write & Comment \\ \midrule
+YCAD & Ed Karlo & - & Aug 07, 2015 & LGPLv2 & Yes & ? & \begin{tabular}[c]{@{}l@{}}confusing \& \\ no documentation.\end{tabular} \\
+Teigha & ODA & 2000 USD/Y & - & Commercial & Yes & Yes &  \\
+Kabeja & - & - & Mar 12, 2008 & Apache-2.0 & Yes & No &  \\
+Tika & Apache & - & Oct 19, 2016 & Apache-2.0 & Yes* & No & *Meta text reader. \\
+jnetcad & J. Raida & ? & Apr 28, 2016 & Commercial & Yes* & Yes* & \begin{tabular}[c]{@{}l@{}}*Only converter \\ for 3D Objects.\end{tabular} \\
+CaffViewer & DeCaff & 1350 Euro & May 17, 2016 & Freeware & Yes & Yes &  \\ \bottomrule
 \end{tabular}
+}
 \end{table}
 
-\pagebreak
 \subsection{Developer Guide}
 This section describes, how to extend the application developed in this work. It is split into different tasks, which will most likely be done in the future.
 
