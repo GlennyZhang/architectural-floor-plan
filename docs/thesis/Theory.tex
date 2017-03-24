@@ -65,9 +65,14 @@ Since the exact calculation with the euclidean distance takes a lot of computati
 \begin{equation}\label{eq:LeftMask} M_{L} = \begin{bmatrix} . & . & .\\ . & x & m_1 \\ m_2 & m_1 & m_2 \end{bmatrix}\end{equation}
 \begin{equation}\label{eq:RightMask}M_{R} = \begin{bmatrix} m2 & m1 & m2 \\ m1 & x & . \\ . & . & . \end{bmatrix} \end{equation}
 
-This all leads to the resulting effect shown in the image below \citep[Section 3.3.3]{szeliski_2011}.
-\todo{Make image of distance transformation before and after}
-Source: http://stackoverflow.com/questions/7426136/fastest-available-algorithm-for-distance-transform
+This all leads to the resulting effect shown in the image below (\citep{szeliski_2011} and \citep{distancetransform}).
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.4\textwidth]{dist_transform1}
+	\caption{This image shows the distance transformation of the plan AN\_1.}
+	\label{dist_transf_theory}
+\end{figure}
+
 
 \subsubsection{Find contours}
 \label{sub:FindContoursTheory}
@@ -224,9 +229,9 @@ This orientated BRIEF descriptor is now defined as
 
 \subsubsection{Cascade training}
 \label{sub:CascadeTraining}
-The algorithm used for object detection in this project was first described by Paul Viola in his paper \todo{ACCEPTED CONFERENCE  ON COMPUTER VISION AND PATTERN RECOGNITION 2001 Rapid Object Detection using a Boosted Cascade of Simple Features}. It is based on three key components. One is the "Integral Image" which is an image representation that allows to detect features very quickly. A second component is the learning algorithm, "AdaBoost", which selects a small number of critical features from a big set. The last component is an algorithm that combines increasingly complex features in a cascade. All of these components provide the basis for a really fast feature detection, compared to previously known algorithms.
+The algorithm used for object detection in this project was first described by Paul Viola in his paper Rapid Object Detection using a Boosted Cascade of Simple Features \citep{viola_jones_2001}. It is based on three key components. One is the "Integral Image" which is an image representation that allows to detect features very quickly. A second component is the learning algorithm, "AdaBoost", which selects a small number of critical features from a big set. The last component is an algorithm that combines increasingly complex features in a cascade. All of these components provide the basis for a really fast feature detection, compared to previously known algorithms.
 
-The object detection for this method is based on features and not pixels. Features can provide additional domain knowledge that would not be know with just pixels. Additionally, the detection based on features, is processed much faster than a pixel based system. The algorithm uses three different simple features based on the "Haar" basis functions. The value of a two-rectangle feature is the difference of the sum of two regions that are vertically or horizontally adjacent and have the same measurements (see Figure\todo{link figure}). The three-rectangle feature has the same conditions, but the value is based on the sum of two outside rectangles and subtracted the sum of a center rectangle. Last is the four-rectangle features, which the value is the difference of sums of diagonal pairs of rectangles.
+The object detection for this method is based on features and not pixels. Features can provide additional domain knowledge that would not be know with just pixels. Additionally, the detection based on features, is processed much faster than a pixel based system. The algorithm uses three different simple features based on the "Haar" basis functions. The value of a two-rectangle feature is the difference of the sum of two regions that are vertically or horizontally adjacent and have the same measurements (see Figure~\ref{fig:rectFeat}). The three-rectangle feature has the same conditions, but the value is based on the sum of two outside rectangles and subtracted the sum of a center rectangle. Last is the four-rectangle features, which the value is the difference of sums of diagonal pairs of rectangles.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.4\textwidth]{rectangleFeatures.jpg}

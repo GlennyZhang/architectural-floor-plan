@@ -37,7 +37,7 @@ The paper written by Mace, Valveny, Loctea and Tabbone uses several algorithms f
 
 For structural analysis they use the hough transformation, which is described in Section \ref{subsubsec:Hough transformation}, in combination with image vectorization. This is used for a simple wall detection algorithm. The wall detection works on an image of the contour of the walls. They take two lines that are close together and have the same orientation and check if the pixels in between those lines are black. If so this is an actual wall due to the fact that before taking the contour of the walls they were connected. 
 
-The room detection in the semantic analysis is done with a polygon partitioning technique, that uses the wall as a convex hull and tries to split it up in smaller polygons (rooms), that all have to be convex. \todo{Maybe to complex?!}This, in combination of the fact that rooms are mostly rectangular shape, which is adjusted with some post-processing, will find the rooms.
+The room detection in the semantic analysis is done with a polygon partitioning technique, that uses the wall as a convex hull and tries to split it up in smaller polygons (rooms), that all have to be convex. This, in combination with the fact that rooms are mostly rectangular shape, which is adjusted during post-processing, will detect the rooms.
 
 \begin{figure}[H]
 	\centering
@@ -69,31 +69,24 @@ The plans chosen are the following:
 
 AN\_1
 50er
-Grundriss\_OG
-H\_OG
 A1\_OG
 
-\todo{add images of plans}
 
-The time was taken with a countdown clock on an iPhone and was stopped manually by hand. This led to a time deviation of usually 1-2 seconds longer than the actual time. \todo{too complex!}The way this was done for all tests, will be the same, so that this will not matter and the tests are comparable to each other. The clicks made were counted by hand.
+
+The time was taken with a countdown clock on an iPhone and was stopped manually by hand. This led to a time deviation of usually 1-2 seconds longer than the actual time. The same will be done for our tests, so that this difference will not matter. The clicks made were counted by hand.
 An estimate of how many clicks are made on a floor plan, is made along the following rules. For every room it usually takes the amount of edges the room has, plus two additional clicks to create and confirm the room. There are also some additional clicks at the beginning, to start the selection as well as the end to confirm and save it.
 What was not taken into consideration in these tests are miss-clicks. These occur quite often. There are two different types of errors that follows from these. Either the last selected edge was way off and has to be corrected, which will take 3 additional clicks. Or it deletes all the work done by now and all rooms have to be reselected. During our tests, this second error happened twice, during six test-runs. That the edge selection is not correct happens around every third or fourth room. All together it can generate an additional 10 percent of clicks over an several floor plans.
 
-
-\todo{name table right}
 \begin{table}[]
 	\centering
-	\caption{My caption}
-	\label{my-label}
 	\begin{tabular}{@{}lll@{}}
 		\toprule
 		Plan          & Clicks & Time (S) \\ \midrule
 		AN\_1         & 77     & 182 \\
 		50er          & 85     & 170  \\
-		Grundriss\_OG & 47     & 96 \\
-		H\_OG01         & 80     & 179 \\
 		A\_1OG        & 222    & 452 \\ \bottomrule
 	\end{tabular}
+\caption{Time and clicks used to detect the all the rooms. These times were done with the program used at the Planfabrik GmbH for the images shown. }
 \end{table}
 
 This table shows the test results for all the different floor plans. With this data, we will make comparisons in the \textit{Implementation} (Section~\ref{sub:Implemenation}) to test how effective our product is compared to the one in use.
