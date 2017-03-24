@@ -68,7 +68,7 @@ Since the exact calculation with the euclidean distance takes a lot of computati
 This all leads to the resulting effect shown in the image below (\citep{szeliski_2011} and \citep{distancetransform}).
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.4\textwidth]{dist_transform1}
+	\includegraphics[width=0.8\textwidth]{dist_transform1}
 	\caption{This image shows the distance transformation of the plan AN\_1.}
 	\label{dist_transf_theory}
 \end{figure}
@@ -295,7 +295,7 @@ The algorithm now uses a two dimensional array called accumulator to detect the 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.4\textwidth]{hough_accumulator}
+	\includegraphics[width=0.5\textwidth]{hough_accumulator}
 	\caption{The image on the left side represents an image with lines and some noise on it. The right image represents the Hough plane (accumulator) with local maxima, which are highlighted as white pixels.}
 	\label{fig:hough_accumulator}
 \end{figure}
@@ -312,9 +312,9 @@ This is accomplished by finding pixels which are adjacent to each other. A pixel
 
 \begin{figure}[H]
 	\centering
-	\subfloat[4-neighbourhood, $\mathcal{N}_4$]{\includegraphics[width=0.3\textwidth]{n4_pixel}\label{fig:n4_pixel}}
+	\subfloat[4-neighbourhood, $\mathcal{N}_4$]{\includegraphics[width=0.2\textwidth]{n4_pixel}\label{fig:n4_pixel}}
 	\hfill
-	\subfloat[8-neighbourhood, $\mathcal{N}_8$]{\includegraphics[width=0.3\textwidth]{n8_pixel}\label{fig:n8_pixel}}
+	\subfloat[8-neighbourhood, $\mathcal{N}_8$]{\includegraphics[width=0.2\textwidth]{n8_pixel}\label{fig:n8_pixel}}
 	\caption{Pixel neighbourhoods.}
 	\label{fig:pixel_neighbourhood}
 \end{figure}
