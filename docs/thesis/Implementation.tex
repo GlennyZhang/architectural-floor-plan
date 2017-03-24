@@ -57,7 +57,7 @@ This project always uses a combination of erosion and dilation to retain the ori
 
 Both of those combinations are used in the morphological transformation class. First used is the "dilation first" transform to combine the walls out of several lines into one. This results in all the walls being one thick line instead of a multitude of small lines. This guarantees that all walls are thick lines and won't get erased with the "erosion first" transform. This is now followed with the "erosion first" transform to erase all the other lines besides the walls. 
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\subfloat[Original image.]{\includegraphics[width=0.5\textwidth]{A_N1.png}\label{fig:A_N1}}
 	\hfill
@@ -65,7 +65,7 @@ Both of those combinations are used in the morphological transformation class. F
 	\caption{Before and after of an uncleaned floor plan with noise removal. }
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\subfloat[Original image.]{\includegraphics[width=0.5\textwidth]{A_N1_cleaned.png}\label{fig:A_N1_cleaned}}
 	\hfill
