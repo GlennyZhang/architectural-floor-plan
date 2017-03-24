@@ -50,7 +50,7 @@ The iteration stops as soon as the the difference (absolute array norm) between 
 
 \subsubsection{Distance transformation}
 \label{subsubsec:Distance transformation}
-As well as the erosion and dilation, the distance transformation is a morphological operation. In our project it serves the purpose to find bassins for the watershed algorithm. This is used to define the foreground picture. We will explain this further in the wathershed discussion.
+As well as the erosion and dilation, the distance transformation is a morphological operation. In our project it serves the purpose to find basins for the watershed algorithm. This is used to define the foreground picture. We will explain this further in the wathershed discussion.
 It is used after preprocessing to find the center of what is supposed to be rooms. This algorithm is only used in combination with the watershed.
 
 The algorithm that OpenCV uses is called cvDistTransform and uses an euclidean distance to calculate the output image. The input for this transformation is a binary image $I(u,v) = I(x)$ which will be separated into a foreground \eqref{eq:Foreground} and background \eqref{eq:Background} image.
@@ -76,7 +76,7 @@ This all leads to the resulting effect shown in the image below (\citep{szeliski
 
 \subsubsection{Find contours}
 \label{sub:FindContoursTheory}
-The find-contours algorithm was used several times during the implementation of this project for different uses. Those uses are described in the \textit{Implementation} (Section~\ref{sub:Implemenation}) part of this document. What the algorithm does is that it finds the borders or the contour of different components in an image. The algorithm used by OpenCv was first described by Suzuki and Abe \citep{suzuki_abe_1985}. This will be a short description of what the algorithm does, as the algorithm itself is quite complicated and can be reviewed completly in their paper.
+The find-contours algorithm was used several times during the implementation of this project for different uses. Those uses are described in the \textit{Implementation} (Section~\ref{sub:Implemenation}) part of this document. What the algorithm does is that it finds the borders or the contour of different components in an image. The algorithm used by OpenCv was first described by Suzuki and Abe \citep{suzuki_abe_1985}. This will be a short description of what the algorithm does, as the algorithm itself is quite complicated and can be reviewed completely in their paper.
 
 The algorithm searches for borders in an image. A border is for example on a binary image where the pixel value changes from 0 to 1 or the other way. The algorithm defines two components that are possible. There are borders, that is where the value changes. Then there are holes, these are the spaces between the borders as well as the background.
 
@@ -225,7 +225,7 @@ To allow BRIEF to be rotation invariant, the descriptor \eqref{eq:BriefDescripto
 This orientated BRIEF descriptor is now defined as
 \begin{equation}\label{eq:BriefDescriptor} g_{n}(p,\theta) := f_{n}(p)|(x_{i},y_{i}) \in S_{\theta}\end{equation}
 
-\acrshort{acro:ORB} creates a matcher that is usedto compare the trained features with the features of a target image. If any of those features match the algorithm has likely found the object of the first image in the second image and will return its coordinates \citep{rublee_rabaud_konolige_bradski_2011}.
+\acrshort{acro:ORB} creates a matcher that is used to compare the trained features with the features of a target image. If any of those features match the algorithm has likely found the object of the first image in the second image and will return its coordinates \citep{rublee_rabaud_konolige_bradski_2011}.
 
 \subsubsection{Cascade training}
 \label{sub:CascadeTraining}
@@ -239,7 +239,7 @@ The object detection for this method is based on features and not pixels. Featur
 	\label{fig:rectFeat}
 \end{figure}
 
-All features combined are more than 180'000 while the detector has a base resolution of 24x24. This means the rectangle features are overcomplete.
+All features combined are more than 180'000 while the detector has a base resolution of 24x24. This means the rectangle features are over complete.
 These rectangle features are computed using the representation "integral image". In an integral, every pixel is a sum of pixels of the original image that are above and to the left:
 \begin{equation}ii(x,y) = \sum_{x'\leq x, y'\leq y} i(x',y')\end{equation}
 where ii(x,y) is the integral image and i(x,y) the original. Using two conditions with s(x,y) as the row sum:

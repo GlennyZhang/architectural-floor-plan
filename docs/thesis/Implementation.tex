@@ -250,7 +250,7 @@ For our tests, the same template $T$ is used, as for template matching (Figure~\
 
 After implementing the algorithm, we recognized, that it was not able to detect any objects on the images. A visualisation of the features of our template image $T$ showed, that zero features have been detected in our image. Our investigations lead us to the conclusion, that the \textit{nFeatures} parameter of the ORB algorithm, was to low.
 
-We tried to increase this feature count, but then realized, that it is not possible to set parameters for detectors in OpenCV 3.1. The problem is that the method, to read and write algorithm parameters, is implemented in the Java wrapper, but is missing in the C++ implementation (see \citep{orb}).
+We tried to increase this feature count, but then realised, that it is not possible to set parameters for detectors in OpenCV 3.1. The problem is that the method, to read and write algorithm parameters, is implemented in the Java wrapper, but is missing in the C++ implementation (see \citep{orb}).
 
 \paragraph{Oriented FAST and Rotated BRIEF (ORB) JavaCV}
 \label{sub:ImpORBJVCV}
@@ -406,7 +406,7 @@ In this section, we will summarise the results of the cascading classification i
 
 Figure~\ref{fig:CCF1ScoreGraph} shows the F1-Score of each floor plan, over each training iteration. With more samples to train the classifier, the results increased over each training. Only the \textit{CC\_T3\_PolyDP} training was a retrogressive step, because the stacked filter system was too restrictive and rejected even true positives. In step \textit{CC\_T5}, all tested floor plans achieved an accuracy (F1-Score) over 75 percent, which was enough to use it in the gap closing algorithms (Section~\ref{sub:GapClosing}).
 
-Another interesting graphic is the comparison between the performance of the original and cleaned floor plans. Figure~\ref{fig:CCF1ScoreGraphOCAverage} shows the averaged F1-Score of the original and cleaned floor plans, over each iteration. The cleaned floor plans always perform better then the original ones. This has to do with noise on the plans like furniture, text or markings, which are falsely classified as objects. This behavior is intended.
+Another interesting graphic is the comparison between the performance of the original and cleaned floor plans. Figure~\ref{fig:CCF1ScoreGraphOCAverage} shows the averaged F1-Score of the original and cleaned floor plans, over each iteration. The cleaned floor plans always perform better then the original ones. This has to do with noise on the plans like furniture, text or markings, which are falsely classified as objects. This behaviour is intended.
 
 \begin{figure}[H]
 	\centering
@@ -509,14 +509,14 @@ The following figure \ref{fig:RoomDDResult} shows the results of the same tests 
 	\label{fig:RoomDDEResult}
 \end{figure}
 
-All of these bench marks discussed show how good the actual room detection works. But there is no comparison yet, what the improvements are compared to the old program used at the PlanfabrikGmbH. As defined in the metrics, the whole process to detect the rooms was measured with clicks and time used to detect the rooms. This comparison with these values will be done just below.
+All of these bench marks discussed show how good the actual room detection works. But there is no comparison yet, what the improvements are compared to the old program used at the Planfabrik GmbH. As defined in the metrics, the whole process to detect the rooms was measured with clicks and time used to detect the rooms. This comparison with these values will be done just below.
 
 As seen in figure \ref{fig:ClicksPerPlan}, the clicks or user input is far less, than the amount needed with the old program. This come from the fact, that algorithms finds the room corners directly and does not need one click per corner. As seen, the amount of clicks needed stays about the same for each detection run. This shows, that the user input will be about the same no matter how complicated or how many rooms a plan has. The clicks used are mostly to adjust the parameters for the algorithms. This is fare less than most plans have room corners on them. Additionally, most tests with cleaning done by the user take some more clicks. But it is within a very small margin, compared to the run with no error correction. What can be said about this program is, that it generally takes less clicks than the old program. Not only that, but the bigger the plan, the fewer additional clicks it takes to process compared to the old program. 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\textwidth]{ClicksPerPlan}
-	\caption{This figure shows the clicks that were needed to fully process a plan. The blue bar represents the tests that were done with the old program within the PlanfabrikGmbH. The red bar represents the tests without user editing of plans, while the orange bar represents wit user editing.}
+	\caption{This figure shows the clicks that were needed to fully process a plan. The blue bar represents the tests that were done with the old program within the Planfabrik GmbH. The red bar represents the tests without user editing of plans, while the orange bar represents wit user editing.}
 	\label{fig:ClicksPerPlan}
 \end{figure}
 
@@ -525,7 +525,7 @@ The same as in figure \ref{fig:ClicksPerPlan} was done in figure \ref{fig:TimePe
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\textwidth]{TimePerPlan}
-	\caption{This figure shows the time that was needed to fully process a plan. The blue bar represents the tests, that were done with the current process within the PlanfabrikGmbH. The red bar represents the tests without user editing of plans, while the orange bar represents with user editing.}
+	\caption{This figure shows the time that was needed to fully process a plan. The blue bar represents the tests, that were done with the current process within the Planfabrik GmbH. The red bar represents the tests without user editing of plans, while the orange bar represents with user editing.}
 	\label{fig:TimePerPlan}
 \end{figure}
 
