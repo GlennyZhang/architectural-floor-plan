@@ -66,7 +66,7 @@ Since the exact calculation with the euclidean distance takes a lot of computati
 \begin{equation}\label{eq:RightMask}M_{R} = \begin{bmatrix} m2 & m1 & m2 \\ m1 & x & . \\ . & . & . \end{bmatrix} \end{equation}
 
 This all leads to the resulting effect shown in the image below (\citep{szeliski_2011} and \citep{distancetransform}).
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.4\textwidth]{dist_transform1}
 	\caption{This image shows the distance transformation of the plan AN\_1.}
@@ -84,7 +84,7 @@ The algorithm searches for borders on the images. It starts at the border of the
 
 This is a very simplistic explanation of what the algorithm does. The whole algorithm is described and proved in the work of Suzuki and Abe \citep{suzuki_abe_1985} for anyone interested in the exact algorithm.
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.4\textwidth]{suzuki_abe}
 	\caption{The representation of borders in an example image in the paper of Suzuki and Abe. The value represent the different borders of connected pixels.}
@@ -166,7 +166,7 @@ The convex hull of a set of points X \begin{equation}conv X \coloneqq \underset{
 
 There are several known algorithms that implement this problems. Examples of those are the Graham-Scan algorithm with a complexity of  $\mathcal{O}(n log n)$ or the Jarvis-March-algorithm with the complexity of $\mathcal{O}(n*k)$ where k is the number of points on the hull itself.
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.4\textwidth]{convex_hull}
 	\caption{Example image of a convex hull. The black line around the point-set shows that start of the algorithm as it is closing around all the outer points until  being the convex hull (blue).}
@@ -184,7 +184,7 @@ This algorithm combines the edges that have been found with the Harris-Corner de
 Added to the rectangle is  a threshold in all directions, in which the algorithm searches for edges. The idea is that due to the structure of walls, there will be a rectangle made out of four edge points inside the door area, that represents the space inbetween the walls. It is expected to only find one rectangle, due to the fact that it makes no sense to have a wall go through a door. As well as the fact that there should be no further lines because it a cleaned up image and any other line except the walls should not be in that image.
 To find the rectangle it connects two edges and calculates the angle compared to the x-Axis for all pairs of edges available. Now all the angles get compared to each other. If two edges $AB$ and $CD$ have a similar angle there will be another comparison for the angles between $AC$ and $BD$ or $AD$ and $BC$. If one of those two is also of a similar angel, we then need to prove that two lines that build a corner have an angle of 90 degree between them. If the opposing lines are all parallel and the angle of one corner is 90 degree we can assume that all other angles have to be 90 degree too and it is therefore a rectangle. 
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.4\textwidth]{door_closing}
 	\caption{This is an image after being processed by the harris corner detection. All white pixels are part of a corner. The points $A$, $B$, $C$ and $D$ will be part of a found door as they create a rectangle. Points E and F will be left out.}
@@ -284,7 +284,7 @@ The hough transformation was used as an alternative to the current process to fi
 The hough transformation is a general approach to find forms like lines or circles in images. This section will discuss how to detect lines in an image.
 Any line can be represented as $r = x \cos \theta + y \sin \theta$ which is the \textit{Hessesche Normalenform}. The parameter $r$ represents the distance from the origin, in an image the bottom left, to the closest point on a straight line that goes through $(x,y)$. The angle $\theta$ represents the angle between the x-axis and the line we used for our parameter $r$. Any possible straight line that can go through the image can be represented by those parameters. The plane of $(r,\theta)$ is called the Hough space for straight lines.
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.4\textwidth]{hough_gerade}
 	\caption{This is an example image of a hough-line with the distance $r$ and the angle $\theta$. It represents the hough line $r = x \cos \theta + y \sin \theta$.}
@@ -293,7 +293,7 @@ Any line can be represented as $r = x \cos \theta + y \sin \theta$ which is the 
 
 The algorithm now uses a two dimensional array called accumulator to detect the existence of a straight line. The algorithm then determines for each pixel and its neighbourhood if there is a possibility for a line and then increments the value in the accumulator for the representative $(r,\theta)$ values. When done for all pixels on the image, there will be local maxima for $(r,\theta)$ values in the accumulator. Those maxima are most likely to represent a straight line in the actual image.  
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.4\textwidth]{hough_accumulator}
 	\caption{The image on the left side represents an image with lines and some noise on it. The right image represents the Hough plane (accumulator) with local maxima, which are highlighted as white pixels.}
@@ -310,7 +310,7 @@ Finding connected components is a common way to detect objects in a thresholded 
 
 This is accomplished by finding pixels which are adjacent to each other. A pixel is adjacent to another pixel if it is immediate $\mathcal{N}_4$ or $\mathcal{N}_8$ and has the same scalar value. Further the neighbour pixels are labeled with the same label, and in the end combined to a region $\mathcal{R}$ \citep[Section 3.3.4]{szeliski_2011}.
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\subfloat[4-neighbourhood, $\mathcal{N}_4$]{\includegraphics[width=0.3\textwidth]{n4_pixel}\label{fig:n4_pixel}}
 	\hfill
