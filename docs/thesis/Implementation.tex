@@ -27,6 +27,8 @@ There were several problems with that algorithm. The algorithm separated a wall 
 \subsubsection{Watershed}
 The idea to find the different rooms within the floor plan, was to run the watershed algorithm on the image (Section~\ref{subsub:watershed}). It is a flood filling algorithm that starts at given starting points and extends its area, until it meets a wall or a different flood from an other starting point. A further explanation will be done in section~\ref{subsubsub:watershed}, as it was actually implemented and used in our second workflow.
 
+\pagebreak
+
 \subsection{Workflow 2}
 \label{sub:workflow2}
 This section describes the second workflow and what algorithms it is composed of. It is a mix of the work of Sébastien Macé and Peter Dawkins and Hervé Locteau and Salvatore Tabbone~\citep{mace_valveny_loctea_tabbone_2010} and the experiences we made with the first workflow~\ref{sub:workflow1}. What it does, is it removes any noise on the floor plan first with morphological operations, like erosion and dilation. This is followed up with a room detection algorithm that, in the end, uses the watershed algorithm to determine the rooms. In contrast to the first workflow, where the preprocessing for the watershed was not done sufficiently, this algorithm improved that. After optimizing this workflow, it was the first workflow that showed actual potential and was able to detect the rooms and therefore solve the given problem.
@@ -93,7 +95,7 @@ The distance transformation gives us an image that represents the distance from 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth]{dist_transform.jpg}
+	\includegraphics[width=0.6\textwidth]{dist_transform.jpg}
 	\caption{Example distance transformation of a architectural floor plan.}
 	\label{fig:dist_transform}
 \end{figure}
@@ -106,7 +108,7 @@ The algorithm to locate the centers after having done the distance transformatio
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth]{MarkersGeodesicDilation}
+	\includegraphics[width=0.6\textwidth]{MarkersGeodesicDilation}
 	\caption{This image shows the markers (black areas) for the geodesic dilation of the floor plan AN1.}
 	\label{fig:geodesicDilation}
 \end{figure}
@@ -117,7 +119,7 @@ The find contours algorithm was used to find the centers found in the marker ima
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth]{findContourForeground}
+	\includegraphics[width=0.6\textwidth]{findContourForeground}
 	\caption{This image shows the different marker centers colored in pixel values around 200 and higher on the plan AN1.}
 	\label{fig:findContour}
 \end{figure}
@@ -142,7 +144,7 @@ We ran into several problems during the implementation of this algorithm. The mo
 As a solution to the fact that not all the doors are found, there is the option to close doors by hand with the editor. This is the simplest solution that always guarantees success. We also tried to improve door detection with better samples and bigger sample size. This can be found in the section \ref{sec:ResultsCascade}.
 To erase object from the image we initially planned to do an object detection. There was time to do some additional object detection other than just door and window. The cascade files can be found in the code. But there are too many different objects only within those few plans to catch them all. To implement object detection for further objects and erase those objects is a next step for this project. For now the user has to erase all object that do not get caught by noise removal by hand.
 
-
+\pagebreak
 \subsection{Workflow 3}
 \label{sub:workflow3}
 With all the gained experience in workflow one (Section~\ref{sub:workflow1}) and workflow two (Section~\ref{sub:workflow2}), we started to implement workflow three. This workflow improves the room detection with the use of object detection, to fill gaps caused by the morphological transformation (Section~\ref{sub:MorphologicalTransformation}).

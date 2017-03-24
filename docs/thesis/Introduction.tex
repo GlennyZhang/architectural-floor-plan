@@ -67,13 +67,18 @@ Both of those papers have a room detection rate between 80-90\%. The important p
 \subsection{Metrics}
 To have a measurement, to compare our product to what is already in place at the Planfabrik GmbH, we went there and collected two values. Those values are the time which is needed to do the room segmentation and how many mouse-clicks it would take. We did that on five different floor plans, that were preselected by us. They were selected after the difficulty to analyse, rated by ourself, as well as their difference in the number of rooms.
 
-The plans chosen are the following:
+The plans chosen are the following (Figure~\ref{fig:FloorPlansForTesting}):
 
-AN\_1
-50er
-A1\_OG
-
-
+\begin{figure}[h!]
+	\centering
+	\subfloat[50er]{\includegraphics[width=0.3\textwidth]{Plan50er}\label{fig:Plan50er}}
+	\hfill
+	\subfloat[AN\_1]{\includegraphics[width=0.3\textwidth]{PlanAN1}\label{fig:PlanAN1}}
+	\hfill
+	\subfloat[A1\_OG]{\includegraphics[width=0.3\textwidth]{PlanA1OG}\label{fig:PlanA1OG}}
+	\caption{Floor plans used for testing.}
+	\label{fig:FloorPlansForTesting}
+\end{figure}
 
 The time was taken with a countdown clock on an iPhone and was stopped manually by hand. This led to a time deviation of usually 1-2 seconds longer than the actual time. The same will be done for our tests, so that this difference will not matter. The clicks made were counted by hand.
 An estimate of how many clicks are made on a floor plan, is made along the following rules. For every room it usually takes the amount of edges the room has, plus two additional clicks to create and confirm the room. There are also some additional clicks at the beginning, to start the selection as well as the end to confirm and save it.
@@ -102,7 +107,7 @@ To measure the performance of the object detection, we calculate the precision a
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\textwidth]{PrecisionAndRecall}
+	\includegraphics[width=0.5\textwidth]{PrecisionAndRecall}
 	\caption{Precision and Recall visualisation. On the left side are the relevant elements.}
 	\label{fig:PrecisionAndRecall}
 \end{figure}

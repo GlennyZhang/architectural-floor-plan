@@ -173,16 +173,10 @@ There are several known algorithms that implement this problems. Examples of tho
 	\label{fig:convex_hull}
 \end{figure}
 
-
-\pagebreak
-
 \subsubsection{Door gap closing algorithm}
 \label{sec:DoorGapAlgorithm}
 
 The cascade door training algorithm has found the rectangles that represent the doors. What is needed in the end though, is not the door itself, but the space inbetween the two walls that the door connects. This is so that we can separate the different rooms that have doors in-between.
-This algorithm combines the edges that have been found with the Harris-Corner detection and the doors from the cascade door algorithm. It uses a heuristic that works as following: The door algorithm provides four points that mark the edge of the recognized door and build a rectangle.
-Added to the rectangle is  a threshold in all directions, in which the algorithm searches for edges. The idea is that due to the structure of walls, there will be a rectangle made out of four edge points inside the door area, that represents the space inbetween the walls. It is expected to only find one rectangle, due to the fact that it makes no sense to have a wall go through a door. As well as the fact that there should be no further lines because it a cleaned up image and any other line except the walls should not be in that image.
-To find the rectangle it connects two edges and calculates the angle compared to the x-Axis for all pairs of edges available. Now all the angles get compared to each other. If two edges $AB$ and $CD$ have a similar angle there will be another comparison for the angles between $AC$ and $BD$ or $AD$ and $BC$. If one of those two is also of a similar angel, we then need to prove that two lines that build a corner have an angle of 90 degree between them. If the opposing lines are all parallel and the angle of one corner is 90 degree we can assume that all other angles have to be 90 degree too and it is therefore a rectangle. 
 
 \begin{figure}[H]
 	\centering
@@ -191,7 +185,12 @@ To find the rectangle it connects two edges and calculates the angle compared to
 	\label{fig:door_closing}
 \end{figure}
 
+This algorithm combines the edges that have been found with the Harris-Corner detection and the doors from the cascade door algorithm. It uses a heuristic that works as following: The door algorithm provides four points that mark the edge of the recognized door and build a rectangle (Figure~\ref{fig:door_closing}).
 
+Added to the rectangle is  a threshold in all directions, in which the algorithm searches for edges. The idea is that due to the structure of walls, there will be a rectangle made out of four edge points inside the door area, that represents the space inbetween the walls. It is expected to only find one rectangle, due to the fact that it makes no sense to have a wall go through a door. As well as the fact that there should be no further lines because it a cleaned up image and any other line except the walls should not be in that image.
+To find the rectangle it connects two edges and calculates the angle compared to the x-Axis for all pairs of edges available. Now all the angles get compared to each other. If two edges $AB$ and $CD$ have a similar angle there will be another comparison for the angles between $AC$ and $BD$ or $AD$ and $BC$. If one of those two is also of a similar angel, we then need to prove that two lines that build a corner have an angle of 90 degree between them. If the opposing lines are all parallel and the angle of one corner is 90 degree we can assume that all other angles have to be 90 degree too and it is therefore a rectangle. 
+
+\pagebreak
 \subsection{Structural Analysis}
 
 \subsubsection{ORB algorithm}
@@ -257,7 +256,7 @@ To find a template $T$ (Figure~\ref{fig:door_template}) in a given image $I$ (Fi
 
 There are various kinds of formulas to calculate the matching metric. Usually the formula sums up the matching pixels in the template $T$ and the image $I$ and stores the result as a color value, in the correlation image $R$.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\subfloat[Template $T$]{\includegraphics[width=0.15\textwidth]{door_template}\label{fig:door_template}}
 	\hfill
@@ -273,9 +272,7 @@ The brightest points in the correlation image $R$ (Figure~\ref{fig:tm_correlatio
 
 Template matching is a very simple matching method and is not rotation and scale invariant.
 
-
-
- 
+\pagebreak
 \subsection{Semantic Analysis}
 \subsubsection{Hough transformation}
 \label{subsubsec:Hough transformation}
@@ -301,8 +298,6 @@ The algorithm now uses a two dimensional array called accumulator to detect the 
 \end{figure}
 
 To find the actual length of the lines, there has to be a further algorithm that checks where on the found, the lines of the image correspond. This can done in several ways and therefore will not be explained here. There are several algorithms described on the internet, or for example in the book \textit{Digital image processing: an algorithmic introduction using Java} \citep{burger_burge_2016}.
-
-\pagebreak
 
 \subsubsection{Connected Component Analysis}
 \label{sub:ConnectedComponentAnalysis}

@@ -48,12 +48,12 @@ image.threshold(128.0, 255.0, Imgproc.THRESH_BINARY)
 image.erode(3)
 \end{lstlisting}
 
-\pagebreak
-
 \subsection{Meta Format}
 \label{sub:MetaFormat}
 To support the different input and output formats, the architecture uses a meta format for the
 floor plan images, called \textit{AFImage}. Different \gls{gloss:Drivers} add the support for multiple file formats. With this architecture it is possible to extend the software with new file formats and work internally with the meta container format.
+
+The meta container \textit{AFImage} contains a map of attributes (Figure \ref{fig:AFImage_CD}), which can be used by algorithms to get information created by other algorithms or to store information into an existing image.
 
 \begin{figure}[H]
   \centering
@@ -61,8 +61,6 @@ floor plan images, called \textit{AFImage}. Different \gls{gloss:Drivers} add th
   \caption{\textit{AFImage} class diagram.}
   \label{fig:AFImage_CD}
 \end{figure}
-
-The meta container \textit{AFImage} contains a map of attributes (Figure \ref{fig:AFImage_CD}), which can be used by algorithms to get information created by other algorithms or to store information into an existing image.
 
 To interact with the user interface there is also a map of layers which contain shapes that are printed onto the image. The software uses this for example for recognised doors or rooms, which are shown as overlay.
 
