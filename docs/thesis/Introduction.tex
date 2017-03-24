@@ -1,4 +1,5 @@
 \section{Introduction}
+\label{sub:Introduction}
 \subsection{Starting position}
 The company PlanFabrik GmbH creates floor plans for house technology. In a first
 step, the plans are analysed and enhanced through an employee. He adds more
@@ -29,6 +30,7 @@ This section will explain how the current process for room recognition work at t
  As a result the \gls{gloss:CAD} can calculate all the different sizes of the rooms.
  
 \subsubsection{Similar works}
+\label{sub:SimilarWorks}
 This section introduces two papers \textit{A System to Detect Rooms in Architectural Floor Plan Images} \citep{mace_valveny_loctea_tabbone_2010} and \textit{Automatic Room Detection and Room Labeling from Architectural Floor Plans} \citep{ahmed_liwicki_weber_dengel_2012} which are two very recent paper on the exact problem of room segmentation. 
 
 The second paper, written by Ahmed, Liwicki,Weber and Dengel, proposes a general structure for detecting floor plans. This structure will help us separate and compare the steps of the algorithms proposed in both of the discussed papers. It will also be used for the further structure of this document. They propose to separate the algorithm in three parts: \textit{Information segmentation}, \textit{Structural analysis} and \textit{Semantic analysis}. The information segmentation part contains all algorithms separating information (text, line thickness, symbols, etc.). The structural analysis contains algorithms that combine the important information from previous algorithms and and create a basic wall image. Finally the semantic analysis finds symbols and rooms based on information from the structural analysis.
